@@ -12,11 +12,11 @@ Visualization of the Spoon Maven Dependency tree, with supply chain information 
 
 <img src="https://github.com/castor-software/depclean-web/blob/main/.img/dependencyTree.jpg" align="left" alt="DepClean visualization of dependency tree"/>
 
-## License
+# License
 
 Distributed under the MIT License. See [LICENSE](https://github.com/castor-software/depclean/blob/master/LICENSE.md) for more information.
 
-## Funding
+# Funding
 
 DepClean is partially funded by the [Wallenberg Autonomous Systems and Software Program (WASP)](https://wasp-sweden.org).
 

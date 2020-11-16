@@ -1,8 +1,33 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head><title>Home Page</title></head>
+<head th:fragment="head(title)">
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+    <meta content="" name="description">
+    <meta content="" name="author">
+    <title th:text="${title}">DepClean Web</title>
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" th:href="@{/libs/bootstrap/css/bootstrap.min.css}"/>
+    <!-- Custom styles for this template -->
+    <link rel="stylesheet" th:href="@{/css/springit.css}">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Oswald|Roboto" rel="stylesheet">
+    <!-- Font Awesome (for icons) -->
+    <script defer src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+</head>
 <body>
     <h1>Hello !</h1>
-    <p>Welcome to <span th:text="${appName}">Our App</span></p>
+    <p>
+        Welcome to <span th:text="${appName}">Our App</span>
+    </p>
+    <p>
+        Today is: <span th:text="${today}">13 May 2011</span>
+    </p>
+
+
+    <form action="#" data-th-action="@{/action/edit}" data-th-object="${model}" method="post">
+        <button name="action" type="submit" value="save">save</button>
+    </form>
+
 </body>
 </html>
