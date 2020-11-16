@@ -42,7 +42,7 @@ body {
 }
 
 .jumbotron p {
-    font-size: 15px;
+    font-size: 20px;
 }
 
 
@@ -133,4 +133,85 @@ a.share {
         padding-top: .5rem;
         text-align: right;
     }
+}
+
+
+/*   Search box styles    */
+.autocomplete-input-box {
+    border: 1px solid rgba(0, 0, 0, 0.07);
+    border-radius: 10px;
+    background: transparent;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    max-width: 700px;
+    min-width: 550px;
+}
+
+.homepage__search-input {
+    margin-top: 10px;
+    width: 100%;
+}
+
+.autocomplete-input__form {
+    display: flex;
+    align-items: baseline;
+    position: relative;
+}
+
+.homepage__search-input-container {
+    width: 100%;
+}
+
+.autocomplete-input__container {
+    position: relative;
+    width: 100%;
+}
+
+.autocomplete-input, .autocomplete-input__dummy-input {
+    font-size: 2rem;
+    padding: 15px 45px 15px 30px;
+    font-family: "Source Code Pro", "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+    font-weight: 300;
+    width: 100%;
+    box-sizing: border-box;
+    letter-spacing: -0.7px;
+}
+
+.autocomplete-input {
+    width: 40vw;
+    border: none;
+    border-radius: 50px;
+    color: rgba(0, 0, 0, 0);
+}
+
+input {
+    background: transparent;
+    line-height: 1;
+    border: 1px solid rgba(0, 0, 0, 0.07);
+    transition: border-top-left-radius 0.1s, border-top-right-radius 0.1s;
+    border-radius: 0.3em;
+    padding: 5px 10px;
+}
+
+.form-inline {
+    margin: 0 auto;
+    padding-top: 40px;
+}
+
+
+.display-4 {
+    font-size: 5.0rem;
+    font-weight: 300;
+    line-height: 1.2;
+}
+
+.form-control {
+    font-size: 1.5rem;
+}
+
+.input-group-text {
+    font-size: 1.5rem;
+}
+
+.btn {
+    font-size: 1.5rem;
 }

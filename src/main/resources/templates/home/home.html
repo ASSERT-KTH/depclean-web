@@ -7,27 +7,52 @@
     <meta content="" name="author">
     <title th:text="${title}">DepClean Web</title>
     <!-- Bootstrap core CSS -->
-    <link rel="stylesheet" th:href="@{/libs/bootstrap/css/bootstrap.min.css}"/>
+    <link crossorigin="anonymous" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" rel="stylesheet">
     <!-- Custom styles for this template -->
-    <link rel="stylesheet" th:href="@{/css/springit.css}">
+    <link rel="stylesheet" th:href="@{/css/main.css}">
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Oswald|Roboto" rel="stylesheet">
     <!-- Font Awesome (for icons) -->
     <script defer src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
 </head>
+
 <body>
-    <h1>Hello !</h1>
-    <p>
-        Welcome to <span th:text="${appName}">Our App</span>
-    </p>
-    <p>
-        Today is: <span th:text="${today}">13 May 2011</span>
-    </p>
+    <!-- Jumbotron -->
+    <div class="jumbotron jumbotron-fluid" th:fragment="jumbotron">
+        <div align="center" class="container">
+            <h2 class="display-4">DepClean Web</h2>
+            <p class="lead">
+                With DepClean Web, developers can easily observe all the unused dependencies in their projects and
+                evaluate what benefits a project could gain from identifying and deleting them.
+            </p>
+            <a class="btn btn-success" href="http://www.github.com/castor-software/depclean" target="_blank"><i
+                    class="fab fa-github"></i>Github Repo</a>
+        </div>
+    </div>
 
+    <!-- Search box -->
+    <div class="container align-items-center form-inline">
+        <form class="form-inline">
+            <div class="input-group mb-2 mr-sm-2">
+                <div class="input-group-prepend">
+                    <div class="input-group-text">https://github.com/</div>
+                </div>
+                <input class="form-control" id="inlineFormInputGroupUsername2" placeholder="user/project" type="text">
+            </div>
+            <button class="btn btn-primary mb-2" type="submit">Analyze</button>
+        </form>
+    </div>
 
-    <form action="#" data-th-action="@{/action/edit}" data-th-object="${model}" method="post">
-        <button name="action" type="submit" value="save">save</button>
-    </form>
-
+    <!-- Bootstrap libraries -->
+    <script crossorigin="anonymous"
+            integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+            src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script crossorigin="anonymous"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script crossorigin="anonymous"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 </body>
 </html>
