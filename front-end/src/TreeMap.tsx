@@ -38,7 +38,7 @@ export const TreeMap = ({ data, dimensions }: React.PropsWithChildren<treeMapPro
 
     const mouseEnter = (d: any) => {
         setToolTipValue(d.data.artifactId + " " + d3.format(".2f")(d.value) + "Mb")
-        setToolTipPos({ x: d.x0, y: d.y0 })
+        setToolTipPos({ x: d.x0 + ((d.x1 - d.x0) / 2), y: d.y0 + dimensions.marginTop })
         setTpOpacity(1);
     }
     const mouseLeave = () => {
