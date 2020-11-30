@@ -56,7 +56,7 @@ export const HorizontalTree = ({
     const tree = d3.tree()
         .nodeSize([30, 100])
         .separation((a, b) => a.depth)
-        .size([dimensions.boundedWidth, dimensions.boundedHeight])
+        .size([dimensions.boundedHeight - dimensions.marginBottom - dimensions.marginTop, dimensions.boundedWidth - dimensions.marginBottom - dimensions.marginTop])
 
     //NodeSize nullifies the .size
     // .size([dimensions.boundedHeight, dimensions.boundedWidth])
@@ -79,7 +79,7 @@ export const HorizontalTree = ({
         <Col span="20">
             <div className="wrapper">
                 <Tooltip value={toolTipValue} position={toolTipPos} opacity={tpOpacity} />
-                <svg width={dimensions.width} height={dimensions.height} key={uuidv4()} >
+                <svg width={dimensions.boundedWidth} height={dimensions.boundedHeight} key={uuidv4()} >
                     <g
                         className="bounds"
                         transform={"translate(" + dimensions.marginLeft + "," + dimensions.marginTop + ")"}
