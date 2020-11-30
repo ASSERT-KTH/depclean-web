@@ -5,6 +5,8 @@ import { v4 as uuidv4 } from 'uuid';
 import { Links } from './vizUtils/Links';
 import { Nodes } from './vizUtils/Nodes';
 import { Tooltip } from './vizUtils/tooltip';
+import { DelaunayGrid } from 'src/vizUtils/Delaunay';
+
 
 interface dimension {
     width: number,
@@ -31,10 +33,9 @@ export const HorizontalTree = ({
     const [tpOpacity, setTpOpacity] = useState(0)
 
     const mouseEnter = (d: any) => {
-        setToolTipValue(d.data.artifactId + " " + d.data.size)
-        setToolTipPos({ x: d.y, y: d.x })
+        setToolTipValue(d.data.artifactId)
+        setToolTipPos({ x: d.y + dimensions.marginTop, y: d.x + dimensions.marginTop })
         setTpOpacity(1);
-        // console.log({d.x,d.y})
     }
     const mouseLeave = () => {
         setTpOpacity(0);
@@ -45,6 +46,7 @@ export const HorizontalTree = ({
         textMargin: 5,
     }
 
+    //ACCESSORS
     //Path to draw the links
     const linkAccesor = (d: any) => {
         return "M" + d.y + "," + d.x
@@ -52,6 +54,12 @@ export const HorizontalTree = ({
             + " " + (d.y + d.parent.y + rectNode.width) / 2 + "," + d.parent.x
             + " " + (d.parent.y + rectNode.width) + "," + d.parent.x;
     };
+    const xAccessor = (d: any) => d.x;
+    const yAccessor = (d: any) => d.y;
+
+    // onEnter={ void}
+    // onLeave={ void}
+
     //CREATE the tree structure  and the hierarchy
     const tree = d3.tree()
         .nodeSize([30, 100])
@@ -98,7 +106,18 @@ export const HorizontalTree = ({
                             onLeave={mouseLeave}
                             sizeScalar={sizeScale}
                         />
+
+                        <DelaunayGrid
+                            data={nodes}
+                            dimensions={dimensions}
+                            xAccessor={xAccessor}
+                            yAccessor={yAccessor}
+                            onEnter={mouseEnter}
+                            onLeave={mouseLeave}
+                        />
+
                     </g>
+
                 </svg>
             </div>
         </Col>

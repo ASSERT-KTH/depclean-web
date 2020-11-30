@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "@types/d3-delaunay": "^5.3.0",
+    "d3-delaunay": "^5.3.0"
+  }
+}
