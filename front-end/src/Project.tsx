@@ -129,14 +129,14 @@ const Dependencies = ({ dataUsed, dataBloated }: React.PropsWithChildren<depende
                     <tr>
                         <td>Used</td>
                         <td>{dataUsed.direct}</td>
-                        <td>{dataUsed.inherited}</td>
                         <td>{dataUsed.transitive}</td>
+                        <td>{dataUsed.inherited}</td>
                     </tr>
                     <tr>
                         <td>Bloated</td>
                         <td className="highlight-red">{dataBloated.direct}</td>
-                        <td className="highlight-red">{dataBloated.inherited}</td>
                         <td className="highlight-red">{dataBloated.transitive}</td>
+                        <td className="highlight-red">{dataBloated.inherited}</td>
                     </tr>
                 </tbody>
             </table>

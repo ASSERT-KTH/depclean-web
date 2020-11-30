@@ -22,26 +22,26 @@ interface gallery {
 export const galleryData: gallery = {
     children: [
         {
-            tittle: "Jenkins",
+            tittle: "Maven core",
             id: 1,
             version: "3.7.0-SNAPSHOT",
             cleanURL: "maven-core.json",
-            gitURL: "https://github.com/jenkinsci/jenkins",
-            img: "jenkins.jpg",
+            gitURL: "https://github.com/apache/maven",
+            img: "maven.jpg",
             normalReport: {
                 direct: 26,
-                inherited: 25,
-                transitive: 1
+                inherited: 1,
+                transitive: 25
             },
             depCleanReport: {
                 direct: 2,
                 inherited: 0,
                 transitive: 20
             },
-            description: "Is the leading open-source automation server. It provides over 1,700 plugins to support automating virtually anything"
+            description: "Apache Maven is a software project management and comprehension tool. "
         },
         {
-            tittle: "Apache Flink",
+            tittle: "Apache Flink core",
             id: 2,
             version: "1.12-SNAPSHOT",
             cleanURL: "flink-core.json",
@@ -68,8 +68,8 @@ export const galleryData: gallery = {
             img: "quarkus.jpg",
             normalReport: {
                 direct: 18,
-                inherited: 24,
-                transitive: 0
+                inherited: 0,
+                transitive: 24
             },
             depCleanReport: {
                 direct: 4,
