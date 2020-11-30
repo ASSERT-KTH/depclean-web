@@ -29,8 +29,8 @@ export const DependenceProvency = () => {
         marginRight: 50,
         marginBottom: 50,
         marginLeft: 50,
-        boundedHeight: 400,
-        boundedWidth: window.innerWidth - 300,
+        boundedHeight: 500 - 50 - 50,
+        boundedWidth: window.innerWidth * 0.9,
     });
 
     useEffect(() => {
@@ -42,8 +42,8 @@ export const DependenceProvency = () => {
                 marginRight: 50,
                 marginBottom: 50,
                 marginLeft: 50,
-                boundedHeight: 400,
-                boundedWidth: window.innerWidth - 300,
+                boundedHeight: 500 - 50 - 50,
+                boundedWidth: window.innerWidth * 0.9,
             })
         }
         window.addEventListener('resize', handleResize)

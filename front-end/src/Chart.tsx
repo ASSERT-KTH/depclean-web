@@ -30,7 +30,7 @@ export const Chart = ({ nodes, dimensions, category }: React.PropsWithChildren<C
 
     const chartViz = useRef(null);
     const categories = countCategories(nodes, category);
-    const chartSize = (dimensions.boundedWidth);
+    const chartSize = (dimensions.boundedWidth * 0.7);
 
     const chartHeight = 300;
     //Create accessor
@@ -58,7 +58,7 @@ export const Chart = ({ nodes, dimensions, category }: React.PropsWithChildren<C
 
 
 
-    const yAccessor = (d: any) => dimensions.boundedHeight - chartHeight;
+    const yAccessor = (d: any) => 0; //dimensions.boundedHeight - chartHeight
     const posAccessor = (d: any) => xScalePie(d.startAngle);
     const wAccessorPie = (d: any) => xScalePie(d.endAngle) - xScalePie(d.startAngle);
     const hAccessorPie = (d: any) => chartHeight;
@@ -71,12 +71,14 @@ export const Chart = ({ nodes, dimensions, category }: React.PropsWithChildren<C
     const color = d3.scaleSequential()
         .domain([0, 5])
         .interpolator(colorInterpolator);
+    const indexAccesor = (d: any) => d.index;
+    const colorAccessor = (d: any) => color(indexAccesor(d))
     //LEGEND DATA
-    const initialPos = [chartSize, dimensions.boundedHeight - chartHeight]
+    const initialPos = [chartSize, dimensions.marginTop]
 
     const mouseEnter = (d: any) => {
         setToolTipValue(nameAccessorPie(d))
-        setToolTipPos({ x: posAccessor(d), y: dimensions.boundedHeight - chartHeight })
+        setToolTipPos({ x: posAccessor(d), y: dimensions.marginTop })
         setTpOpacity(1);
     }
     const mouseLeave = (d: any) => {
@@ -86,12 +88,13 @@ export const Chart = ({ nodes, dimensions, category }: React.PropsWithChildren<C
 
     return (
 
-        <div className="Chart" ref={chartViz}>
+        <div className="flex flex-justify-center" ref={chartViz}>
             <div className="wrapper">
                 <Tooltip value={toolTipValue} position={toolTipPos} opacity={tpOpacity} />
-                <svg width={dimensions.width} height={dimensions.height} >
+                <svg width={dimensions.boundedWidth} height={dimensions.height} >
 
-                    <g transform={"translate(" + dimensions.marginLeft + "," + dimensions.marginTop + ")"}>
+                    <g transform={"translate(" + 0 + "," + dimensions.marginTop + ")"} >
+
                         <Squares
                             data={pieData}
                             keyNumber={uuidv4()}
@@ -104,16 +107,17 @@ export const Chart = ({ nodes, dimensions, category }: React.PropsWithChildren<C
                             onLeave={mouseLeave}
                             valueAccessor={valueAccesor}
                             // indexAccessor ={}
-                            color={color}
-                        />
-
-                        <Legend
-                            data={pieData}
-                            nameAccessor={nameAccessorPie}
-                            initialPos={initialPos}
-                            color={color}
+                            colorAccessor={colorAccessor}
                         />
                     </g>
+
+                    <Legend
+                        data={pieData}
+                        nameAccessor={nameAccessorPie}
+                        initialPos={initialPos}
+                        color={color}
+                    />
+
                 </svg>
             </div>
         </div >

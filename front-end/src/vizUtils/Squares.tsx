@@ -12,7 +12,8 @@ interface SquaresProps {
     onEnter(d: any): void,
     onLeave(d: any): void,
     valueAccessor(d: any): string,
-    color: any
+    colorAccessor: any,
+    showText?: boolean
 }
 
 export const Squares = ({
@@ -26,7 +27,8 @@ export const Squares = ({
     onEnter,
     onLeave,
     valueAccessor,
-    color
+    colorAccessor,
+    showText = true,
 }: React.PropsWithChildren<SquaresProps>) => {
 
     const mouseEnter = (d: any) => {
@@ -37,7 +39,7 @@ export const Squares = ({
 
     return (
         <React.Fragment>
-            {data.map((d, i) => (
+            {data.map((d) => (
                 <g
                     transform={"translate(" + xAccessor(d) + "," + yAccessor(d) + ")"}
                     key={uuidv4()}
@@ -45,16 +47,15 @@ export const Squares = ({
 
                     <rect
                         className="square_treemap"
-                        key={keyNumber}
+                        key={uuidv4()}
                         cx={xAccessor(d)}
                         cy={yAccessor(d)}
                         width={widthAccessor(d)}
                         height={heightAccessor(d)}
-                        fill={color(d.index)}
-                        onMouseEnter={() => mouseEnter(d)}
-                        onMouseLeave={() => mouseLeave(d)}
+                        fill={colorAccessor(d)}
+
                     />
-                    <foreignObject
+                    {showText ? <foreignObject
                         width={widthAccessor(d)}
                         height={heightAccessor(d)}
                         fill="#d3e2ee"
@@ -64,7 +65,19 @@ export const Squares = ({
                             <span className="title"> {nameAccessor(d)}</span>
                             <span className="sub-title"> {valueAccessor(d)}</span>
                         </div>
-                    </foreignObject>
+                    </foreignObject> : ''}
+
+                    <rect
+                        key={uuidv4()}
+                        cx={xAccessor(d)}
+                        cy={yAccessor(d)}
+                        width={widthAccessor(d)}
+                        height={heightAccessor(d)}
+                        style={{ opacity: "0" }}
+                        onMouseEnter={() => mouseEnter(d)}
+                        onMouseLeave={() => mouseLeave(d)}
+                    />
+
                 </g>
             ))}
         </React.Fragment>

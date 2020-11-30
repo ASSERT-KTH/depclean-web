@@ -26,11 +26,13 @@ export const TreeMap = ({ data, dimensions }: React.PropsWithChildren<treeMapPro
     const [toolTipPos, setToolTipPos] = useState({ x: 0, y: 0 });
     const [tpOpacity, setTpOpacity] = useState(0)
 
+    //treemapSliceDice
+
     const treeViz = useRef(null);
     const treemap = d3.treemap()
         .tile(d3.treemapBinary)
         .size([dimensions.boundedWidth, dimensions.boundedHeight])
-        .padding(6)
+        .padding(10)
 
     const nodes = treemap(data);
 
@@ -50,33 +52,36 @@ export const TreeMap = ({ data, dimensions }: React.PropsWithChildren<treeMapPro
     const wAccessor = (d: any) => d.x1 - d.x0;
     const hAccessor = (d: any) => d.y1 - d.y0;
     const nameAccessor = (d: any) => d.data.parent;
-    const tittleAccessor = (d: any) => d.data.artifactId;
+    const tittleAccessor = (d: any) => d.data.parent !== null ? d.data.parent : d.data.artifactId;;
     const color = d3.scaleOrdinal(d3.schemeCategory10);
+    const colorAccessor = (d: any) => color(tittleAccessor(d));
 
     return (
-        <div className="TreeMap" ref={treeViz}>
+        <div className="flex flex-justify-center" ref={treeViz}>
             <div className="wrapper">
                 <Tooltip value={toolTipValue} position={toolTipPos} opacity={tpOpacity} />
                 <svg
-                    width={dimensions.width}
+                    width={dimensions.boundedWidth}
                     height={dimensions.height}
-                    transform={"translate(" + dimensions.marginLeft + "," + dimensions.marginTop + ")"}
                 >
-                    <Squares
-                        data={nodes.descendants()}
-                        keyNumber={uuidv4()}
-                        xAccessor={xAccessor}
-                        yAccessor={yAccessor}
-                        widthAccessor={wAccessor}
-                        heightAccessor={hAccessor}
-                        nameAccessor={nameAccessor}
-                        onEnter={mouseEnter}
-                        onLeave={mouseLeave}
-                        valueAccessor={tittleAccessor}
-                        color={color}
-                    />
+                    <g transform={"translate(" + 0 + "," + dimensions.marginTop + ")"}  >
+                        {/* transform={"translate(" + dimensions.marginLeft + "," + dimensions.marginTop + ")"} */}
+                        <Squares
+                            data={nodes.descendants()}
+                            keyNumber={uuidv4()}
+                            xAccessor={xAccessor}
+                            yAccessor={yAccessor}
+                            widthAccessor={wAccessor}
+                            heightAccessor={hAccessor}
+                            nameAccessor={nameAccessor}
+                            onEnter={mouseEnter}
+                            onLeave={mouseLeave}
+                            valueAccessor={tittleAccessor}
+                            colorAccessor={colorAccessor}
+                            showText={false}
+                        />
 
-                    {/* <Texts
+                        {/* <Texts
                     data={nodes.descendants()}
                     keyAccessor={keyAccessor}
                     xAccessor={xAccessor}
@@ -84,6 +89,7 @@ export const TreeMap = ({ data, dimensions }: React.PropsWithChildren<treeMapPro
                     tittleAccessor={tittleAccessor}
                 /> */}
 
+                    </g>
                 </svg>
             </div>
         </div>
