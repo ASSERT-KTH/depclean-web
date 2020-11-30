@@ -1,6 +1,5 @@
 import { sampleJson } from './sampleJason';
 import * as d3 from 'd3';
-import { create } from 'domain';
 
 function resolveData() {
     return new Promise(resolve => {

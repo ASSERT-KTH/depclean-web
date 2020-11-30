@@ -95,7 +95,7 @@ export const Project = ({ data }: React.PropsWithChildren<projectProps>) => {
                             >
                                 DepClean Project
                             </Button>
-                            <a href={data.gitURL} target="_blank">View GitHub</a>
+                            <a href={data.gitURL} target="_blank" rel="noreferrer">View GitHub</a>
                         </div>
                     </div>
 

@@ -66,7 +66,7 @@ export const Chart = ({ nodes, dimensions, category }: React.PropsWithChildren<C
     const valueAccesor = (d: any) => "(" + d.value + ")";
     const total = d3.sum(pieData, (d: any) => d.value)
     const valueAccessorPie = (d: any) => d3.format(".2f")((d.value / total) * 100) + "%";
-    const indexAccessor = (d: any) => d.index;
+    // const indexAccessor = (d: any) => d.index;
     const colorInterpolator = d3.interpolate("red", "blue")
     const color = d3.scaleSequential()
         .domain([0, 5])

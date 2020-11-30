@@ -186,26 +186,3 @@ export const formatTree = (project: any) => {
 
     return obj;
 }
-
-//return a type of color generator
-//
-export const getcolor = ((type: "color-type" | "color-artifact-id" | "color-group-nodes") => {
-    switch (type) {
-        case "color-type":
-            // create accessor
-            //create color
-            const dataAccessor = ((d: any, i: number) => { return i % 10 });
-            // break;
-            return {
-                color: d3.scaleOrdinal(d3.schemeCategory10),
-                accessor: dataAccessor
-            };
-        case "color-artifact-id":
-            // code block
-            break;
-        case "color-group-nodes":
-
-        default:
-        // code block
-    }
-})
