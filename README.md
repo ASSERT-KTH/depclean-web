@@ -13,7 +13,8 @@ Visualization of the Spoon Maven Dependency tree, with supply chain information 
 <img src="https://github.com/castor-software/depclean-web/blob/main/.img/dependencyTree.jpg" align="left" alt="DepClean visualization of dependency tree"/>
 
 
-# DepClean Web front-end
+
+# DepCleanfront-end
 
 ## How to run devevelopment mode
 
