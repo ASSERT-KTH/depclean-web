@@ -82,8 +82,8 @@ export const HomeViz = () => {
         marginRight: 50,
         marginBottom: 50,
         marginLeft: 50,
-        boundedHeight: (size.width / 100) * 50,
-        boundedWidth: size.height - 100,
+        boundedHeight: size.height - 100,
+        boundedWidth: size.width * 0.7,
     }
 
 

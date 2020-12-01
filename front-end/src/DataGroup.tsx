@@ -1,5 +1,4 @@
 import React from 'react';
-import { Space } from 'antd';
 import { DataInfo } from './DataInfo';
 import { v4 as uuidv4 } from 'uuid';
 

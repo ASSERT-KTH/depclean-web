@@ -68,8 +68,12 @@ export const Nodes = ({
 
 
 
-    const mouseEnter = (d: any) => { if (d.data.visible) onEnter(d) }
-    const mouseLeave = (d: any) => { if (d.data.visible) onLeave() }
+    const mouseEnter = (d: any) => {
+        // if (d.data.visible) onEnter(d) 
+    }
+    const mouseLeave = (d: any) => {
+        // if (d.data.visible) onLeave() 
+    }
 
 
 
