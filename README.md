@@ -12,6 +12,22 @@ Visualization of the Spoon Maven Dependency tree, with supply chain information 
 
 <img src="https://github.com/castor-software/depclean-web/blob/main/.img/dependencyTree.jpg" align="left" alt="DepClean visualization of dependency tree"/>
 
+
+# DepClean Web front-end
+
+## How to run devevelopment mode
+
+Go first to the front-end folder and use the following commands in the terminal to run the project:
+
+### `yarn install`
+### `yarn start`
+
+Runs the app in the development mode.\
+Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+
+The page will reload if you make edits.\
+You will also see any lint errors in the console.
+
 # License
 
 Distributed under the MIT License. See [LICENSE](https://github.com/castor-software/depclean/blob/master/LICENSE.md) for more information.
