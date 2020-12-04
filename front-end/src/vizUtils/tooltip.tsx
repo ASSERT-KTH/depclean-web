@@ -1,7 +1,7 @@
 import React from 'react';
 
 interface tooltipProps {
-    value: string
+    value: React.ReactNode
     position: {
         x: number,
         y: number

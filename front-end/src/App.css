@@ -159,6 +159,18 @@
   font-weight: 600;
 }
 
+.toolTip-tittle{
+  font-size: 24px;
+  font-weight: 500;
+}
+.toolTip-sub{
+  font-size: 16px;
+  font-weight: 500;
+  color: hsla(0,0%,0%, .3);
+}
+.toolTip-value{
+  font-weight: 400;
+}
 .square-text{
  display: block;
  padding:15px;

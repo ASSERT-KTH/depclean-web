@@ -28,12 +28,16 @@ export const HorizontalTree = ({
     data,
     dimensions
 }: React.PropsWithChildren<HorizontalTreeProps>) => {
-    const [toolTipValue, setToolTipValue] = useState("");
+    const [toolTipValue, setToolTipValue] = useState(<div></div>);
     const [toolTipPos, setToolTipPos] = useState({ x: 0, y: 0 });
     const [tpOpacity, setTpOpacity] = useState(0)
 
     const mouseEnter = (d: any) => {
-        setToolTipValue(d.data.artifactId)
+        setToolTipValue(
+            <div>
+                <div className="toolTip-tittle">{d.data.artifactId}</div>
+                <div className="toolTip-sub">Size: <span className="toolTip-value">{d.data.size}</span></div>
+            </div>)
         setToolTipPos({ x: d.y + dimensions.marginTop, y: d.x + dimensions.marginTop })
         setTpOpacity(1);
     }
