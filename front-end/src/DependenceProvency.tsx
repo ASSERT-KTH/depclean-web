@@ -19,6 +19,7 @@ export const DependenceProvency = () => {
     const gName: string = `Group Id (${rootInfo[1].num})`;
     const sName: string = `Size ${rootInfo[2].num}Mb`;
     const nodesFiltered = filtered.descendants().filter((d: any) => d.data.type !== "omitted" && d.data.type !== "test")
+
     const nodesDep = getNodesWithDepCategory(nodesFiltered.splice(1));
     const colorUsage = d3.interpolate("red", "blue")
     const colorGroupId = d3.scaleOrdinal(d3.schemeCategory10);
@@ -67,6 +68,7 @@ export const DependenceProvency = () => {
                         category={"dependencyUsage"}
                         labelY={"Artifacts"}
                         colorInterpolator={colorUsage}
+                        numTicks={5}
                     />
                 </TabPane>
                 <TabPane tab={gName} key="2">
@@ -77,6 +79,7 @@ export const DependenceProvency = () => {
                         category={"groupId"}
                         labelY={"Artifacts"}
                         colorInterpolator={colorGroupId}
+                        numTicks={5}
                     />
                 </TabPane>
                 <TabPane tab={sName} key="3">

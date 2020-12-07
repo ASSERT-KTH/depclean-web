@@ -23,12 +23,8 @@ interface axisHorizontalProps {
 export const AxisVertical = ({
     dimensions,
     label,
-    formatTick,
-    scale,
-    numTicks,
-    showAxis
 }: React.PropsWithChildren<axisHorizontalProps>) => {
-    const ticks = scale.ticks(numTicks);
+    // const ticks = scale.ticks(numTicks);
     const textLabel = label ?
         (<text
             key={uuidv4()}

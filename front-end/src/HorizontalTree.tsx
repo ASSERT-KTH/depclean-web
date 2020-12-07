@@ -74,7 +74,7 @@ export const HorizontalTree = ({
     // .size([dimensions.boundedHeight, dimensions.boundedWidth])
 
     //GET ALL THE NODES WITH A TREE STRUCTURE
-    const nodes = tree(data).descendants();
+    const nodes = tree(data).descendants().filter((d: any) => d.data.type !== "omitted" && d.data.type !== "test");
 
     // const totalSize = d3.sum(nodes, (d: any) => d.data.size)
     const sizeExtent = d3.extent(nodes.slice(1), (d: any) => d.data.size)

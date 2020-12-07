@@ -34,7 +34,7 @@ export const getNodesWithDepCategory = (nodes: any): object[] => {
 export const getRootInfo = (root: any): object[] => {
     let info: object[] = [];
     //get all the nodes but remove the father
-    const nodes = root.descendants().splice(1);
+    const nodes = root.descendants().splice(1).filter((d: any) => d.data.type !== "omitted" && d.data.type !== "test");
     let dependencies: number = 0;
     let groupId: string[] = [];
     let size: number = 0;
