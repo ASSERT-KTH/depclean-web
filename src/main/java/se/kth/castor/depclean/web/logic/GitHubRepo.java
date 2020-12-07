@@ -21,17 +21,17 @@ public class GitHubRepo {
     /**
      * The name of the repository in the form [user-on-github]/[name-of-the-repository]]
      */
-    private final String repositoryName;
+    private final String repoName;
 
     /**
      * A repository on GitHub.
      */
     private final GHRepository ghRepository;
 
-    public GitHubRepo(String repositoryName) throws IOException {
-        this.repositoryName = repositoryName;
+    public GitHubRepo(String repoName) throws IOException {
+        this.repoName = repoName;
         GitHub github = GitHubBuilder.fromEnvironment().build();
-        ghRepository = github.getRepository(repositoryName);
+        ghRepository = github.getRepository(repoName);
     }
 
     public int nbForks() {
@@ -39,7 +39,7 @@ public class GitHubRepo {
     }
 
     public String repositoryName() {
-        return repositoryName;
+        return repoName;
     }
 
     public List<GHTag> tags() throws IOException {
@@ -53,16 +53,16 @@ public class GitHubRepo {
     /**
      * Clones a repository into a folder in the file system using the GitHub repository name.
      *
-     * @param clonedRepositoryDir The path where the repository is going to be placed.
+     * @param repoDir The path where the repository is going to be placed.
      * @return A GitRepo.
      * @throws IOException
      */
-    public GitRepo remoteRepository(File clonedRepositoryDir) throws IOException {
+    public GitRepo cloneRepository(File repoDir) throws IOException {
         // clone the repository
         var remoteRepository = new GitRepo(url());
         try {
-            FileUtils.forceMkdir(clonedRepositoryDir);
-            remoteRepository.cloneRepository(clonedRepositoryDir);
+            FileUtils.forceMkdir(repoDir);
+            remoteRepository.cloneRepository(repoDir);
         } catch (GitAPIException e) {
             log.error("Unable to clone the repository from GitHub.");
         }

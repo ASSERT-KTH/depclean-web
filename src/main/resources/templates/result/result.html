@@ -18,39 +18,10 @@
 </head>
 
 <body>
-    <!-- Jumbotron -->
-    <div class="jumbotron jumbotron-fluid" th:fragment="jumbotron">
-        <div align="center" class="container">
-            <h2 class="display-4">DepClean Web</h2>
-            <p class="lead">
-                Now you can easily observe all the unused dependencies in your Maven project and
-                evaluate what benefits you project could gain from identifying and deleting them.
-            </p>
-            <a class="btn btn-success" href="http://www.github.com/castor-software/depclean" target="_blank"><i
-                    class="fab fa-github"></i>Github Repo</a>
-        </div>
-    </div>
-
-    <!-- Search box -->
-    <div class="container align-items-center form-inline">
-        <form action="#" class="form-inline" method="POST" th:action="@{/home/home}" th:object="${repo}">
-            <div class=" input-group mb-2 mr-sm-2">
-                <div class="input-group-prepend">
-                    <div class="input-group-text">https://github.com/</div>
-                </div>
-                <input class="form-control" id="inlineFormInputGroupRepo" placeholder="user/project" th:field="*{name}"
-                       type="text">
-            </div>
-            <button class="btn btn-primary mb-2" type="submit">Analyze</button>
-        </form>
-    </div>
-
-    <!-- DepClean lot text area -->
-    <div class="container align-items-center form-inline" method="GET" th:action="@{home/home}" th:object="${repo}">
-        <form class="form-inline" name=myform>
-        <textarea cols=100 name=mytextarea readonly rows=15>
-        </textarea>
-        </form>
+    <!-- Result -->
+    <h1>Result</h1>
+    <div class="container">
+        <p th:text="'id: ' + ${project.id}"/>
     </div>
 
     <!-- Bootstrap libraries -->

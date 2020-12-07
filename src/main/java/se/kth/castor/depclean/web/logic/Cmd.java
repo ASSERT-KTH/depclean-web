@@ -17,9 +17,14 @@ import java.util.Set;
 public class Cmd {
 
     private final File path;
+    private StringBuilder viewLog;
 
     public Cmd(File path) {
         this.path = path;
+    }
+
+    public String getViewLog() {
+        return viewLog.toString();
     }
 
     /**
@@ -32,7 +37,7 @@ public class Cmd {
         Map<String, Set<String>> result = new HashMap<>();
         String[] str = new String[]{
                 "mvn",
-                "se.kth.castor:depclean-maven-plugin:1.1.0:depclean"
+                "se.kth.castor:depclean-maven-plugin:1.1.0:depclean -Dcreate.pom.debloated=true -Dcreate.result.json=true"
         };
         result.put("UsedDirect", new HashSet<>());
         result.put("UsedTransitive", new HashSet<>());
@@ -86,10 +91,24 @@ public class Cmd {
     }
 
     /**
+     * Execute DepClean.
+     */
+    public boolean executeDepClean() {
+        log.info("Executing DepClean in: " + path);
+        String[] str = new String[]{
+                "mvn",
+                "se.kth.castor:depclean-maven-plugin:1.1.0:depclean",
+                "-Dcreate.pom.debloated=true",
+                "-Dcreate.result.json=true"
+        };
+        return printOutput(str);
+    }
+
+    /**
      * Write the dependency tree of a Maven project to a file.
      *
-     * @param outputFile A file with the dependency tree.
-     * @return True if the dependency tree was obtained, false otherwise.
+     * @param outputFile A file with the dependency tree
+     * @return True if the dependency tree was obtained, false otherwise
      */
     public boolean dependencyTree(File outputFile) {
         log.info("Getting dependency tree " + outputFile);
@@ -103,9 +122,9 @@ public class Cmd {
     }
 
     /**
-     * Execute the maven compile.
+     * Compile the sources of the Maven project.
      */
-    public boolean compileProject() {
+    public boolean compileSources() {
         log.info("Compiling project " + path);
         String[] str = new String[]{
                 "mvn",
@@ -115,13 +134,27 @@ public class Cmd {
         return printOutput(str);
     }
 
-    public boolean printOutput(String[] str) {
+    /**
+     * Compile the test sources of the Maven project.
+     */
+    public boolean compileTestSources() {
+        log.info("Compiling project " + path);
+        String[] str = new String[]{
+                "mvn",
+                "org.apache.maven.plugins:maven-compiler-plugin:3.7.0:testCompile",
+                "-Dmaven.compiler.source=1.8"
+        };
+        return printOutput(str);
+    }
+
+    private boolean printOutput(String[] str) {
         try {
             String line;
             Process p = Runtime.getRuntime().exec(str, null, path);
             BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
             while ((line = input.readLine()) != null) {
                 log.info(line);
+                viewLog.append(line);
             }
             input.close();
         } catch (Exception e) {
