@@ -160,11 +160,11 @@
 }
 
 .toolTip-tittle{
-  font-size: 24px;
+  font-size: 18px;
   font-weight: 500;
 }
 .toolTip-sub{
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 500;
   color: hsla(0,0%,0%, .3);
 }
@@ -502,3 +502,27 @@ ant-tabs-tab-btn:focus, .ant-tabs-tab-remove:focus, .ant-tabs-tab-btn:active, .a
   color: #fff;
   color: #64C19A!important;
 } */
+
+/* CHART */
+line.Axis__line {
+  stroke: hsla(0,0%,0%, 0.2);
+  stroke-width: 1px;
+}
+
+.axis_label{
+    font-size: 18px;
+    font-weight: 600;
+    fill: rgb(0 0 0 / 0.3);
+}
+
+.axis__tick{
+  font-size: 16px;
+  font-weight: 400;
+  fill: rgb(0 0 0 / 0.3);
+}
+
+.axis__tick:last-child{
+  text-anchor:end;
+}
+
+
