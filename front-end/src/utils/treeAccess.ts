@@ -139,13 +139,14 @@ export const highlightBloat = (data: artifact[], filterType: string[]): artifact
     });
     return unFiltered;
 }
-//get a depClean pom.XML and filter it according to the type array
-export const filterByType = (data: artifact[], filterType: string[]): artifact[] => {
+
+
+export const filterArtifacts = (data: artifact[], scopeType: string[], filterType: string[]): artifact[] => {
     //if the node is filtered then stop and return
-    // if(!filterType.includes(data.type) return;
+    // if(!scopeType.includes(data.type) return;
     const unFiltered = data.map((node: artifact) => {
-        node.visible = filterType.includes(node.type);
-        node.children = node.visible ? filterByType(node.children, filterType) : setValueToChildren(node.children, "visible", node.visible)
+        node.visible = scopeType.includes(node.scope) && filterType.includes(node.type);
+        node.children = node.visible ? filterArtifacts(node.children, scopeType, filterType) : setValueToChildren(node.children, "visible", node.visible)
         return node;
     });
     return unFiltered;

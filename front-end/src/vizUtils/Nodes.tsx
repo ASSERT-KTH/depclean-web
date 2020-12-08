@@ -55,6 +55,7 @@ export const Nodes = ({
 
     const shapeAccessor = (d: any) => {
         const type = d.data.type;
+        // console.log(d.data.scope)
         if (type === "parent") {
             return <circle
                 key={uuidv4()}

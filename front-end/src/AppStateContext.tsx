@@ -1,5 +1,5 @@
 import React, { createContext, useReducer, useContext } from "react";
-import { filterByType, getTreeHierarchy, cloneProject, highlightBloat } from "./utils/treeAccess";
+import { filterArtifacts, getTreeHierarchy, cloneProject, highlightBloat } from "./utils/treeAccess";
 // import { fetchFromFile } from './utils/dataRetrieve';
 import * as d3 from 'd3';
 
@@ -32,6 +32,7 @@ export interface AppState {
     filteredBloated: string[],
     colorSelected: "color-type" | "color-artifact-id",
     textDisplay: string[],
+    filteredScope: string[],
     viewDependencyList: boolean
 }
 
@@ -51,6 +52,10 @@ type Action =
     }
     | {
         type: "SELECT_VIEW"
+        payload: string[]
+    }
+    | {
+        type: "SELECT_SCOPE"
         payload: string[]
     }
     | {
@@ -956,7 +961,7 @@ const dependCheckGroup: string[] = ["direct", "transitive", "inherited"];
 const bloatedCheckGroup: string[] = [];
 const viewText: string[] = ["groupid", "artifactid", "version"];
 const nodes = d3.hierarchy(data, childrenAccessor);
-
+const scopeCheckGroup: string[] = ["compile", "test", "provided", "runtime", "system"]
 
 const appData: AppState = {
 
@@ -969,6 +974,7 @@ const appData: AppState = {
     textDisplay: viewText,
     viewDependencyList: false,
     colorSelected: "color-type",
+    filteredScope: scopeCheckGroup,
 }
 
 
@@ -979,7 +985,7 @@ const appStateReducer = (state: AppState, action: Action): AppState => {
         case "SELECT_DEPENDENCY": {
             //set the filters
             state.filteredDependencies = action.payload;
-            state.filteredProject.children = filterByType(state.filteredProject.children, action.payload);
+            state.filteredProject.children = filterArtifacts(state.filteredProject.children, state.filteredScope, state.filteredDependencies);
             state.filtered = getTreeHierarchy(state.filteredProject, childrenAccessor);
 
             return {
@@ -991,6 +997,17 @@ const appStateReducer = (state: AppState, action: Action): AppState => {
         case "SELECT_BLOAT": {
             state.filteredBloated = action.payload;
             state.filteredProject.children = highlightBloat(state.filteredProject.children, action.payload);
+            state.filtered = getTreeHierarchy(state.filteredProject, childrenAccessor);
+
+            return {
+                ...state
+
+            }
+        }
+
+        case "SELECT_SCOPE": {
+            state.filteredScope = [...action.payload, "provided", "runtime", "system"];
+            state.filteredProject.children = filterArtifacts(state.filteredProject.children, state.filteredScope, state.filteredDependencies);
             state.filtered = getTreeHierarchy(state.filteredProject, childrenAccessor);
 
             return {

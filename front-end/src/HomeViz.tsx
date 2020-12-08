@@ -32,6 +32,7 @@ export const HomeViz = () => {
     const { filtered,
         filteredDependencies,
         filteredBloated,
+        filteredScope,
         textDisplay,
     } = state;
 
@@ -71,6 +72,14 @@ export const HomeViz = () => {
         ]
     }
 
+    const scope = {
+        tittle: "Scope",
+        children: [
+            { label: "Compile", value: "compile", checked: true, disabled: true },
+            { label: "Test", value: "test", checked: true, disabled: false },
+        ]
+    }
+
 
     //DATA FOR TREE
 
@@ -103,6 +112,14 @@ export const HomeViz = () => {
                 <Col span="2" offset={1}>
                     <CategoryCheckbox
                         key={uuidv4()}
+                        tittle={bloated.tittle}
+                        children={bloated.children}
+                        checked={filteredBloated}
+                        onClick={(checkedValues: string[]) => dispatch({ type: "SELECT_BLOAT", payload: checkedValues })}
+                    />
+                    <Divider />
+                    <CategoryCheckbox
+                        key={uuidv4()}
                         tittle={dep.tittle}
                         children={dep.children}
                         checked={filteredDependencies}
@@ -111,10 +128,10 @@ export const HomeViz = () => {
                     <Divider />
                     <CategoryCheckbox
                         key={uuidv4()}
-                        tittle={bloated.tittle}
-                        children={bloated.children}
-                        checked={filteredBloated}
-                        onClick={(checkedValues: string[]) => dispatch({ type: "SELECT_BLOAT", payload: checkedValues })}
+                        tittle={scope.tittle}
+                        children={scope.children}
+                        checked={filteredScope}
+                        onClick={(checkedValues: string[]) => dispatch({ type: "SELECT_SCOPE", payload: checkedValues })}
                     />
                     <Divider />
                     <CategoryCheckbox

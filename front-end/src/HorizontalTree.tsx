@@ -35,8 +35,11 @@ export const HorizontalTree = ({
     const mouseEnter = (d: any) => {
         setToolTipValue(
             <div>
-                <div className="toolTip-tittle">{d.data.artifactId}</div>
-                <div className="toolTip-sub">Size: <span className="toolTip-value">{d.data.size}</span></div>
+                <div className="toolTip-tittle">ArtifactId: {d.data.artifactId}</div>
+                <div className="toolTip-sub">GroupId: {d.data.groupId}</div>
+                <div className="toolTip-sub">Version: {d.data.version}</div>
+                <div className="toolTip-sub">Scope: {d.data.scope}</div>
+                <div className="toolTip-sub">Size: <span className="toolTip-value">{d3.format(".4f")(d.data.size)}</span></div>
             </div>)
         setToolTipPos({ x: d.y + dimensions.marginTop, y: d.x + dimensions.marginTop })
         setTpOpacity(1);
