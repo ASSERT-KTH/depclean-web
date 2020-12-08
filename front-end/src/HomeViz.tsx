@@ -59,7 +59,6 @@ export const HomeViz = () => {
         children: [
             { label: "Type", value: "color-type" },
             { label: "Artifact Id", value: "color-artifact-id" },
-            { label: "N° nodes", value: "color-group-nodes" },
         ]
     }
 

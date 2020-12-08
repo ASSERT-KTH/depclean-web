@@ -3,6 +3,8 @@ import * as d3 from 'd3';
 import { Squares } from './vizUtils/Squares';
 import { v4 as uuidv4 } from 'uuid';
 import { Tooltip } from './vizUtils/tooltip';
+
+import { useAppState } from "src/AppStateContext";
 // import { Texts } from './vizUtils/Texts';
 
 interface dimension {
@@ -26,6 +28,12 @@ export const TreeMap = ({ data, dimensions }: React.PropsWithChildren<treeMapPro
     const [toolTipPos, setToolTipPos] = useState({ x: 0, y: 0 });
     const [tpOpacity, setTpOpacity] = useState(0)
 
+    //get the main state
+    const { state } = useAppState();
+    //Get all the nodes
+    const {
+        colorSelected
+    } = state;
     //treemapSliceDice
 
     const treeViz = useRef(null);
@@ -34,7 +42,7 @@ export const TreeMap = ({ data, dimensions }: React.PropsWithChildren<treeMapPro
         .size([dimensions.boundedWidth, dimensions.boundedHeight])
         .padding(10)
 
-    const nodes = treemap(data);
+    const nodes = treemap(data).descendants();
 
     const mouseEnter = (d: any) => {
         setToolTipValue(d.data.artifactId + " " + d3.format(".2f")(d.value) + "Mb")
@@ -52,11 +60,11 @@ export const TreeMap = ({ data, dimensions }: React.PropsWithChildren<treeMapPro
     const wAccessor = (d: any) => d.x1 - d.x0;
     const hAccessor = (d: any) => d.y1 - d.y0;
     const nameAccessor = (d: any) => d.data.parent;
-    const tittleAccessor = (d: any) => d.data.parent !== null ? d.data.parent : d.data.artifactId;;
+    const tittleAccessor = (d: any) => d.data.parent !== null ? d.data.parent : d.data.artifactId;
     const depthAccessor = (d: any) => d.depth;
     const color = d3.scaleOrdinal(d3.schemeCategory10);
-    const colorAccessor = (d: any) => color(depthAccessor(d))
-        ;
+
+    const colorAccessor = (d: any) => color(depthAccessor(d));
 
     return (
         <div className="flex flex-justify-center" ref={treeViz}>
@@ -69,7 +77,7 @@ export const TreeMap = ({ data, dimensions }: React.PropsWithChildren<treeMapPro
                     <g transform={"translate(" + 0 + "," + dimensions.marginTop + ")"}  >
                         {/* transform={"translate(" + dimensions.marginLeft + "," + dimensions.marginTop + ")"} */}
                         <Squares
-                            data={nodes.descendants()}
+                            data={nodes}
                             keyNumber={uuidv4()}
                             xAccessor={xAccessor}
                             yAccessor={yAccessor}

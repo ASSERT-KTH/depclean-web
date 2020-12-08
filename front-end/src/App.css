@@ -79,13 +79,13 @@
 }
 .node-leaf{
   /* stroke:gray; */
-  fill:gray;
+  /* fill:gray; */
   stroke-width:3;
 }
 
 .node-parent{
-  stroke:#64C19A ;
-  fill:white;
+  /* stroke:#64C19A ; */
+  /* fill:white; */
   stroke-width:8;
 }
 

@@ -183,6 +183,45 @@ export const formatTree = (project: any) => {
         }
         return n;
     });
-
     return obj;
+}
+
+//Returns an color generator according to the color selected
+export const getColorGenerator = (colorSelected: string, data: string[]) => {
+    switch (colorSelected) {
+        case "color-type":
+            return d3.scaleOrdinal(["#30611E", "#98BC8B", "#7EBEE9", "#EAD17A"]);
+        case "color-artifact-id":
+            const total = data.length;
+            const colors = data.map((d: string, i: number) => {
+                return d3.interpolateSpectral(i / total);
+            })
+            return d3.scaleOrdinal()
+                .domain(data)
+                .range(colors);
+        default:
+            return d3.scaleOrdinal(d3.schemeCategory10);
+    }
+}
+
+//Returns an color data accessor according to the color selected
+export const getColorDataAccessor = (colorSelected: string) => {
+    switch (colorSelected) {
+        case "color-type":
+            return ((d: any): string => d.data.type);
+        case "color-artifact-id":
+            return ((d: any): string => { return d.data.groupId });
+        default:
+            return ((d: any): string => d.data.type);
+    }
+}
+
+export const getArtifactsId = (nodes: d3.HierarchyRectangularNode<unknown>[]): string[] => {
+    //CREATE THE OBJECT
+    const countCategories = (categoryArr: any, node: any) => {
+        const dId = node.data.groupId;
+        return categoryArr.includes(dId) ? categoryArr : [...categoryArr, dId];
+    }
+    //GET ALL THE CATEGORIES AND COUNTED ITEMS
+    return nodes.reduce(countCategories, [])
 }

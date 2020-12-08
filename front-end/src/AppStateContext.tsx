@@ -30,7 +30,7 @@ export interface AppState {
     filtered: any,
     filteredDependencies: string[],
     filteredBloated: string[],
-    colorSelected: "color-type" | "color-artifact-id" | "color-group-nodes",
+    colorSelected: "color-type" | "color-artifact-id",
     textDisplay: string[],
     viewDependencyList: boolean
 }
@@ -55,7 +55,7 @@ type Action =
     }
     | {
         type: "SELECT_COLOR"
-        payload: "color-type" | "color-artifact-id" | "color-group-nodes",
+        payload: "color-type" | "color-artifact-id",
     }
     | {
         type: "LOAD_LOCAL_FILE"
