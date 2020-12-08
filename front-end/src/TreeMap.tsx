@@ -24,7 +24,7 @@ interface treeMapProps {
 }
 
 export const TreeMap = ({ data, dimensions }: React.PropsWithChildren<treeMapProps>) => {
-    const [toolTipValue, setToolTipValue] = useState("");
+    const [toolTipValue, setToolTipValue] = useState(<div></div>);
     const [toolTipPos, setToolTipPos] = useState({ x: 0, y: 0 });
     const [tpOpacity, setTpOpacity] = useState(0)
 
@@ -45,7 +45,12 @@ export const TreeMap = ({ data, dimensions }: React.PropsWithChildren<treeMapPro
     const nodes = treemap(data).descendants();
 
     const mouseEnter = (d: any) => {
-        setToolTipValue(d.data.artifactId + " " + d3.format(".2f")(d.value) + "Mb")
+        setToolTipValue(
+            <div>
+                <div className="toolTip-tittle">{d.data.artifactId}</div>
+                <div className="toolTip-sub"><span className="toolTip-value">{d3.format(".2f")(d.value) + "Mb"}</span></div>
+            </div>
+        )
         setToolTipPos({ x: d.x0 + ((d.x1 - d.x0) / 2), y: d.y0 + dimensions.marginTop })
         setTpOpacity(1);
     }
