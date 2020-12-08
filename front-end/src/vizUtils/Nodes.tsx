@@ -53,16 +53,13 @@ export const Nodes = ({
         // if (d.data.visible) onLeave() 
     }
 
-
-
     const shapeAccessor = (d: any) => {
         const type = d.data.type;
         if (type === "parent") {
-            console.log(color(d), "parent")
             return <circle
                 key={uuidv4()}
                 className={classAccessor(d)}
-                r={size * 4}
+                r={size * 6}
                 onMouseEnter={() => mouseEnter(d)}
                 onMouseLeave={() => mouseLeave(d)}
                 fill={color(d)}
@@ -92,7 +89,8 @@ export const Nodes = ({
                 fill={color(d)}
             />
 
-        } else if (type === "inherited") {
+        }
+        else if (type === "inherited") {
             const size = sizeScalar(d.data.size);
             return <rect
                 className={classAccessor(d)}
@@ -122,7 +120,7 @@ export const Nodes = ({
 
     return (
         <g>
-            {data.map((d, i) => (
+            {data.map((d) => (
                 <g transform={"translate(" + d.y + "," + d.x + ")"} key={uuidv4()}>
                     {shapeAccessor(d)}
                 </g>
