@@ -42,33 +42,31 @@ export const chart = (array: any[], category: string, xScale: d3.ScaleLinear<num
     if (va.length > 10) {
         va.sort((a: any, b: any) => b.value - a.value)
         let newArr = va.slice(0, 9);
-        const remaining = va.slice(9, va.length);
-        const newObj = remaining.reduce((objectMap: any, node: any) => {
-            const counter = objectMap.value + node.value
-            return {
-                ...objectMap,
-                data: {
-                    category: "other",
-                    items: counter
-                },
-                index: 0,
-                value: counter,
-                x0: 0,
-                x1: 0
-            }
-        })
-        newArr.push(newObj);
-        va = [...newArr];
+        const newObj = va.slice(9, va.length)
+            .reduce((objectMap: any, node: any) => {
+                const counter = objectMap.value + node.value
+                return {
+                    ...objectMap,
+                    data: {
+                        category: "others",
+                        items: counter
+                    },
+                    index: 0,
+                    value: counter,
+                    x0: 0,
+                    x1: 0
+                }
+            })
+        va = [...newArr, newObj];
     }
     //calculate the position of the objects
     let pos = 0;
-    for (let i = 0; i < va.length; i++) {
-        const node = va[i];
-        node.x1 = xScale((node.data.items / chartTotal) * 100);
-        node.x0 = pos;
-        node.index = i;
-        pos += node.x1;
-    }
-    return va
+    return va.map((d: any, index: number) => {
+        d.x1 = xScale((d.data.items / chartTotal) * 100);
+        d.x0 = pos;
+        d.index = index;
+        pos += d.x1;
+        return d;
+    })
 
 }

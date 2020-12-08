@@ -524,5 +524,8 @@ line.Axis__line {
 .axis__tick:last-child{
   text-anchor:end;
 }
-
+/* TREE MAP */
+.tree-map rect.square_treemap {
+  stroke: white;
+}
 

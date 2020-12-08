@@ -53,12 +53,14 @@ export const TreeMap = ({ data, dimensions }: React.PropsWithChildren<treeMapPro
     const hAccessor = (d: any) => d.y1 - d.y0;
     const nameAccessor = (d: any) => d.data.parent;
     const tittleAccessor = (d: any) => d.data.parent !== null ? d.data.parent : d.data.artifactId;;
+    const depthAccessor = (d: any) => d.depth;
     const color = d3.scaleOrdinal(d3.schemeCategory10);
-    const colorAccessor = (d: any) => color(tittleAccessor(d));
+    const colorAccessor = (d: any) => color(depthAccessor(d))
+        ;
 
     return (
         <div className="flex flex-justify-center" ref={treeViz}>
-            <div className="wrapper">
+            <div className="wrapper tree-map">
                 <Tooltip value={toolTipValue} position={toolTipPos} opacity={tpOpacity} />
                 <svg
                     width={dimensions.boundedWidth}
