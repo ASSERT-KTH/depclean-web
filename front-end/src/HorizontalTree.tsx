@@ -76,7 +76,7 @@ export const HorizontalTree = ({
     // .angle(function (d: any) { return d.x; })
     // .radius(function (d: any) { return d.y; });
 
-    const radialClassAccessor = (d: any) => "treeLink treeLink-ommited"
+    const radialClassAccessor = () => "treeLink treeLink-ommited"
 
     const xAccessor = (d: any) => d.x;
     const yAccessor = (d: any) => d.y;
@@ -96,6 +96,12 @@ export const HorizontalTree = ({
     //GET ALL THE NODES WITH A TREE STRUCTURE
     const treeNodes = tree(data).descendants();
     const ommitedLinks = getOmmitedLinks(treeNodes);
+    const ommitedLabels = ommitedLinks.map((d: any) => <text
+        key={uuidv4()}
+        x={d.target.y + (d.source.y - d.target.y) / 2}
+        y={d.target.x + (d.source.x - d.target.x) / 2}
+        textAnchor="middle"
+        className="omitted-label">{d.version}</text>)
 
     const nodes = treeNodes.filter((d: any) => d.data.type !== "omitted" && d.data.type !== "test");
 
@@ -131,6 +137,7 @@ export const HorizontalTree = ({
                             classAccessor={radialClassAccessor}
                             key={uuidv4()}
                         />
+                        {ommitedLabels}
 
                         <Nodes
                             data={nodes}

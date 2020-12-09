@@ -82,7 +82,7 @@ export const Nodes = ({
             const size = sizeScalar(d.data.size);
             return <rect
                 className={classAccessor(d)}
-                transform={"translate(" + (-size / 2) + "," + 0 + ")"}
+                // transform={"translate(" + (-size / 2) + "," + 0 + ")"}
                 key={uuidv4()}
                 y={-size / 2}
                 width={size}
