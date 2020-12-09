@@ -17,7 +17,7 @@ import java.util.Set;
 public class Cmd {
 
     private final File path;
-    private StringBuilder viewLog;
+    private StringBuilder viewLog = new StringBuilder();
 
     public Cmd(File path) {
         this.path = path;
