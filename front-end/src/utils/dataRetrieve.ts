@@ -60,12 +60,12 @@ export const createProject = (data: any): artifact => {
     return project;
 }
 
-const getSize = (d: any) => {
-    const getSize = ((size: number, node: any) => {
-        return node.size === null ? size : size + parseFloat(node.size);
-    })
-    return d.reduce(getSize, 0);
-}
+// const getSize = (d: any) => {
+//     const getSize = ((size: number, node: any) => {
+//         return node.size === null ? size : size + parseFloat(node.size);
+//     })
+//     return d.reduce(getSize, 0);
+// }
 
 
 //load the data from a file

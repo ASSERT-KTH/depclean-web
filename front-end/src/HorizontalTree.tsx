@@ -6,7 +6,7 @@ import { Links } from './vizUtils/Links';
 import { Nodes } from './vizUtils/Nodes';
 import { Tooltip } from './vizUtils/tooltip';
 import { DelaunayGrid } from 'src/vizUtils/Delaunay';
-
+import { getOmmitedLinks } from 'src/utils/treeAccess';
 
 interface dimension {
     width: number,
@@ -61,6 +61,23 @@ export const HorizontalTree = ({
             + " " + (d.y + d.parent.y + rectNode.width) / 2 + "," + d.parent.x
             + " " + (d.parent.y + rectNode.width) + "," + d.parent.x;
     };
+
+    const linksClassAccessor = (d: any) => {
+        return "treeLink " +
+            (d.data.highlight || d.parent.data.highlight ? " treeLink-highlight" : "") +
+            (d.data.visible ? " treeLink-visible" : " treeLink-invisible");
+    }
+
+    const linkradial = d3.linkVertical()
+        .x(function (d: any) { return d.y; })
+        .y(function (d: any) { return d.x; });
+
+    // const linkradial = d3.linkRadial()
+    // .angle(function (d: any) { return d.x; })
+    // .radius(function (d: any) { return d.y; });
+
+    const radialClassAccessor = (d: any) => "treeLink treeLink-ommited"
+
     const xAccessor = (d: any) => d.x;
     const yAccessor = (d: any) => d.y;
 
@@ -77,7 +94,10 @@ export const HorizontalTree = ({
     // .size([dimensions.boundedHeight, dimensions.boundedWidth])
 
     //GET ALL THE NODES WITH A TREE STRUCTURE
-    const nodes = tree(data).descendants().filter((d: any) => d.data.type !== "omitted" && d.data.type !== "test");
+    const treeNodes = tree(data).descendants();
+    const ommitedLinks = getOmmitedLinks(treeNodes);
+
+    const nodes = treeNodes.filter((d: any) => d.data.type !== "omitted" && d.data.type !== "test");
 
     // const totalSize = d3.sum(nodes, (d: any) => d.data.size)
     const sizeExtent = d3.extent(nodes, (d: any) => d.data.size)
@@ -101,8 +121,17 @@ export const HorizontalTree = ({
                         <Links
                             data={nodes.slice(1)}
                             linkAccesor={linkAccesor}
+                            classAccessor={linksClassAccessor}
                             key={uuidv4()}
                         />
+                        {/* OMITTED LINKS */}
+                        <Links
+                            data={ommitedLinks}
+                            linkAccesor={linkradial}
+                            classAccessor={radialClassAccessor}
+                            key={uuidv4()}
+                        />
+
                         <Nodes
                             data={nodes}
                             size={5}

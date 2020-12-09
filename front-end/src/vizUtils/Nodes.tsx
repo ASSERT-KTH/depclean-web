@@ -75,12 +75,14 @@ export const Nodes = ({
                 onMouseEnter={() => mouseEnter(d)}
                 onMouseLeave={() => mouseLeave(d)}
                 fill={color(d)}
+
             />
 
         } else if (type === "transitive") {
             const size = sizeScalar(d.data.size);
             return <rect
                 className={classAccessor(d)}
+                transform={"translate(" + (-size / 2) + "," + 0 + ")"}
                 key={uuidv4()}
                 y={-size / 2}
                 width={size}
@@ -95,7 +97,7 @@ export const Nodes = ({
             const size = sizeScalar(d.data.size);
             return <rect
                 className={classAccessor(d)}
-                transform={"rotate(45)"}
+                transform={"rotate(45), translate(" + (-size / 2) + "," + (size / 2) + ")"}
                 key={uuidv4()}
                 y={-size}
                 width={size}

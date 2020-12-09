@@ -226,3 +226,26 @@ export const getArtifactsId = (nodes: d3.HierarchyRectangularNode<unknown>[]): s
     //GET ALL THE CATEGORIES AND COUNTED ITEMS
     return nodes.reduce(countCategories, [])
 }
+
+//returns all the links of the ommited
+export const getOmmitedLinks = (nodes: any) => {
+    //get all the ommited
+    const filterOmmited = (d: any) => d.data.omitted === true;
+    //get the target for each of the ommited
+    const getLinks = (linksMap: any, node: any) => {
+        const parent = node.parent;
+        const replacement = nodes.find((d: any) =>
+            d.data.groupId === node.data.groupId
+            && d.data.artifactId === node.data.artifactId
+            && d.data.omitted === false);
+        const link = {
+            source: { x: parent.x, y: parent.y }, //parents position
+            target: { x: replacement.x, y: replacement.y }, // replacement position
+            version: node.data.version
+        };
+        return [...linksMap, link]
+    }
+    return nodes
+        .filter(filterOmmited)
+        .reduce(getLinks, [])
+}

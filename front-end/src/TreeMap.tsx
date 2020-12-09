@@ -4,7 +4,6 @@ import { Squares } from './vizUtils/Squares';
 import { v4 as uuidv4 } from 'uuid';
 import { Tooltip } from './vizUtils/tooltip';
 
-import { useAppState } from "src/AppStateContext";
 // import { Texts } from './vizUtils/Texts';
 
 interface dimension {
@@ -29,11 +28,8 @@ export const TreeMap = ({ data, dimensions }: React.PropsWithChildren<treeMapPro
     const [tpOpacity, setTpOpacity] = useState(0)
 
     //get the main state
-    const { state } = useAppState();
     //Get all the nodes
-    const {
-        colorSelected
-    } = state;
+
     //treemapSliceDice
 
     const treeViz = useRef(null);
