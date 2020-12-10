@@ -18,22 +18,22 @@ import java.nio.charset.StandardCharsets;
 @Slf4j
 public class DepTree {
 
-    private final String treeTextFilePath;
+   private final String treeTextFilePath;
 
-    public DepTree(String treeTextFilePath) {
-        this.treeTextFilePath = treeTextFilePath;
-    }
+   public DepTree(String treeTextFilePath) {
+      this.treeTextFilePath = treeTextFilePath;
+   }
 
-    public String parseTreeToJSON() throws ParseException, IOException {
-        InputType type = InputType.TEXT;
-        Reader r = new BufferedReader(new InputStreamReader(
-                new FileInputStream(treeTextFilePath), StandardCharsets.UTF_8
-        ));
-        Parser parser = type.newParser();
-        Node tree = parser.parse(r);
-        NodeAdapter nodeAdapter = new NodeAdapter();
-        GsonBuilder gsonBuilder = new GsonBuilder().registerTypeAdapter(Node.class, nodeAdapter);
-        Gson gson = gsonBuilder.create();
-        return gson.toJson(tree);
-    }
+   public String parseTreeToJSON() throws ParseException, IOException {
+      InputType type = InputType.TEXT;
+      Reader r = new BufferedReader(new InputStreamReader(
+              new FileInputStream(treeTextFilePath), StandardCharsets.UTF_8
+      ));
+      Parser parser = type.newParser();
+      Node tree = parser.parse(r);
+      NodeAdapter nodeAdapter = new NodeAdapter();
+      GsonBuilder gsonBuilder = new GsonBuilder().registerTypeAdapter(Node.class, nodeAdapter);
+      Gson gson = gsonBuilder.create();
+      return gson.toJson(tree);
+   }
 }

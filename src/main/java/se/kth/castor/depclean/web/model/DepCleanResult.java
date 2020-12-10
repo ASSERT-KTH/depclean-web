@@ -5,9 +5,9 @@ import lombok.Data;
 @Data
 public class DepCleanResult {
 
-    private final String result;
+   private final String result;
 
-    public DepCleanResult(String result) {
-        this.result = result;
-    }
+   public DepCleanResult(String result) {
+      this.result = result;
+   }
 }

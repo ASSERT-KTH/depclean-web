@@ -7,9 +7,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Repo {
 
-    private String name;
+   private String name;
 
-    public Repo(String name) {
-        this.name = name;
-    }
+   public Repo(String name) {
+      this.name = name;
+   }
 }

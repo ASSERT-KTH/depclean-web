@@ -6,7 +6,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import se.kth.castor.depclean.web.logic.Logic;
-import se.kth.castor.depclean.web.model.Project;
 import se.kth.castor.depclean.web.model.Repo;
 
 import java.io.IOException;
@@ -15,20 +14,25 @@ import java.io.IOException;
 @Controller
 public class HomeController {
 
-    @GetMapping("/")
-    public String homePageForm(Model model) {
-        Repo repo = new Repo();
-        repo.setName("cesarsotovalero/clothing");
-        model.addAttribute("repo", repo);
-        return "/home/home";
-    }
+   @GetMapping("/")
+   public String homePageForm(Model model) {
+      Repo repo = new Repo();
+      repo.setName("cesarsotovalero/clothing");
+      model.addAttribute("repo", repo);
+      return "/home/home";
+   }
 
-    @PostMapping("/home/home")
-    public Project submitRepo(Repo repo) throws IOException {
-        log.info("Processing repo: " + repo.getName());
-        Logic logic = new Logic();
-        logic.processRepo(repo.getName());
-        ProjectController projectController = new ProjectController();
-        return projectController.all();
-    }
+   @PostMapping("/home/home")
+   public String submitRepo(Repo repo) throws IOException {
+      log.info("Processing repo: " + repo.getName());
+      Logic logic = new Logic();
+      logic.processRepo(repo.getName());
+      return "/home/home/project";
+   }
+
+   @GetMapping("/error")
+   public String error(Model model) {
+      return "/home/error";
+   }
+
 }

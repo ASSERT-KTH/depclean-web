@@ -18,54 +18,54 @@ import java.util.List;
 @Slf4j
 public class GitHubRepo {
 
-    /**
-     * The name of the repository in the form [user-on-github]/[name-of-the-repository]]
-     */
-    private final String repoName;
+   /**
+    * The name of the repository in the form [user-on-github]/[name-of-the-repository]]
+    */
+   private final String repoName;
 
-    /**
-     * A repository on GitHub.
-     */
-    private final GHRepository ghRepository;
+   /**
+    * A repository on GitHub.
+    */
+   private final GHRepository ghRepository;
 
-    public GitHubRepo(String repoName) throws IOException {
-        this.repoName = repoName;
-        GitHub github = GitHubBuilder.fromEnvironment().build();
-        ghRepository = github.getRepository(repoName);
-    }
+   public GitHubRepo(String repoName) throws IOException {
+      this.repoName = repoName;
+      GitHub github = GitHubBuilder.fromEnvironment().build();
+      ghRepository = github.getRepository(repoName);
+   }
 
-    public int nbForks() {
-        return ghRepository.getForksCount();
-    }
+   public int nbForks() {
+      return ghRepository.getForksCount();
+   }
 
-    public String repositoryName() {
-        return repoName;
-    }
+   public String repositoryName() {
+      return repoName;
+   }
 
-    public List<GHTag> tags() throws IOException {
-        return ghRepository.listTags().toList();
-    }
+   public List<GHTag> tags() throws IOException {
+      return ghRepository.listTags().toList();
+   }
 
-    public String url() {
-        return ghRepository.getHtmlUrl().toString();
-    }
+   public String url() {
+      return ghRepository.getHtmlUrl().toString();
+   }
 
-    /**
-     * Clones a repository into a folder in the file system using the GitHub repository name.
-     *
-     * @param repoDir The path where the repository is going to be placed.
-     * @return A GitRepo.
-     * @throws IOException
-     */
-    public GitRepo cloneRepository(File repoDir) throws IOException {
-        // clone the repository
-        var remoteRepository = new GitRepo(url());
-        try {
-            FileUtils.forceMkdir(repoDir);
-            remoteRepository.cloneRepository(repoDir);
-        } catch (GitAPIException e) {
-            log.error("Unable to clone the repository from GitHub.");
-        }
-        return remoteRepository;
-    }
+   /**
+    * Clones a repository into a folder in the file system using the GitHub repository name.
+    *
+    * @param repoDir The path where the repository is going to be placed.
+    * @return A GitRepo.
+    * @throws IOException
+    */
+   public GitRepo cloneRepository(File repoDir) throws IOException {
+      // clone the repository
+      var remoteRepository = new GitRepo(url());
+      try {
+         FileUtils.forceMkdir(repoDir);
+         remoteRepository.cloneRepository(repoDir);
+      } catch (GitAPIException e) {
+         log.error("Unable to clone the repository from GitHub.");
+      }
+      return remoteRepository;
+   }
 }

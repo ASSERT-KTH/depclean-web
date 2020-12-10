@@ -6,8 +6,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class DepCleanWeb {
 
-    public static void main(String[] args) {
-        SpringApplication.run(DepCleanWeb.class, args);
-    }
+   public static void main(String[] args) {
+      SpringApplication.run(DepCleanWeb.class, args);
+   }
 
 }
