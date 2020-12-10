@@ -32,7 +32,6 @@ export const HomeViz = () => {
     //Get all the nodes
     const { filtered,
         filteredDependencies,
-        filteredBloated,
         filteredScope,
         textDisplay,
         viewOmitted
@@ -48,14 +47,14 @@ export const HomeViz = () => {
         ]
     }
 
-    const bloated = {
-        tittle: "Bloated",
-        children: [
-            { label: "Direct", value: "direct", checked: true, disabled: false },
-            { label: "Transitive", value: "transitive", checked: true, disabled: false },
-            { label: "Inherited", value: "inherited", checked: true, disabled: false }
-        ]
-    }
+    // const bloated = {
+    //     tittle: "Bloated",
+    //     children: [
+    //         { label: "Direct", value: "direct", checked: true, disabled: false },
+    //         { label: "Transitive", value: "transitive", checked: true, disabled: false },
+    //         { label: "Inherited", value: "inherited", checked: true, disabled: false }
+    //     ]
+    // }
 
     const colorOptions = {
         tittle: "Color by",
@@ -119,14 +118,7 @@ export const HomeViz = () => {
             >
                 {/* CATEGORY LIST */}
                 <Col span="2" offset={1}>
-                    <CategoryCheckbox
-                        key={uuidv4()}
-                        tittle={bloated.tittle}
-                        children={bloated.children}
-                        checked={filteredBloated}
-                        onClick={(checkedValues: string[]) => dispatch({ type: "SELECT_BLOAT", payload: checkedValues })}
-                    />
-                    <Divider />
+
                     <CategoryCheckbox
                         key={uuidv4()}
                         tittle={dep.tittle}

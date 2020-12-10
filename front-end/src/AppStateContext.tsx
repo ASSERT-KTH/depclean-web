@@ -1,5 +1,5 @@
 import React, { createContext, useReducer, useContext } from "react";
-import { filterArtifacts, getTreeHierarchy, cloneProject, highlightBloat } from "./utils/treeAccess";
+import { filterArtifacts, getTreeHierarchy, cloneProject, highlightBloat, debloatDirect, debloatAll } from "./utils/treeAccess";
 // import { fetchFromFile } from './utils/dataRetrieve';
 import * as d3 from 'd3';
 
@@ -35,6 +35,7 @@ export interface AppState {
     filteredScope: string[],
     viewDependencyList: boolean,
     viewOmitted: boolean
+    debloatNum: number
 }
 
 interface AppStateContextProps {
@@ -78,6 +79,10 @@ type Action =
     | {
         type: "VIEW_OMITTED"
         payload: boolean
+    }
+    | {
+        type: "DEBLOAT_PROJECT"
+        payload: number
     }
 
 
@@ -974,17 +979,22 @@ const scopeCheckGroup: string[] = ["compile", "test", "provided", "runtime", "sy
 
 const appData: AppState = {
 
-    project: data,
-    filteredProject: cloneProject(data),
-    nodes: nodes,
+    project: data, //the original data only changes when you load a new project
+    nodes: nodes, //all the nodes of the filtered project
+    filteredProject: cloneProject(data),// is a copy of the projec which will be manipulated
     filtered: nodes,
+
     filteredDependencies: dependCheckGroup,
     filteredBloated: bloatedCheckGroup,
-    textDisplay: viewText,
-    viewDependencyList: false,
-    colorSelected: "color-type",
     filteredScope: scopeCheckGroup,
+
+    textDisplay: viewText,
+    colorSelected: "color-type",
+
+    viewDependencyList: false,
     viewOmitted: true,
+
+    debloatNum: 0,
 }
 
 
@@ -1064,6 +1074,7 @@ const appStateReducer = (state: AppState, action: Action): AppState => {
                 colorSelected: "color-type",
                 filteredScope: scopeCheckGroup,
                 viewOmitted: true,
+                debloatNum: 0,
             }
         }
         case "VIEW_OMITTED": {
@@ -1072,6 +1083,27 @@ const appStateReducer = (state: AppState, action: Action): AppState => {
                 viewOmitted: action.payload
             }
         }
+        case "DEBLOAT_PROJECT": {
+
+            const projectDebloated: artifact = cloneProject(state.project);
+            projectDebloated.children =
+                action.payload === 0 ? state.project.children :
+                    action.payload === 50 ? debloatDirect(projectDebloated.children) :
+                        action.payload === 100 ? debloatAll(projectDebloated.children, ["direct", "transitive"]) : projectDebloated.children;
+
+            const filteredDebloated = getTreeHierarchy(projectDebloated, childrenAccessor);
+            // const nodes = d3.hierarchy(newProject, childrenAccessor);
+
+
+            return {
+                ...state,
+                debloatNum: action.payload,
+                filteredProject: projectDebloated,
+                filtered: filteredDebloated,
+            }
+        }
+
+
 
         default: {
             console.log("DEFAULT")

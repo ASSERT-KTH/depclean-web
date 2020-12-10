@@ -7,9 +7,9 @@ import { ExclamationCircleOutlined } from '@ant-design/icons';
 
 export const MainInfo = () => {
     //get the main state
-    const { state } = useAppState();
+    const { state, dispatch } = useAppState();
     //Get all the nodes
-    const { filtered } = state;
+    const { filtered, debloatNum } = state;
     //GET THE INFORMATIN
     const descent = filtered.descendants();
     const dependencyInfo = countDependencies(descent);
@@ -29,6 +29,12 @@ export const MainInfo = () => {
             label: "All",
         },
     };
+
+    const onChange = (value: number) => {
+        dispatch({ type: "DEBLOAT_PROJECT", payload: value })
+    };
+
+
     return (
         <Col span={20} offset={2}>
             <div className="flex flex-enter margin-20 " >
@@ -57,9 +63,10 @@ export const MainInfo = () => {
                         style={{ width: 300 }}
                         marks={marks}
                         step={50}
-                        defaultValue={0}
+                        defaultValue={debloatNum}
+                        value={debloatNum}
                         tooltipVisible={false}
-
+                        onChange={onChange}
                     />
                 </div>
             </div>

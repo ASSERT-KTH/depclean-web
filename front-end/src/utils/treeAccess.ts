@@ -1,4 +1,6 @@
+import { ConsoleSqlOutlined } from '@ant-design/icons';
 import * as d3 from 'd3';
+import { Children } from 'react';
 // import { isConstructorDeclaration } from 'typescript';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -217,6 +219,7 @@ export const getColorDataAccessor = (colorSelected: string) => {
     }
 }
 
+
 export const getArtifactsId = (nodes: d3.HierarchyRectangularNode<unknown>[]): string[] => {
     //CREATE THE OBJECT
     const countCategories = (categoryArr: any, node: any) => {
@@ -227,25 +230,38 @@ export const getArtifactsId = (nodes: d3.HierarchyRectangularNode<unknown>[]): s
     return nodes.reduce(countCategories, [])
 }
 
-//returns all the links of the ommited
-export const getOmmitedLinks = (nodes: any) => {
-    //get all the ommited
-    const filterOmmited = (d: any) => d.data.omitted === true;
-    //get the target for each of the ommited
-    const getLinks = (linksMap: any, node: any) => {
-        const parent = node.parent;
-        const replacement = nodes.find((d: any) =>
-            d.data.groupId === node.data.groupId
-            && d.data.artifactId === node.data.artifactId
-            && d.data.omitted === false);
-        const link = {
-            source: { x: parent.x, y: parent.y }, //parents position
-            target: { x: replacement.x, y: replacement.y }, // replacement position
-            version: node.data.version
-        };
-        return [...linksMap, link]
-    }
-    return nodes
-        .filter(filterOmmited)
-        .reduce(getLinks, [])
+//hightlight all the direct dependencies and all its transitive that are bloated
+export const debloatDirect = (children: artifact[]): artifact[] => {
+    //get all the direct bloated
+    const artifacts = children.map((d: artifact) => {
+        //  d.status === "bloated" && d.type === "direct"
+        const isBloated = d.status === "bloated" && d.type === "direct";
+        d.highlight = isBloated;
+        d.children = isBloated ? debloatTransitive(d.children) : d.children;
+        return d;
+    })
+    return [...artifacts]
 }
+
+const debloatTransitive = (children: artifact[]): artifact[] => {
+    const artifacts = children.map((d: artifact) => {
+        d.highlight = d.status === "bloated" && d.type === "transitive" ? true : false;
+        d.children = debloatTransitive(d.children)
+        return d;
+    })
+    return [...artifacts];
+}
+
+
+
+export const debloatAll = (data: artifact[], filterType: string[]): artifact[] => {
+    const unFiltered = data.map((node: artifact) => {
+        node.highlight = filterType.includes(node.type) && node.status === "bloated";
+        const filteredChildren = node.children.filter((d: artifact) => filterType.includes(node.type))
+        const filteredInherited = node.children.filter((d: artifact) => node.type === "inherited")
+        node.children = [...filteredInherited, ...highlightBloat(filteredChildren, filterType)]
+        return node;
+    });
+    return unFiltered;
+}
+
