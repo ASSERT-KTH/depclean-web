@@ -59,8 +59,13 @@ export const Project = ({ data }: React.PropsWithChildren<projectProps>) => {
     const handleClick = async (url: string) => {
         await fetchFromFile(url)
             .then((data) => {
+                //format the data to an artifact type
                 const project: artifact = createProject(data);
+                //reset the filters first
+                dispatch({ type: "RESET_FILTERS", payload: null })
+                //replace the current project for the new one
                 dispatch({ type: "LOAD_LOCAL_FILE", payload: project });
+                //navigate to the view page
                 history.push("/");
             })
             .catch((err) => {

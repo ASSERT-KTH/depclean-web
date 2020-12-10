@@ -33,7 +33,8 @@ export interface AppState {
     colorSelected: "color-type" | "color-artifact-id",
     textDisplay: string[],
     filteredScope: string[],
-    viewDependencyList: boolean
+    viewDependencyList: boolean,
+    viewOmitted: boolean
 }
 
 interface AppStateContextProps {
@@ -68,6 +69,14 @@ type Action =
     }
     | {
         type: "VIEW_DEPENDENCY_LIST"
+        payload: boolean
+    }
+    | {
+        type: "RESET_FILTERS"
+        payload: null
+    }
+    | {
+        type: "VIEW_OMITTED"
         payload: boolean
     }
 
@@ -975,6 +984,7 @@ const appData: AppState = {
     viewDependencyList: false,
     colorSelected: "color-type",
     filteredScope: scopeCheckGroup,
+    viewOmitted: true,
 }
 
 
@@ -1036,7 +1046,6 @@ const appStateReducer = (state: AppState, action: Action): AppState => {
             const newNodes = d3.hierarchy(action.payload, childrenAccessor);
             state.nodes = newNodes;
             state.filtered = newNodes;
-            // console.log(state)
             return {
                 ...state
             }
@@ -1047,6 +1056,23 @@ const appStateReducer = (state: AppState, action: Action): AppState => {
                 ...state
             }
         }
+        case "RESET_FILTERS": {
+            return {
+                ...state,
+                filteredDependencies: dependCheckGroup,
+                filteredBloated: bloatedCheckGroup,
+                colorSelected: "color-type",
+                filteredScope: scopeCheckGroup,
+            }
+        }
+        case "VIEW_OMITTED": {
+            return {
+                ...state,
+                viewOmitted: action.payload
+            }
+        }
+
+
 
         default: {
             console.log("DEFAULT")
