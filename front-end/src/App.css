@@ -68,6 +68,10 @@
   font-size: 10px;
 }
 
+.ommited-invislbe{
+  opacity:0.1;
+}
+
 .treeLink-highlight{
   stroke:hsla(2,79%,68%, 0.8);;
 }

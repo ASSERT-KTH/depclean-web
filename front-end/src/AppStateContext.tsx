@@ -1063,6 +1063,7 @@ const appStateReducer = (state: AppState, action: Action): AppState => {
                 filteredBloated: bloatedCheckGroup,
                 colorSelected: "color-type",
                 filteredScope: scopeCheckGroup,
+                viewOmitted: true,
             }
         }
         case "VIEW_OMITTED": {
@@ -1071,8 +1072,6 @@ const appStateReducer = (state: AppState, action: Action): AppState => {
                 viewOmitted: action.payload
             }
         }
-
-
 
         default: {
             console.log("DEFAULT")

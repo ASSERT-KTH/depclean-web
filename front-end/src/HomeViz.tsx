@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 // import { LateralMenu } from './LateralMenu';
 import { MainInfo } from './MainInfo';
-import { Row, Col, Divider } from 'antd';
+import { Row, Col, Divider, Checkbox } from 'antd';
 import { CategoryCheckbox } from './CategoryCheckbox';
 import { CategoryRadialBox } from './CategoryRadialBox';
 import { DependenceProvency } from './DependenceProvency';
@@ -9,6 +9,7 @@ import { HorizontalTree } from './HorizontalTree';
 import { useAppState } from "./AppStateContext";
 import { v4 as uuidv4 } from 'uuid';
 import { DependencyList } from './DependencyList';
+import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 
 export const HomeViz = () => {
     const [size, setSize] = useState({
@@ -34,6 +35,7 @@ export const HomeViz = () => {
         filteredBloated,
         filteredScope,
         textDisplay,
+        viewOmitted
     } = state;
 
 
@@ -77,6 +79,13 @@ export const HomeViz = () => {
         children: [
             { label: "Compile", value: "compile", checked: true, disabled: true },
             { label: "Test", value: "test", checked: true, disabled: false },
+        ]
+    }
+
+    const omitted = {
+        tittle: "Omitted",
+        children: [
+            { label: "Omitted", value: "omitted", checked: true, disabled: false },
         ]
     }
 
@@ -133,6 +142,12 @@ export const HomeViz = () => {
                         checked={filteredScope}
                         onClick={(checkedValues: string[]) => dispatch({ type: "SELECT_SCOPE", payload: checkedValues })}
                     />
+                    <Divider />
+                    <Checkbox
+                        key={uuidv4()}
+                        checked={viewOmitted}
+                        onChange={(e: CheckboxChangeEvent) => dispatch({ type: "VIEW_OMITTED", payload: !viewOmitted })}
+                    >{omitted.tittle}</Checkbox>
                     <Divider />
                     <CategoryCheckbox
                         key={uuidv4()}

@@ -6,7 +6,8 @@ import { Links } from './vizUtils/Links';
 import { Nodes } from './vizUtils/Nodes';
 import { Tooltip } from './vizUtils/tooltip';
 import { DelaunayGrid } from 'src/vizUtils/Delaunay';
-import { getOmmitedLinks } from 'src/utils/treeAccess';
+import { useAppState } from "./AppStateContext";
+import { parseOmitedLinks, getOmmitedLinks } from "src/utils/horizontalTree";
 
 interface dimension {
     width: number,
@@ -31,6 +32,13 @@ export const HorizontalTree = ({
     const [toolTipValue, setToolTipValue] = useState(<div></div>);
     const [toolTipPos, setToolTipPos] = useState({ x: 0, y: 0 });
     const [tpOpacity, setTpOpacity] = useState(0)
+
+    //get the main state
+    const { state } = useAppState();
+    //Get all the nodes
+    const {
+        viewOmitted
+    } = state;
 
     const mouseEnter = (d: any) => {
         setToolTipValue(
@@ -95,13 +103,15 @@ export const HorizontalTree = ({
 
     //GET ALL THE NODES WITH A TREE STRUCTURE
     const treeNodes = tree(data).descendants();
-    const ommitedLinks = getOmmitedLinks(treeNodes);
-    const ommitedLabels = ommitedLinks.map((d: any) => <text
-        key={uuidv4()}
-        x={d.target.y + (d.source.y - d.target.y) / 2}
-        y={d.target.x + (d.source.x - d.target.x) / 2}
-        textAnchor="middle"
-        className="omitted-label">{d.version}</text>)
+    const ommitedLinks = viewOmitted ? getOmmitedLinks(treeNodes) : <React.Fragment />;
+    const ommitedLabels = viewOmitted ? parseOmitedLinks(ommitedLinks) : <React.Fragment />
+    const omittedLinksLines = viewOmitted ?
+        <Links
+            data={ommitedLinks}
+            linkAccesor={linkradial}
+            classAccessor={radialClassAccessor}
+            key={uuidv4()}
+        /> : <React.Fragment />
 
     const nodes = treeNodes.filter((d: any) => d.data.type !== "omitted" && d.data.type !== "test");
 
@@ -111,6 +121,7 @@ export const HorizontalTree = ({
     const sizeScale = d3.scaleLinear()
         .domain([sizeExtent[0], sizeExtent[1]])
         .range([6, 20])
+
 
 
 
@@ -131,12 +142,7 @@ export const HorizontalTree = ({
                             key={uuidv4()}
                         />
                         {/* OMITTED LINKS */}
-                        <Links
-                            data={ommitedLinks}
-                            linkAccesor={linkradial}
-                            classAccessor={radialClassAccessor}
-                            key={uuidv4()}
-                        />
+                        {omittedLinksLines}
                         {ommitedLabels}
 
                         <Nodes
