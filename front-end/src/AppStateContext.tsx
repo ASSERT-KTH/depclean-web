@@ -36,6 +36,7 @@ export interface AppState {
     viewDependencyList: boolean,
     viewOmitted: boolean
     debloatNum: number
+    messageState: "ORIGINAL" | "DEBLOAT_DIRECT" | "DEBLOAT_ALL",
 }
 
 interface AppStateContextProps {
@@ -981,7 +982,7 @@ const appData: AppState = {
 
     project: data, //the original data only changes when you load a new project
     nodes: nodes, //all the nodes of the filtered project
-    filteredProject: cloneProject(data),// is a copy of the projec which will be manipulated
+    filteredProject: cloneProject(data),// is a copy of the projec which will be modified
     filtered: nodes,
 
     filteredDependencies: dependCheckGroup,
@@ -995,6 +996,8 @@ const appData: AppState = {
     viewOmitted: true,
 
     debloatNum: 0,
+
+    messageState: "ORIGINAL",
 }
 
 
@@ -1093,13 +1096,17 @@ const appStateReducer = (state: AppState, action: Action): AppState => {
 
             const filteredDebloated = getTreeHierarchy(projectDebloated, childrenAccessor);
             // const nodes = d3.hierarchy(newProject, childrenAccessor);
-
+            const messageState =
+                action.payload === 0 ? "ORIGINAL" :
+                    action.payload === 50 ? "DEBLOAT_DIRECT" :
+                        action.payload === 100 ? "DEBLOAT_ALL" : "ORIGINAL";
 
             return {
                 ...state,
                 debloatNum: action.payload,
                 filteredProject: projectDebloated,
                 filtered: filteredDebloated,
+                messageState: messageState
             }
         }
 

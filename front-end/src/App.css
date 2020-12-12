@@ -259,6 +259,10 @@ p{
   /* justify-content: center; */
 }
 
+.flex-wrap{
+  flex-wrap: wrap;
+}
+
 .flex-justify-center{
   justify-content: center;
 }
@@ -296,6 +300,9 @@ p{
 }
 .margin-20{
   margin-top:20px;
+}
+
+.margin-buttom-40{
   margin-bottom:40px
 }
 .margin-5{
@@ -547,3 +554,11 @@ line.Axis__line {
   stroke: white;
 }
 
+.text-message{
+    font-size: 14px;
+    font-weight: 600;
+    height: 100px;
+    margin-right: 30px;
+    color: rgb(193, 193, 193);
+    
+}

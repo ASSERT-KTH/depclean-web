@@ -33,7 +33,7 @@ export const HomeViz = () => {
     const { filtered,
         filteredDependencies,
         filteredScope,
-        textDisplay,
+        // textDisplay,
         viewOmitted
     } = state;
 
@@ -64,14 +64,14 @@ export const HomeViz = () => {
         ]
     }
 
-    const view = {
-        tittle: "Label",
-        children: [
-            { label: "GroupId", value: "direct", checked: true, disabled: false },
-            { label: "ArtifactId", value: "omitted", checked: true, disabled: false },
-            { label: "Version", value: "transitive", checked: true, disabled: false }
-        ]
-    }
+    // const view = {
+    //     tittle: "Label",
+    //     children: [
+    //         { label: "GroupId", value: "direct", checked: true, disabled: false },
+    //         { label: "ArtifactId", value: "omitted", checked: true, disabled: false },
+    //         { label: "Version", value: "transitive", checked: true, disabled: false }
+    //     ]
+    // }
 
     const scope = {
         tittle: "Scope",
@@ -140,14 +140,14 @@ export const HomeViz = () => {
                         checked={viewOmitted}
                         onChange={(e: CheckboxChangeEvent) => dispatch({ type: "VIEW_OMITTED", payload: !viewOmitted })}
                     >{omitted.tittle}</Checkbox>
-                    <Divider />
+                    {/* <Divider />
                     <CategoryCheckbox
                         key={uuidv4()}
                         tittle={view.tittle}
                         children={view.children}
                         checked={textDisplay}
                         onClick={(checkedValues: string[]) => dispatch({ type: "SELECT_VIEW", payload: checkedValues })}
-                    />
+                    /> */}
                     <Divider />
                     <CategoryRadialBox
                         key={uuidv4()}
