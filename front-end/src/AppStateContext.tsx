@@ -1,5 +1,5 @@
 import React, { createContext, useReducer, useContext } from "react";
-import { filterByType, getTreeHierarchy, cloneProject, highlightBloat } from "./utils/treeAccess";
+import { filterArtifacts, getTreeHierarchy, cloneProject, highlightBloat, debloatDirect, debloatAll } from "./utils/treeAccess";
 // import { fetchFromFile } from './utils/dataRetrieve';
 import * as d3 from 'd3';
 
@@ -30,9 +30,13 @@ export interface AppState {
     filtered: any,
     filteredDependencies: string[],
     filteredBloated: string[],
-    colorSelected: "color-type" | "color-artifact-id" | "color-group-nodes",
+    colorSelected: "color-type" | "color-artifact-id",
     textDisplay: string[],
-    viewDependencyList: boolean
+    filteredScope: string[],
+    viewDependencyList: boolean,
+    viewOmitted: boolean
+    debloatNum: number
+    messageState: "ORIGINAL" | "DEBLOAT_DIRECT" | "DEBLOAT_ALL",
 }
 
 interface AppStateContextProps {
@@ -54,8 +58,12 @@ type Action =
         payload: string[]
     }
     | {
+        type: "SELECT_SCOPE"
+        payload: string[]
+    }
+    | {
         type: "SELECT_COLOR"
-        payload: "color-type" | "color-artifact-id" | "color-group-nodes",
+        payload: "color-type" | "color-artifact-id",
     }
     | {
         type: "LOAD_LOCAL_FILE"
@@ -64,6 +72,18 @@ type Action =
     | {
         type: "VIEW_DEPENDENCY_LIST"
         payload: boolean
+    }
+    | {
+        type: "RESET_FILTERS"
+        payload: null
+    }
+    | {
+        type: "VIEW_OMITTED"
+        payload: boolean
+    }
+    | {
+        type: "DEBLOAT_PROJECT"
+        payload: number
     }
 
 
@@ -956,19 +976,28 @@ const dependCheckGroup: string[] = ["direct", "transitive", "inherited"];
 const bloatedCheckGroup: string[] = [];
 const viewText: string[] = ["groupid", "artifactid", "version"];
 const nodes = d3.hierarchy(data, childrenAccessor);
-
+const scopeCheckGroup: string[] = ["compile", "test", "provided", "runtime", "system"]
 
 const appData: AppState = {
 
-    project: data,
-    filteredProject: cloneProject(data),
-    nodes: nodes,
+    project: data, //the original data only changes when you load a new project
+    nodes: nodes, //all the nodes of the filtered project
+    filteredProject: cloneProject(data),// is a copy of the projec which will be modified
     filtered: nodes,
+
     filteredDependencies: dependCheckGroup,
     filteredBloated: bloatedCheckGroup,
+    filteredScope: scopeCheckGroup,
+
     textDisplay: viewText,
-    viewDependencyList: false,
     colorSelected: "color-type",
+
+    viewDependencyList: false,
+    viewOmitted: true,
+
+    debloatNum: 0,
+
+    messageState: "ORIGINAL",
 }
 
 
@@ -979,7 +1008,7 @@ const appStateReducer = (state: AppState, action: Action): AppState => {
         case "SELECT_DEPENDENCY": {
             //set the filters
             state.filteredDependencies = action.payload;
-            state.filteredProject.children = filterByType(state.filteredProject.children, action.payload);
+            state.filteredProject.children = filterArtifacts(state.filteredProject.children, state.filteredScope, state.filteredDependencies);
             state.filtered = getTreeHierarchy(state.filteredProject, childrenAccessor);
 
             return {
@@ -991,6 +1020,17 @@ const appStateReducer = (state: AppState, action: Action): AppState => {
         case "SELECT_BLOAT": {
             state.filteredBloated = action.payload;
             state.filteredProject.children = highlightBloat(state.filteredProject.children, action.payload);
+            state.filtered = getTreeHierarchy(state.filteredProject, childrenAccessor);
+
+            return {
+                ...state
+
+            }
+        }
+
+        case "SELECT_SCOPE": {
+            state.filteredScope = [...action.payload, "provided", "runtime", "system"];
+            state.filteredProject.children = filterArtifacts(state.filteredProject.children, state.filteredScope, state.filteredDependencies);
             state.filtered = getTreeHierarchy(state.filteredProject, childrenAccessor);
 
             return {
@@ -1019,7 +1059,6 @@ const appStateReducer = (state: AppState, action: Action): AppState => {
             const newNodes = d3.hierarchy(action.payload, childrenAccessor);
             state.nodes = newNodes;
             state.filtered = newNodes;
-            // console.log(state)
             return {
                 ...state
             }
@@ -1030,6 +1069,48 @@ const appStateReducer = (state: AppState, action: Action): AppState => {
                 ...state
             }
         }
+        case "RESET_FILTERS": {
+            return {
+                ...state,
+                filteredDependencies: dependCheckGroup,
+                filteredBloated: bloatedCheckGroup,
+                colorSelected: "color-type",
+                filteredScope: scopeCheckGroup,
+                viewOmitted: true,
+                debloatNum: 0,
+            }
+        }
+        case "VIEW_OMITTED": {
+            return {
+                ...state,
+                viewOmitted: action.payload
+            }
+        }
+        case "DEBLOAT_PROJECT": {
+
+            const projectDebloated: artifact = cloneProject(state.project);
+            projectDebloated.children =
+                action.payload === 0 ? state.project.children :
+                    action.payload === 50 ? debloatDirect(projectDebloated.children) :
+                        action.payload === 100 ? debloatAll(projectDebloated.children, ["direct", "transitive"]) : projectDebloated.children;
+
+            const filteredDebloated = getTreeHierarchy(projectDebloated, childrenAccessor);
+            // const nodes = d3.hierarchy(newProject, childrenAccessor);
+            const messageState =
+                action.payload === 0 ? "ORIGINAL" :
+                    action.payload === 50 ? "DEBLOAT_DIRECT" :
+                        action.payload === 100 ? "DEBLOAT_ALL" : "ORIGINAL";
+
+            return {
+                ...state,
+                debloatNum: action.payload,
+                filteredProject: projectDebloated,
+                filtered: filteredDebloated,
+                messageState: messageState
+            }
+        }
+
+
 
         default: {
             console.log("DEFAULT")

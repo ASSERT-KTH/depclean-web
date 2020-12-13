@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 // import { LateralMenu } from './LateralMenu';
 import { MainInfo } from './MainInfo';
-import { Row, Col, Divider } from 'antd';
+import { Row, Col, Divider, Checkbox } from 'antd';
 import { CategoryCheckbox } from './CategoryCheckbox';
 import { CategoryRadialBox } from './CategoryRadialBox';
 import { DependenceProvency } from './DependenceProvency';
@@ -9,6 +9,7 @@ import { HorizontalTree } from './HorizontalTree';
 import { useAppState } from "./AppStateContext";
 import { v4 as uuidv4 } from 'uuid';
 import { DependencyList } from './DependencyList';
+import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 
 export const HomeViz = () => {
     const [size, setSize] = useState({
@@ -31,8 +32,9 @@ export const HomeViz = () => {
     //Get all the nodes
     const { filtered,
         filteredDependencies,
-        filteredBloated,
-        textDisplay,
+        filteredScope,
+        // textDisplay,
+        viewOmitted
     } = state;
 
 
@@ -45,30 +47,44 @@ export const HomeViz = () => {
         ]
     }
 
-    const bloated = {
-        tittle: "Bloated",
-        children: [
-            { label: "Direct", value: "direct", checked: true, disabled: false },
-            { label: "Transitive", value: "transitive", checked: true, disabled: false },
-            { label: "Inherited", value: "inherited", checked: true, disabled: false }
-        ]
-    }
+    // const bloated = {
+    //     tittle: "Bloated",
+    //     children: [
+    //         { label: "Direct", value: "direct", checked: true, disabled: false },
+    //         { label: "Transitive", value: "transitive", checked: true, disabled: false },
+    //         { label: "Inherited", value: "inherited", checked: true, disabled: false }
+    //     ]
+    // }
 
     const colorOptions = {
         tittle: "Color by",
         children: [
             { label: "Type", value: "color-type" },
-            { label: "Artifact Id", value: "color-artifact-id" },
-            { label: "N° nodes", value: "color-group-nodes" },
+            { label: "Group Id", value: "color-artifact-id" },
         ]
     }
 
-    const view = {
-        tittle: "Label",
+    // const view = {
+    //     tittle: "Label",
+    //     children: [
+    //         { label: "GroupId", value: "direct", checked: true, disabled: false },
+    //         { label: "ArtifactId", value: "omitted", checked: true, disabled: false },
+    //         { label: "Version", value: "transitive", checked: true, disabled: false }
+    //     ]
+    // }
+
+    const scope = {
+        tittle: "Scope",
         children: [
-            { label: "GroupId", value: "direct", checked: true, disabled: false },
-            { label: "ArtifactId", value: "omitted", checked: true, disabled: false },
-            { label: "Version", value: "transitive", checked: true, disabled: false }
+            { label: "Compile", value: "compile", checked: true, disabled: true },
+            { label: "Test", value: "test", checked: true, disabled: false },
+        ]
+    }
+
+    const omitted = {
+        tittle: "Omitted",
+        children: [
+            { label: "Omitted", value: "omitted", checked: true, disabled: false },
         ]
     }
 
@@ -102,6 +118,7 @@ export const HomeViz = () => {
             >
                 {/* CATEGORY LIST */}
                 <Col span="2" offset={1}>
+
                     <CategoryCheckbox
                         key={uuidv4()}
                         tittle={dep.tittle}
@@ -112,19 +129,25 @@ export const HomeViz = () => {
                     <Divider />
                     <CategoryCheckbox
                         key={uuidv4()}
-                        tittle={bloated.tittle}
-                        children={bloated.children}
-                        checked={filteredBloated}
-                        onClick={(checkedValues: string[]) => dispatch({ type: "SELECT_BLOAT", payload: checkedValues })}
+                        tittle={scope.tittle}
+                        children={scope.children}
+                        checked={filteredScope}
+                        onClick={(checkedValues: string[]) => dispatch({ type: "SELECT_SCOPE", payload: checkedValues })}
                     />
                     <Divider />
+                    <Checkbox
+                        key={uuidv4()}
+                        checked={viewOmitted}
+                        onChange={(e: CheckboxChangeEvent) => dispatch({ type: "VIEW_OMITTED", payload: !viewOmitted })}
+                    >{omitted.tittle}</Checkbox>
+                    {/* <Divider />
                     <CategoryCheckbox
                         key={uuidv4()}
                         tittle={view.tittle}
                         children={view.children}
                         checked={textDisplay}
                         onClick={(checkedValues: string[]) => dispatch({ type: "SELECT_VIEW", payload: checkedValues })}
-                    />
+                    /> */}
                     <Divider />
                     <CategoryRadialBox
                         key={uuidv4()}

@@ -4,7 +4,7 @@ import { TreeMap } from './TreeMap';
 import { useAppState } from "./AppStateContext";
 import { Chart } from './Chart';
 import { getRootInfo, getNodesWithDepCategory } from "./utils/treeAccess";
-
+import * as d3 from 'd3';
 const { TabPane } = Tabs;
 
 export const DependenceProvency = () => {
@@ -19,8 +19,10 @@ export const DependenceProvency = () => {
     const gName: string = `Group Id (${rootInfo[1].num})`;
     const sName: string = `Size ${rootInfo[2].num}Mb`;
     const nodesFiltered = filtered.descendants().filter((d: any) => d.data.type !== "omitted" && d.data.type !== "test")
-    const nodesDep = getNodesWithDepCategory(nodesFiltered.splice(1));
 
+    const nodesDep = getNodesWithDepCategory(nodesFiltered.splice(1));
+    const colorUsage = d3.interpolate("red", "blue")
+    const colorGroupId = d3.scaleOrdinal(d3.schemeCategory10);
 
     const [dimensions, setDimensions] = useState({
         width: window.innerWidth,
@@ -64,6 +66,9 @@ export const DependenceProvency = () => {
                         nodes={nodesDep}
                         dimensions={dimensions}
                         category={"dependencyUsage"}
+                        labelY={"Artifacts"}
+                        colorInterpolator={colorUsage}
+                        numTicks={5}
                     />
                 </TabPane>
                 <TabPane tab={gName} key="2">
@@ -72,6 +77,9 @@ export const DependenceProvency = () => {
                         nodes={nodesDep}
                         dimensions={dimensions}
                         category={"groupId"}
+                        labelY={"Artifacts"}
+                        colorInterpolator={colorGroupId}
+                        numTicks={5}
                     />
                 </TabPane>
                 <TabPane tab={sName} key="3">

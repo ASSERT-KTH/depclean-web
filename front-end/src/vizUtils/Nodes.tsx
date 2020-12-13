@@ -2,7 +2,8 @@ import React from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { useAppState } from "src/AppStateContext";
 // import { getcolor } from 'src/utils/treeAccess'
-import * as d3 from 'd3';
+import { getColorGenerator, getColorDataAccessor, getArtifactsId } from 'src/utils/treeAccess';
+// import * as d3 from 'd3';
 
 interface LinkProps {
     data: any[],
@@ -26,35 +27,12 @@ export const Nodes = ({
         colorSelected
     } = state;
 
-    let colorGenerator: any = d3.scaleOrdinal(d3.schemeCategory10);
-    let colorAccessor = ((d: any) => { return d.data.type });
-
-    switch (colorSelected) {
-        case "color-type":
-            // create accessor
-            //create color
-            colorAccessor = ((d: any) => { return d.data.type });
-            colorGenerator = d3.scaleOrdinal(["#8EBE86", "#6BBFEE", "#EED16B"]);
-
-            break;
-        case "color-artifact-id":
-            colorAccessor = ((d: any) => { return d.data.groupId });
-            // colorGenerator = d3.scaleOrdinal(["#8EBE86", "#6BBFEE", "#EED16B"]);
-            break;
-        case "color-group-nodes":
-            const variant = d3.extent(data.slice(1).map((d: any) => {
-                return d.data.children.length
-            }))
-            colorAccessor = ((d: any) => { return d.data.children.length });
-            colorGenerator = d3.scaleSequential()
-                .domain([variant[0], variant[1]])
-                .interpolator(d3.interpolateRdYlBu);
-            break;
-
-        default:
-        // code block
-    }
-
+    // let colorGenerator: any = d3.scaleOrdinal(d3.schemeCategory10);
+    // let colorAccessor = ((d: any) => { return d.data.type });
+    const getIds = getArtifactsId(data)
+    const colorGenerator: d3.ScaleOrdinal<string, unknown, never> = getColorGenerator(colorSelected, getIds);
+    const colorDataAccessor: (d: any) => string = getColorDataAccessor(colorSelected)
+    const color: any = (d: any) => colorGenerator(colorDataAccessor(d));
 
 
     const classAccessor = (d: any) => {
@@ -75,17 +53,17 @@ export const Nodes = ({
         // if (d.data.visible) onLeave() 
     }
 
-
-
     const shapeAccessor = (d: any) => {
         const type = d.data.type;
+        // console.log(d.data.scope)
         if (type === "parent") {
             return <circle
                 key={uuidv4()}
                 className={classAccessor(d)}
-                r={size * 4}
+                r={size * 6}
                 onMouseEnter={() => mouseEnter(d)}
                 onMouseLeave={() => mouseLeave(d)}
+                fill={color(d)}
 
             />;
 
@@ -96,34 +74,38 @@ export const Nodes = ({
                 r={sizeScalar(d.data.size)}
                 onMouseEnter={() => mouseEnter(d)}
                 onMouseLeave={() => mouseLeave(d)}
-                style={{ fill: colorGenerator(colorAccessor(d)) }}
+                fill={color(d)}
+
             />
 
         } else if (type === "transitive") {
             const size = sizeScalar(d.data.size);
             return <rect
                 className={classAccessor(d)}
+                // transform={"translate(" + (-size / 2) + "," + 0 + ")"}
                 key={uuidv4()}
                 y={-size / 2}
                 width={size}
                 height={size}
                 onMouseEnter={() => mouseEnter(d)}
                 onMouseLeave={() => mouseLeave(d)}
-                style={{ fill: colorGenerator(colorAccessor(d)) }}
+                fill={color(d)}
             />
 
-        } else if (type === "inherited") {
+        }
+        else if (type === "inherited") {
             const size = sizeScalar(d.data.size);
             return <rect
                 className={classAccessor(d)}
-                transform={"rotate(45)"}
+                transform={"rotate(45), translate(" + (-size / 2) + "," + (size / 2) + ")"}
                 key={uuidv4()}
                 y={-size}
                 width={size}
                 height={size}
                 onMouseEnter={() => mouseEnter(d)}
                 onMouseLeave={() => mouseLeave(d)}
-                style={{ fill: colorGenerator(colorAccessor(d)), }}
+                fill={color(d)}
+
             />
 
         }
@@ -141,7 +123,7 @@ export const Nodes = ({
 
     return (
         <g>
-            {data.map((d, i) => (
+            {data.map((d) => (
                 <g transform={"translate(" + d.y + "," + d.x + ")"} key={uuidv4()}>
                     {shapeAccessor(d)}
                 </g>

@@ -3,6 +3,7 @@ import * as d3 from 'd3';
 import { Squares } from './vizUtils/Squares';
 import { v4 as uuidv4 } from 'uuid';
 import { Tooltip } from './vizUtils/tooltip';
+
 // import { Texts } from './vizUtils/Texts';
 
 interface dimension {
@@ -22,9 +23,12 @@ interface treeMapProps {
 }
 
 export const TreeMap = ({ data, dimensions }: React.PropsWithChildren<treeMapProps>) => {
-    const [toolTipValue, setToolTipValue] = useState("");
+    const [toolTipValue, setToolTipValue] = useState(<div></div>);
     const [toolTipPos, setToolTipPos] = useState({ x: 0, y: 0 });
     const [tpOpacity, setTpOpacity] = useState(0)
+
+    //get the main state
+    //Get all the nodes
 
     //treemapSliceDice
 
@@ -34,10 +38,15 @@ export const TreeMap = ({ data, dimensions }: React.PropsWithChildren<treeMapPro
         .size([dimensions.boundedWidth, dimensions.boundedHeight])
         .padding(10)
 
-    const nodes = treemap(data);
+    const nodes = treemap(data).descendants();
 
     const mouseEnter = (d: any) => {
-        setToolTipValue(d.data.artifactId + " " + d3.format(".2f")(d.value) + "Mb")
+        setToolTipValue(
+            <div>
+                <div className="toolTip-tittle">{d.data.artifactId}</div>
+                <div className="toolTip-sub"><span className="toolTip-value">{d3.format(".2f")(d.value) + "Mb"}</span></div>
+            </div>
+        )
         setToolTipPos({ x: d.x0 + ((d.x1 - d.x0) / 2), y: d.y0 + dimensions.marginTop })
         setTpOpacity(1);
     }
@@ -52,13 +61,15 @@ export const TreeMap = ({ data, dimensions }: React.PropsWithChildren<treeMapPro
     const wAccessor = (d: any) => d.x1 - d.x0;
     const hAccessor = (d: any) => d.y1 - d.y0;
     const nameAccessor = (d: any) => d.data.parent;
-    const tittleAccessor = (d: any) => d.data.parent !== null ? d.data.parent : d.data.artifactId;;
+    const tittleAccessor = (d: any) => d.data.parent !== null ? d.data.parent : d.data.artifactId;
+    const depthAccessor = (d: any) => d.depth;
     const color = d3.scaleOrdinal(d3.schemeCategory10);
-    const colorAccessor = (d: any) => color(tittleAccessor(d));
+
+    const colorAccessor = (d: any) => color(depthAccessor(d));
 
     return (
         <div className="flex flex-justify-center" ref={treeViz}>
-            <div className="wrapper">
+            <div className="wrapper tree-map">
                 <Tooltip value={toolTipValue} position={toolTipPos} opacity={tpOpacity} />
                 <svg
                     width={dimensions.boundedWidth}
@@ -67,7 +78,7 @@ export const TreeMap = ({ data, dimensions }: React.PropsWithChildren<treeMapPro
                     <g transform={"translate(" + 0 + "," + dimensions.marginTop + ")"}  >
                         {/* transform={"translate(" + dimensions.marginLeft + "," + dimensions.marginTop + ")"} */}
                         <Squares
-                            data={nodes.descendants()}
+                            data={nodes}
                             keyNumber={uuidv4()}
                             xAccessor={xAccessor}
                             yAccessor={yAccessor}

@@ -1,10 +1,12 @@
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import * as d3 from 'd3';
-import { countCategories } from './utils/CountCategories';
+import { chart } from './utils/CountCategories';
 import { Squares } from './vizUtils/Squares';
 import { Legend } from './vizUtils/Legend';
 import { v4 as uuidv4 } from 'uuid';
 import { Tooltip } from './vizUtils/tooltip';
+import { AxisHorizontal } from 'src/vizUtils/AxisHorizontal';
+import { AxisVertical } from 'src/vizUtils/AxisVertical';
 
 interface dimension {
     width: number,
@@ -21,64 +23,73 @@ interface ChartProps {
     nodes: any[],
     dimensions: dimension,
     category: string
+    labelX?: string,
+    labelY?: string,
+    colorInterpolator: any,
+    numTicks: number
 }
 
-export const Chart = ({ nodes, dimensions, category }: React.PropsWithChildren<ChartProps>) => {
-    const [toolTipValue, setToolTipValue] = useState("");
+export const Chart = ({
+    nodes,
+    dimensions,
+    category,
+    labelX,
+    labelY,
+    colorInterpolator,
+    numTicks
+}: React.PropsWithChildren<ChartProps>) => {
+    const [toolTipValue, setToolTipValue] = useState(<div></div>);
     const [toolTipPos, setToolTipPos] = useState({ x: 0, y: 0 });
     const [tpOpacity, setTpOpacity] = useState(0)
 
-    const chartViz = useRef(null);
-    const categories = countCategories(nodes, category);
+    //declare chart width and height
     const chartSize = (dimensions.boundedWidth * 0.7);
-
     const chartHeight = 300;
-    //Create accessor
-    //ACCESSORS FOR SQUARES
-    const xAccessor = (d: any) => d.items;
-
-    // Compute the position of each group on the pie:
-    const pie = d3.pie()
-        .value(xAccessor)
-        .sort((a: any, b: any) => {
-            return a.category.localeCompare(b.category)
-        })
-    let pieData = pie(categories).sort((a: any, b: any) => {
-        return a.data.category.localeCompare(b.data.category)
-    });
+    const chartDimensions = {
+        ...dimensions,
+        boundedWidth: chartSize,
+        height: chartHeight
+    }
 
 
-
-    const maxAngle = d3.max(pieData, (d: any) => d.endAngle);
-    //transform circular pie to rectangular
-    const xScalePie = d3.scaleLinear()
-        .domain([0, maxAngle])
+    const chartXScale = d3.scaleLinear()
+        .domain([0, 100])
         .range([0, chartSize])
         .nice()
+    //Calculate all chart 
+    const chartData = chart(nodes, category, chartXScale);
+    const total = d3.sum(chartData, (d: any) => d.value)
 
 
-
-    const yAccessor = (d: any) => 0; //dimensions.boundedHeight - chartHeight
-    const posAccessor = (d: any) => xScalePie(d.startAngle);
-    const wAccessorPie = (d: any) => xScalePie(d.endAngle) - xScalePie(d.startAngle);
-    const hAccessorPie = (d: any) => chartHeight;
-    const nameAccessorPie = (d: any) => d.data.category;
+    //DATA ACCESSORS
+    const formatTick = (d: any) => d + "%";
+    const yAccessor = (d: any) => 0;
+    const posAccessor = (d: any) => d.x0;
+    const wAccessor = (d: any) => d.x1;
+    const hAccessor = (d: any) => chartHeight;
+    const nameAccessor = (d: any) => d.data.category;
     const valueAccesor = (d: any) => "(" + d.value + ")";
-    const total = d3.sum(pieData, (d: any) => d.value)
-    const valueAccessorPie = (d: any) => d3.format(".2f")((d.value / total) * 100) + "%";
+    const valueAccessor = (d: any) => d3.format(".2f")((d.value / total) * 100) + "%";
     // const indexAccessor = (d: any) => d.index;
-    const colorInterpolator = d3.interpolate("red", "blue")
+    // const colorInterpolator = d3.interpolate("red", "blue")
+
     const color = d3.scaleSequential()
-        .domain([0, 5])
+        .domain([0, chartData.length + 1])
         .interpolator(colorInterpolator);
     const indexAccesor = (d: any) => d.index;
     const colorAccessor = (d: any) => color(indexAccesor(d))
     //LEGEND DATA
-    const initialPos = [chartSize, dimensions.marginTop]
+    const initialPos = [chartSize + dimensions.marginLeft + 10, dimensions.marginTop]
 
     const mouseEnter = (d: any) => {
-        setToolTipValue(nameAccessorPie(d))
-        setToolTipPos({ x: posAccessor(d), y: dimensions.marginTop })
+
+        setToolTipValue(
+            <div>
+                <div className="toolTip-tittle">{nameAccessor(d)}</div>
+                <div className="toolTip-sub"><span className="toolTip-value">{valueAccessor(d)}</span></div>
+                <div className="toolTip-sub"><span className="toolTip-value">{valueAccesor(d)}</span></div>
+            </div>)
+        setToolTipPos({ x: dimensions.marginLeft + posAccessor(d) + wAccessor(d) / 2, y: dimensions.marginTop })
         setTpOpacity(1);
     }
     const mouseLeave = (d: any) => {
@@ -88,21 +99,21 @@ export const Chart = ({ nodes, dimensions, category }: React.PropsWithChildren<C
 
     return (
 
-        <div className="flex flex-justify-center" ref={chartViz}>
+        <div className="flex flex-justify-center" >
             <div className="wrapper">
                 <Tooltip value={toolTipValue} position={toolTipPos} opacity={tpOpacity} />
                 <svg width={dimensions.boundedWidth} height={dimensions.height} >
 
-                    <g transform={"translate(" + 0 + "," + dimensions.marginTop + ")"} >
+                    <g transform={"translate(" + dimensions.marginLeft + "," + dimensions.marginTop + ")"} >
 
                         <Squares
-                            data={pieData}
+                            data={chartData}
                             keyNumber={uuidv4()}
                             xAccessor={posAccessor}
                             yAccessor={yAccessor}
-                            widthAccessor={wAccessorPie}
-                            heightAccessor={hAccessorPie}
-                            nameAccessor={valueAccessorPie}
+                            widthAccessor={wAccessor}
+                            heightAccessor={hAccessor}
+                            nameAccessor={valueAccessor}
                             onEnter={mouseEnter}
                             onLeave={mouseLeave}
                             valueAccessor={valueAccesor}
@@ -112,12 +123,25 @@ export const Chart = ({ nodes, dimensions, category }: React.PropsWithChildren<C
                     </g>
 
                     <Legend
-                        data={pieData}
-                        nameAccessor={nameAccessorPie}
+                        data={chartData}
+                        nameAccessor={nameAccessor}
                         initialPos={initialPos}
                         color={color}
                     />
-
+                    <AxisHorizontal
+                        dimensions={chartDimensions}
+                        formatTick={formatTick}
+                        scale={chartXScale}
+                        numTicks={numTicks}
+                    />
+                    <AxisVertical
+                        dimensions={chartDimensions}
+                        label={labelY}
+                        showAxis={false}
+                        formatTick={formatTick}
+                        scale={chartXScale}
+                        numTicks={numTicks}
+                    />
                 </svg>
             </div>
         </div >

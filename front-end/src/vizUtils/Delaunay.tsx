@@ -1,6 +1,5 @@
 import React from 'react';
 import { Delaunay } from "d3-delaunay";
-import * as d3 from 'd3';
 import { v4 as uuidv4 } from 'uuid';
 
 interface dimension {

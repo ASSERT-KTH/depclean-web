@@ -1,19 +1,16 @@
 import React from "react";
 import { Col, Slider } from 'antd';
-import { DataGroup } from './DataGroup';
+import { Message } from 'src/Message';
 import { useAppState } from "./AppStateContext"
-import { countDependencies, countBloated } from "./utils/treeAccess";
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 
 export const MainInfo = () => {
     //get the main state
-    const { state } = useAppState();
+    const { state, dispatch } = useAppState();
     //Get all the nodes
-    const { filtered } = state;
+    const { debloatNum } = state;
     //GET THE INFORMATIN
-    const descent = filtered.descendants();
-    const dependencyInfo = countDependencies(descent);
-    const bloatedInfo = countBloated(descent);
+
 
     const tittle = state.project.artifactId;
     const version = state.project.version;
@@ -29,6 +26,12 @@ export const MainInfo = () => {
             label: "All",
         },
     };
+
+    const onChange = (value: number) => {
+        dispatch({ type: "DEBLOAT_PROJECT", payload: value })
+    };
+
+
     return (
         <Col span={20} offset={2}>
             <div className="flex flex-enter margin-20 " >
@@ -36,20 +39,6 @@ export const MainInfo = () => {
                     <h1 >
                         {tittle} <span className="version-num">{version}</span>
                     </h1>
-                    <div className="flex">
-                        <DataGroup
-                            tittle="Dependencies"
-                            dataInfo={dependencyInfo}
-                            theme="dependencies"
-
-                        />
-                        <DataGroup
-                            tittle="Bloated"
-                            dataInfo={bloatedInfo}
-                            theme="bloated"
-                        />
-
-                    </div>
                 </div>
                 <div className="pull-left slider-theme">
                     <span className="tittle"><ExclamationCircleOutlined /> Debloat artifacts</span>
@@ -57,12 +46,15 @@ export const MainInfo = () => {
                         style={{ width: 300 }}
                         marks={marks}
                         step={50}
-                        defaultValue={0}
+                        defaultValue={debloatNum}
+                        value={debloatNum}
                         tooltipVisible={false}
-
+                        onChange={onChange}
                     />
                 </div>
             </div>
+            <Message />
+
 
         </Col>
     )

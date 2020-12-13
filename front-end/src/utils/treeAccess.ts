@@ -1,3 +1,4 @@
+
 import * as d3 from 'd3';
 // import { isConstructorDeclaration } from 'typescript';
 import { v4 as uuidv4 } from 'uuid';
@@ -34,7 +35,7 @@ export const getNodesWithDepCategory = (nodes: any): object[] => {
 export const getRootInfo = (root: any): object[] => {
     let info: object[] = [];
     //get all the nodes but remove the father
-    const nodes = root.descendants().splice(1);
+    const nodes = root.descendants().splice(1).filter((d: any) => d.data.type !== "omitted" && d.data.type !== "test");
     let dependencies: number = 0;
     let groupId: string[] = [];
     let size: number = 0;
@@ -139,13 +140,14 @@ export const highlightBloat = (data: artifact[], filterType: string[]): artifact
     });
     return unFiltered;
 }
-//get a depClean pom.XML and filter it according to the type array
-export const filterByType = (data: artifact[], filterType: string[]): artifact[] => {
+
+
+export const filterArtifacts = (data: artifact[], scopeType: string[], filterType: string[]): artifact[] => {
     //if the node is filtered then stop and return
-    // if(!filterType.includes(data.type) return;
+    // if(!scopeType.includes(data.type) return;
     const unFiltered = data.map((node: artifact) => {
-        node.visible = filterType.includes(node.type);
-        node.children = node.visible ? filterByType(node.children, filterType) : setValueToChildren(node.children, "visible", node.visible)
+        node.visible = scopeType.includes(node.scope) && filterType.includes(node.type);
+        node.children = node.visible ? filterArtifacts(node.children, scopeType, filterType) : setValueToChildren(node.children, "visible", node.visible)
         return node;
     });
     return unFiltered;
@@ -183,6 +185,82 @@ export const formatTree = (project: any) => {
         }
         return n;
     });
-
     return obj;
 }
+
+//Returns an color generator according to the color selected
+export const getColorGenerator = (colorSelected: string, data: string[]) => {
+    switch (colorSelected) {
+        case "color-type":
+            return d3.scaleOrdinal(["#30611E", "#98BC8B", "#7EBEE9", "#EAD17A"]);
+        case "color-artifact-id":
+            const total = data.length;
+            const colors = data.map((d: string, i: number) => {
+                return d3.interpolateSpectral(i / total);
+            })
+            return d3.scaleOrdinal()
+                .domain(data)
+                .range(colors);
+        default:
+            return d3.scaleOrdinal(d3.schemeCategory10);
+    }
+}
+
+//Returns an color data accessor according to the color selected
+export const getColorDataAccessor = (colorSelected: string) => {
+    switch (colorSelected) {
+        case "color-type":
+            return ((d: any): string => d.data.type);
+        case "color-artifact-id":
+            return ((d: any): string => { return d.data.groupId });
+        default:
+            return ((d: any): string => d.data.type);
+    }
+}
+
+
+export const getArtifactsId = (nodes: d3.HierarchyRectangularNode<unknown>[]): string[] => {
+    //CREATE THE OBJECT
+    const countCategories = (categoryArr: any, node: any) => {
+        const dId = node.data.groupId;
+        return categoryArr.includes(dId) ? categoryArr : [...categoryArr, dId];
+    }
+    //GET ALL THE CATEGORIES AND COUNTED ITEMS
+    return nodes.reduce(countCategories, [])
+}
+
+//hightlight all the direct dependencies and all its transitive that are bloated
+export const debloatDirect = (children: artifact[]): artifact[] => {
+    //get all the direct bloated
+    const artifacts = children.map((d: artifact) => {
+        //  d.status === "bloated" && d.type === "direct"
+        const isBloated = d.status === "bloated" && d.type === "direct";
+        d.highlight = isBloated;
+        d.children = isBloated ? debloatTransitive(d.children) : d.children;
+        return d;
+    })
+    return [...artifacts]
+}
+
+const debloatTransitive = (children: artifact[]): artifact[] => {
+    const artifacts = children.map((d: artifact) => {
+        d.highlight = d.status === "bloated" && d.type === "transitive" ? true : false;
+        d.children = debloatTransitive(d.children)
+        return d;
+    })
+    return [...artifacts];
+}
+
+
+
+export const debloatAll = (data: artifact[], filterType: string[]): artifact[] => {
+    const unFiltered = data.map((node: artifact) => {
+        node.highlight = filterType.includes(node.type) && node.status === "bloated";
+        const filteredChildren = node.children.filter((d: artifact) => filterType.includes(node.type))
+        const filteredInherited = node.children.filter((d: artifact) => node.type === "inherited")
+        node.children = [...filteredInherited, ...highlightBloat(filteredChildren, filterType)]
+        return node;
+    });
+    return unFiltered;
+}
+
