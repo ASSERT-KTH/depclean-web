@@ -566,7 +566,6 @@ line.Axis__line {
 
 .dropzone{
   border: 2px dashed #64C19A;
-    /* width: 50vw; */
     height: 50vh;
     display: flex;
     align-items: center;
