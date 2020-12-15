@@ -3,9 +3,8 @@ import { Row, Col, Input, Button } from 'antd';
 import { v4 as uuidv4 } from 'uuid';
 import logo from 'src/img/depCleanLogo.svg';
 import { ProjectOutlined, UserOutlined, SearchOutlined } from '@ant-design/icons';
-import {
-    Link,
-} from "react-router-dom";
+import { Link } from "react-router-dom";
+import { debounce } from 'lodash';
 
 export const Search = () => {
     const [size, setSize] = useState({
@@ -17,15 +16,15 @@ export const Search = () => {
     const [project, setProject] = useState("")
 
 
-    const onChangeSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { value } = e.target;
-        console.log(value)
-        setUser(value);
-        // const reg = /^-?\d*(\.\d*)?$/;
-        // if ((!isNaN(value) && reg.test(value)) || value === '' || value === '-') {
-        //   this.props.onChange(value);
-        // }
-    };
+    const onChangeSearch = debounce((text: string) => {
+        const reg = /\s+/g;
+        setUser(text.replace(reg, ''));
+    }, 500);
+
+    const onChangeProject = debounce((text: string) => {
+        const reg = /\s+/g;
+        setProject(text.replace(reg, ''));
+    }, 400);
 
     useEffect(() => {
         function handleResize() {
@@ -66,13 +65,13 @@ export const Search = () => {
                     <Input.Group>
                         <Row gutter={8} justify="center" align="middle">
                             <Col span={8}>
-                                <Input size="large" placeholder="user" maxLength={20} prefix={<UserOutlined />} />
+                                <Input size="large" onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChangeSearch(e.target.value)} placeholder={user === "" ? "user" : user} maxLength={20} prefix={<UserOutlined />} />
                             </Col>
                             <Col span={8}>
-                                <Input size="large" placeholder="project" maxLength={20} prefix={<ProjectOutlined />} />
 
+                                <Input size="large" onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChangeProject(e.target.value)} placeholder={project === "" ? "project" : project} maxLength={20} prefix={<ProjectOutlined />} />
                             </Col>
-                            <Button type="primary" className="button btn-green mid-size margin-auto" icon={<SearchOutlined />} size="large">Depclean project</Button>
+                            <Button type="primary" disabled={user !== "" && project !== "" ? false : true} className="button btn-green mid-size margin-auto" icon={<SearchOutlined />} size="large">Depclean project</Button>
                         </Row>
                     </Input.Group>
                 </div>
