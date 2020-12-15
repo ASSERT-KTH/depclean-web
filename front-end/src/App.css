@@ -562,3 +562,20 @@ line.Axis__line {
     color: rgb(193, 193, 193);
     
 }
+
+
+.dropzone{
+  border: 2px dashed #64C19A;
+    /* width: 50vw; */
+    height: 50vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+.icon-large{
+  font-size: 72px;
+}
+.icon-large path{
+  fill:#64C19A;
+}

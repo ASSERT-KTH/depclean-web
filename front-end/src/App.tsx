@@ -3,7 +3,9 @@ import { Layout } from 'antd';
 import { MainMenu } from './MainMenu';
 import { HomeViz } from './HomeViz';
 import { Gallery } from './gallery';
-import { About } from './about'
+import { About } from './about';
+import { Search } from 'src/Search';
+import { Scan } from 'src/Components/Scan';
 import {
   BrowserRouter as Router,
   Route,
@@ -29,14 +31,15 @@ function App() {
           <Switch>
             <Route exact path="/about" component={About} />
             <Route exact path="/gallery" component={Gallery} />
-            <Route exact path="/" component={HomeViz} />
+            <Route exact path="/result" component={HomeViz} />
+            <Route exact path="/search" component={Search} />
+            <Route exact path="/scan" component={Scan} />
+            <Route exact path="/" component={Search} />
           </Switch>
 
         </Content>
 
         <Footer>
-
-
         </Footer>
 
 

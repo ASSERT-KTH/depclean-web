@@ -66,7 +66,7 @@ export const Project = ({ data }: React.PropsWithChildren<projectProps>) => {
                 //replace the current project for the new one
                 dispatch({ type: "LOAD_LOCAL_FILE", payload: project });
                 //navigate to the view page
-                history.push("/");
+                history.push("/result");
             })
             .catch((err) => {
                 console.log("error", err)
