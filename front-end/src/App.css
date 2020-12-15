@@ -584,6 +584,7 @@ line.Axis__line {
   padding: 0!important;
   overflow: hidden;
   height: 15vh;
+  max-height: 200px;
 }
 
 .project-scan .description{
@@ -648,4 +649,58 @@ line.Axis__line {
   font-size: 14px;
   font-weight: 400;
   color:#0E1D08;
+}
+
+.margin-auto{
+  margin:auto;
+}
+
+
+.spacer-h{
+  height:10px;
+  display: block;
+}
+
+.spacer-h.spacer-h-m{
+  height:20px;
+  display: block;
+}
+
+.spacer-h.spacer-h-l{
+  height:40px;
+  display: block;
+}
+
+.p-xl{
+  font-size: 22px;
+  font-weight: 300;
+}
+
+.main-url p{
+  font-size: 32px;
+  font-weight: 500;
+}
+.unHighlight{
+  color:rgb(218, 218, 218);
+}
+
+.text-center{
+  text-align: center;
+}
+
+.text-small{
+  font-size: 18px;
+}
+
+.link-green{
+ color:#64C19A; 
+}
+
+.underline-text{
+  text-decoration: underline;
+  text-decoration-color: #64C19A;  
+}
+
+.mid-size{
+  max-width: 220px;
 }

@@ -67,39 +67,68 @@ export const Scan = () => {
     }
 
     //
-    const packageLoader = <Col span={12} >
-        <div>
-            <Dropzone
-                className="scan__dropzone"
-                onDropAccepted={handleDropAccepted}
-                onDropRejected={handleDropRejected}
-                multiple={false}
-                accept="application/json"
-            // onDrop={(acceptedFiles: any) => console.log(acceptedFiles)}
-            >
-                {({ getRootProps, getInputProps }: any) => (
-                    <section className="">
-                        <div {...getRootProps()} className="dropzone flex flex-list flex-center">
-                            <input {...getInputProps()} />
-                            <InboxOutlined className="icon-large" />
-                            <p>Drag 'n' drop a file here </p>
-                            <p>OR</p>
-                            <Button type="primary" className="button btn-green" size={'large'}>
-                                click to upload file
+    const packageLoader =
+        <Col span={12} >
+            <div>
+                <Dropzone
+                    className="scan__dropzone"
+                    onDropAccepted={handleDropAccepted}
+                    onDropRejected={handleDropRejected}
+                    multiple={false}
+                    accept="application/json"
+                // onDrop={(acceptedFiles: any) => console.log(acceptedFiles)}
+                >
+                    {({ getRootProps, getInputProps }: any) => (
+                        <section className="">
+                            <div {...getRootProps()} className="dropzone flex flex-list flex-center">
+                                <input {...getInputProps()} />
+                                <InboxOutlined className="icon-large" />
+                                <p>Drag 'n' drop a file here </p>
+                                <p>OR</p>
+                                <Button type="primary" className="button btn-green" size={'large'}>
+                                    click to upload file
                         </Button>
 
-                        </div>
-                    </section>
-                )}
-            </Dropzone>
-        </div>
-    </Col>;
+                            </div>
+                        </section>
+                    )}
+                </Dropzone>
+            </div>
+        </Col>;
+
+
+    // const loadAgain = packages.packages !== undefined ?
+    //     <Col span={10}>
+    //         <p style={{ textAlign: "center" }}>OR</p>
+    //         <Dropzone
+    //             className=""
+    //             onDropAccepted={handleDropAccepted}
+    //             onDropRejected={handleDropRejected}
+    //             multiple={false}
+    //             accept="application/json"
+    //         >
+    //             {({ getRootProps, getInputProps }: any) => (
+    //                 <section className="">
+    //                     <div {...getRootProps()} className="flex flex-list flex-center">
+    //                         <input {...getInputProps()} />
+    //                         <Button type="primary" className="button btn-green" size={'large'}>
+    //                             click to upload file
+    //             </Button>
+    //                     </div>
+    //                 </section>
+    //             )}
+    //         </Dropzone>
+    //     </Col>
+    //     : <></>;
 
     //dipslay when there is a project uploded
-    const project = packages.resume !== undefined ? <Project data={packages.resume} /> : <></>;
+    const project = packages.resume !== undefined ?
+        <Project data={packages.resume} /> : <></>;
 
     //select what to display if packages are undefined or not
-    const content = packages.packages === undefined ? packageLoader : project;
+    const content = packages.packages === undefined ?
+        packageLoader : project;
+
 
 
     return (
@@ -110,6 +139,7 @@ export const Scan = () => {
             align="middle"
         >
             {content}
+            {/* {loadAgain} */}
         </Row>
     )
 }

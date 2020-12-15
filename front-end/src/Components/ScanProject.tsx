@@ -2,7 +2,7 @@ import React from 'react';
 import { Col, Button } from 'antd';
 import { useAppState } from "src/AppStateContext";
 import { useHistory } from 'react-router-dom';
-import { artifact, reportI, artifactResume } from 'src/interfaces/interfaces'
+import { reportI, artifactResume } from 'src/interfaces/interfaces'
 import { v4 as uuidv4 } from 'uuid';
 
 
@@ -16,7 +16,6 @@ export const Project = ({ data }: React.PropsWithChildren<projectProps>) => {
     const { dispatch } = useAppState();
 
     const handleClick = async (d: any) => {
-        console.log(data)
         //reset the filters first
         dispatch({ type: "RESET_FILTERS", payload: null })
         //replace the current project for the new one
@@ -26,7 +25,7 @@ export const Project = ({ data }: React.PropsWithChildren<projectProps>) => {
     }
 
     return (
-        <Col span="12" className="flex margin-xs boder-round shadow-xs project-scan">
+        <Col span="16" className="flex margin-xs boder-round shadow-xs project-scan">
             <div style={{ width: "100%" }}>
                 <div className="gal-tittle">
                     <div className="flex flex-base" >
