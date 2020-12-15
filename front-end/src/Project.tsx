@@ -3,6 +3,7 @@ import { Row, Col, Image, Button } from 'antd';
 import { useAppState } from "./AppStateContext";
 import { fetchFromFile, createProject } from './utils/dataRetrieve';
 import { useHistory } from 'react-router-dom';
+import { artifact } from 'src/interfaces/interfaces'
 // import {
 //     Link
 // } from 'react-router-dom';
@@ -28,28 +29,6 @@ interface project {
 interface projectProps {
     data: project
 }
-
-//Interface for an artifact in the POM XML
-interface artifact {
-    coordinates: string,
-    groupId: string,
-    artifactId: string,
-    version: string,
-    scope: "compile" | "provided" | "runtime" | "test" | "sytem" | "import" | "null",
-    packaging: "jar" | "war"
-    omitted: boolean,
-    classifier: string,
-    parent: string,
-    size: number,
-    status: "used" | "bloated"
-    type: "parent" | "direct" | "omitted" | "transitive" | "inherited"
-    children: artifact[],
-    highlight: boolean,
-    visible: boolean,
-}
-
-
-
 
 export const Project = ({ data }: React.PropsWithChildren<projectProps>) => {
     let history = useHistory();

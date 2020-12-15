@@ -53,7 +53,7 @@ const countDirectBloated = (bloatedMap: any, artifact: any) => {
 
 
 //get all the  children from a list of artifacts
-const getAllTransitive = (artifacts: any) => {
+export const getAllTransitive = (artifacts: any) => {
     const reduceTransitive = (transitiveArr: any, artifact: any) => {
         const innerChilds = getAllTransitive(artifact.children)
         return [...transitiveArr, ...artifact.children, ...innerChilds].flat()

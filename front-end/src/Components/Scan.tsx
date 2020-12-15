@@ -1,43 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Row, Col, message, Button } from 'antd';
 import { v4 as uuidv4 } from 'uuid';
-import { createProject, projectIsValid } from 'src/utils/dataRetrieve';
+import { createProject, projectIsValid, getReport } from 'src/utils/dataRetrieve';
 import { InboxOutlined } from '@ant-design/icons';
 import Dropzone from 'react-dropzone';
-
-//Interface for an artifact in the POM XML
-interface artifact {
-    coordinates: string,
-    groupId: string,
-    artifactId: string,
-    version: string,
-    scope: "compile" | "provided" | "runtime" | "test" | "sytem" | "import" | "null",
-    packaging: "jar" | "war"
-    omitted: boolean,
-    classifier: string,
-    parent: string,
-    size: number,
-    status: "used" | "bloated"
-    type: "parent" | "direct" | "omitted" | "transitive" | "inherited"
-    children: artifact[],
-    highlight: boolean,
-    visible: boolean,
-}
-
-interface reportI {
-    direct: number,
-    inherited: number,
-    transitive: number
-}
-
-interface artifactResume {
-    tittle: string,
-    id: number,
-    version: string,
-    normalReport: reportI,
-    depcleanRport: reportI
-}
-
+import { artifact, artifactResume } from 'src/interfaces/interfaces'
+import { Project } from 'src/Components/ScanProject';
 
 interface packageI {
     packages: artifact | undefined
@@ -73,9 +41,12 @@ export const Scan = () => {
                 //check i f the project is valid
                 // eslint-disable-next-line no-throw-literal
                 if (projectIsValid(project) === false) throw "Invalid Json format";
+                const report = getReport(project);
+                //set the packages and the report
                 setPackages({
                     ...packages,
-                    packages: project
+                    packages: project,
+                    resume: report
                 })
             } catch (err) {
                 handleDropRejected();
@@ -95,6 +66,7 @@ export const Scan = () => {
         message.error(`Could not parse the depclean POM.json file`);
     }
 
+    //
     const packageLoader = <Col span={12} >
         <div>
             <Dropzone
@@ -123,11 +95,12 @@ export const Scan = () => {
         </div>
     </Col>;
 
-    const project = <Col span={12} >
+    //dipslay when there is a project uploded
+    const project = packages.resume !== undefined ? <Project data={packages.resume} /> : <></>;
 
-    </Col>;
-
+    //select what to display if packages are undefined or not
     const content = packages.packages === undefined ? packageLoader : project;
+
 
     return (
         <Row id="search"
@@ -136,9 +109,9 @@ export const Scan = () => {
             justify="center"
             align="middle"
         >
-
             {content}
-
         </Row>
     )
 }
+
+

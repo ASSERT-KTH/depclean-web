@@ -578,3 +578,74 @@ line.Axis__line {
 .icon-large path{
   fill:#64C19A;
 }
+
+.project-scan{
+  background:#F3F5F7;
+  padding: 0!important;
+  overflow: hidden;
+  height: 15vh;
+}
+
+.project-scan .description{
+  padding: 10px 20px 0 20px;
+  justify-content: space-between;
+  align-items: center;
+}
+.project-scan .description a{
+  margin-top:10px;
+  color: hsl(155,43%, 47%, 0.5);
+  font-weight: 500;
+}
+.project-scan .gal-tittle{
+  background-color: white;
+  height: 50%;
+  padding: 20px 20px 0 20px;
+}
+.project-scan .gal-tittle h3{
+  font-size: 32px !important;
+  margin-right: 5px;
+  margin-bottom: 5px;
+  font-weight: 600;
+}
+.project-scan .gal-tittle span{
+  font-size: 20px !important;
+  margin-right: 15px;
+  font-weight: 400;
+  color: hsl(0,0%, 0%, 0.2);
+}
+.project-scan .gal-tittle p{
+  font-size: 16px !important;
+}
+
+.project-scan .table-report{
+  width: 265px;
+}
+
+.project-scan .table-report th{
+  font-size: 12px;
+  font-weight: 400;
+  text-align: right;
+  color: hsl(0,0%, 0%, 0.5);
+}
+.project-scan .table-report th:first-child{
+  text-align: left;
+  
+}
+.project-scan .table-report tr td{
+  font-size: 16px;
+  font-weight: 400;
+  text-align: right;
+  font-weight: 600;
+  color:hsl(102,56%,14%, 40%)
+
+}
+.project-scan .table-report tr td.highlight-red{
+  color:#EE706B;
+  
+}
+.project-scan .table-report tr td:first-child{
+  text-align: left;
+  font-size: 14px;
+  font-weight: 400;
+  color:#0E1D08;
+}

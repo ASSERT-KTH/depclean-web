@@ -11,8 +11,20 @@ export interface artifactResume {
     version: string,
     normalReport: reportI,
     depcleanRport: reportI
+    data: artifact
 }
 
+
+export interface scanProjectI {
+    tittle: string,
+    id: number,
+    version: string,
+    img: string,
+    normalReport: reportI,
+    depCleanReport: reportI,
+    description: string,
+    project: artifact
+}
 
 //Interface for an artifact in the POM XML
 export interface artifact {
