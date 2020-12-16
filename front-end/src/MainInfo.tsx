@@ -8,7 +8,7 @@ export const MainInfo = () => {
     //get the main state
     const { state, dispatch } = useAppState();
     //Get all the nodes
-    const { debloatNum } = state;
+    const { debloatNum, filteredBloated } = state;
     //GET THE INFORMATIN
 
 
@@ -29,6 +29,8 @@ export const MainInfo = () => {
 
     const onChange = (value: number) => {
         dispatch({ type: "DEBLOAT_PROJECT", payload: value })
+        //
+        dispatch({ type: "SELECT_BLOAT", payload: filteredBloated });
     };
 
 

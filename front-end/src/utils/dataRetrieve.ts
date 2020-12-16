@@ -1,5 +1,7 @@
 import { sampleJson } from './sampleJason';
 import * as d3 from 'd3';
+import { artifact, reportI, artifactResume } from 'src/interfaces/interfaces'
+import { getAllTransitive } from 'src/utils/message';
 
 function resolveData() {
     return new Promise(resolve => {
@@ -16,25 +18,6 @@ export async function fetchData() {
 interface ResponseData {
     features: any[];
 }
-//Interface for an artifact in the POM XML
-interface artifact {
-    coordinates: string,
-    groupId: string,
-    artifactId: string,
-    version: string,
-    scope: "compile" | "provided" | "runtime" | "test" | "sytem" | "import" | "null",
-    packaging: "jar" | "war"
-    omitted: boolean,
-    classifier: string,
-    parent: string,
-    size: number,
-    status: "used" | "bloated"
-    type: "parent" | "direct" | "omitted" | "transitive" | "inherited"
-    children: artifact[],
-    highlight: boolean,
-    visible: boolean,
-}
-
 
 export const createProject = (data: any): artifact => {
 
@@ -56,6 +39,7 @@ export const createProject = (data: any): artifact => {
         }),
         highlight: false,
         visible: true,
+        deleted: false,
     }
     return project;
 }
@@ -74,3 +58,72 @@ export async function fetchFromFile(fileName: string) {
     const url = './files/' + fileName;
     return await d3.json<ResponseData>(url);
 }
+
+//check if an artifact has all the valid structure
+export const projectIsValid = (project: artifact) => {
+    return project.coordinates === undefined ||
+        project.groupId === undefined ||
+        project.artifactId === undefined ||
+        project.version === undefined ||
+        project.scope === undefined ||
+        project.packaging === undefined ||
+        project.omitted === undefined ||
+        project.size === undefined ||
+        project.status === undefined ||
+        project.type === undefined ||
+        project.artifactId === undefined ? false : true
+}
+
+//reportMap is the objecto witht the report interface
+//a is an artifact
+const countDirectBloated = (reportMap: any, a: any) => {
+    const direct = a.type === "direct" ? reportMap.direct + 1 : reportMap.direct;
+    const inherited = a.type === "inherited" ? reportMap.inherited + 1 : reportMap.inherited;
+    const transitive = a.type === "transitive" ? reportMap.transitive + 1 : reportMap.transitive;
+    return {
+        ...reportMap,
+        direct: direct,
+        inherited: inherited,
+        transitive: transitive
+    }
+}
+
+const countBloated = (reportMap: any, a: any) => {
+    const direct = a.type === "direct" && a.status === "bloated" ? reportMap.direct + 1 : reportMap.direct;
+    const inherited = a.type === "inherited" && a.status === "bloated" ? reportMap.inherited + 1 : reportMap.inherited;
+    const transitive = a.type === "transitive" && a.status === "bloated" ? reportMap.transitive + 1 : reportMap.transitive;
+    return {
+        ...reportMap,
+        direct: direct,
+        inherited: inherited,
+        transitive: transitive
+    }
+}
+
+//send a report of the project
+export const getReport = (project: artifact): artifactResume => {
+    const dependencies = [...project.children, ...getAllTransitive(project.children)]
+    const normalReport: reportI = dependencies.reduce(countDirectBloated, {
+        direct: 0,
+        inherited: 0,
+        transitive: 0
+    })
+
+    const bloatedReport: reportI = dependencies.reduce(countBloated, {
+        direct: 0,
+        inherited: 0,
+        transitive: 0
+    })
+
+    return {
+        tittle: project.artifactId,
+        id: 0,
+        version: project.version,
+        normalReport: normalReport,
+        depcleanRport: bloatedReport,
+        data: project,
+    }
+}
+
+
+

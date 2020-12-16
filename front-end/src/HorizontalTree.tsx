@@ -73,7 +73,8 @@ export const HorizontalTree = ({
     const linksClassAccessor = (d: any) => {
         return "treeLink " +
             (d.data.highlight || d.parent.data.highlight ? " treeLink-highlight" : "") +
-            (d.data.visible ? " treeLink-visible" : " treeLink-invisible");
+            (d.data.visible ? " treeLink-visible" : " treeLink-invisible") +
+            (d.data.deleted || d.parent.data.deleted ? " treeLink-deleted" : "")
     }
 
     const linkradial = d3.linkVertical()
