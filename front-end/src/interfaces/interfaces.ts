@@ -43,4 +43,21 @@ export interface artifact {
     children: artifact[],
     highlight: boolean,
     visible: boolean,
+    deleted: boolean
+}
+
+export interface AppState {
+    project: artifact,
+    filteredProject: artifact,
+    nodes: any,
+    filtered: any,
+    filteredDependencies: string[],
+    filteredBloated: string[],
+    colorSelected: "color-type" | "color-artifact-id",
+    textDisplay: string[],
+    filteredScope: string[],
+    viewDependencyList: boolean,
+    viewOmitted: boolean
+    debloatNum: number
+    messageState: "ORIGINAL" | "DEBLOAT_DIRECT" | "DEBLOAT_ALL",
 }

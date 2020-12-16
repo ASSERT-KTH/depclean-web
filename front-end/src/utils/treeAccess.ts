@@ -2,26 +2,7 @@
 import * as d3 from 'd3';
 // import { isConstructorDeclaration } from 'typescript';
 import { v4 as uuidv4 } from 'uuid';
-
-
-//Interface for an artifact in the POM XML
-interface artifact {
-    coordinates: string,
-    groupId: string,
-    artifactId: string,
-    version: string,
-    scope: "compile" | "provided" | "runtime" | "test" | "sytem" | "import" | "null",
-    packaging: "jar" | "war"
-    omitted: boolean,
-    classifier: string,
-    parent: string,
-    size: number,
-    status: "used" | "bloated"
-    type: "parent" | "direct" | "omitted" | "transitive" | "inherited"
-    children: artifact[],
-    highlight: boolean,
-    visible: boolean,
-}
+import { artifact } from 'src/interfaces/interfaces';
 
 //Creates a new type that includes depClean
 export const getNodesWithDepCategory = (nodes: any): object[] => {

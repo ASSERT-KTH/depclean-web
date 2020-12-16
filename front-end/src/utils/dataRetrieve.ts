@@ -39,6 +39,7 @@ export const createProject = (data: any): artifact => {
         }),
         highlight: false,
         visible: true,
+        deleted: false,
     }
     return project;
 }

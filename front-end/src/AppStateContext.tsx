@@ -1,43 +1,8 @@
 import React, { createContext, useReducer, useContext } from "react";
 import { filterArtifacts, getTreeHierarchy, cloneProject, highlightBloat, debloatDirect, debloatAll } from "./utils/treeAccess";
 // import { fetchFromFile } from './utils/dataRetrieve';
+import { artifact, AppState } from 'src/interfaces/interfaces';
 import * as d3 from 'd3';
-
-
-//Interface for an artifact in the POM XML
-interface artifact {
-    coordinates: string,
-    groupId: string,
-    artifactId: string,
-    version: string,
-    scope: "compile" | "provided" | "runtime" | "test" | "sytem" | "import" | "null",
-    packaging: "jar" | "war"
-    omitted: boolean,
-    classifier: string,
-    parent: string,
-    size: number,
-    status: "used" | "bloated"
-    type: "parent" | "direct" | "omitted" | "transitive" | "inherited"
-    children: artifact[],
-    highlight: boolean,
-    visible: boolean,
-}
-
-export interface AppState {
-    project: artifact,
-    filteredProject: artifact,
-    nodes: any,
-    filtered: any,
-    filteredDependencies: string[],
-    filteredBloated: string[],
-    colorSelected: "color-type" | "color-artifact-id",
-    textDisplay: string[],
-    filteredScope: string[],
-    viewDependencyList: boolean,
-    viewOmitted: boolean
-    debloatNum: number
-    messageState: "ORIGINAL" | "DEBLOAT_DIRECT" | "DEBLOAT_ALL",
-}
 
 interface AppStateContextProps {
     state: AppState,
@@ -116,6 +81,7 @@ const data: artifact = {
     "visible": true,
     "highlight": false,
     "type": "parent",
+    "deleted": false,
     "children": [
         {
             "coordinates": "io.netty:netty:jar:3.6.6.Final:compile",
@@ -132,6 +98,7 @@ const data: artifact = {
             "visible": true,
             "highlight": false,
             "type": "direct",
+            "deleted": false,
             "children": []
         },
         {
@@ -149,6 +116,7 @@ const data: artifact = {
             "visible": true,
             "highlight": false,
             "type": "inherited",
+            "deleted": false,
             "children": []
         },
         {
@@ -166,6 +134,7 @@ const data: artifact = {
             "visible": true,
             "highlight": false,
             "type": "direct",
+            "deleted": false,
             "children": [
                 {
                     "coordinates": "com.google.code.findbugs:jsr305:jar:1.3.9:compile",
@@ -182,6 +151,7 @@ const data: artifact = {
                     "visible": true,
                     "highlight": false,
                     "type": "transitive",
+                    "deleted": false,
                     "children": []
                 }
             ]
@@ -201,6 +171,7 @@ const data: artifact = {
             "visible": true,
             "highlight": false,
             "type": "direct",
+            "deleted": false,
             "children": [
                 {
                     "coordinates": "ch.qos.logback:logback-core:jar:1.0.13:test",
@@ -217,6 +188,7 @@ const data: artifact = {
                     "visible": true,
                     "highlight": false,
                     "type": "transitive",
+                    "deleted": false,
                     "children": []
                 },
                 {
@@ -234,6 +206,7 @@ const data: artifact = {
                     "visible": true,
                     "highlight": false,
                     "type": "transitive",
+                    "deleted": false,
                     "children": []
                 }
             ]
@@ -253,6 +226,7 @@ const data: artifact = {
             "visible": true,
             "highlight": false,
             "type": "omitted",
+            "deleted": false,
             "children": []
         },
         {
@@ -270,6 +244,7 @@ const data: artifact = {
             "visible": true,
             "highlight": false,
             "type": "direct",
+            "deleted": false,
             "children": [
                 {
                     "coordinates": "junit:junit:jar:3.8.1:test",
@@ -286,6 +261,7 @@ const data: artifact = {
                     "visible": true,
                     "highlight": false,
                     "type": "transitive",
+                    "deleted": false,
                     "children": []
                 }
             ]
@@ -305,6 +281,7 @@ const data: artifact = {
             "visible": true,
             "highlight": false,
             "type": "direct",
+            "deleted": false,
             "children": [
                 {
                     "coordinates": "org.eclipse.jetty.orbit:javax.servlet:jar:3.0.0.v201112011016:test",
@@ -321,6 +298,7 @@ const data: artifact = {
                     "visible": true,
                     "highlight": false,
                     "type": "transitive",
+                    "deleted": false,
                     "children": []
                 },
                 {
@@ -338,6 +316,7 @@ const data: artifact = {
                     "visible": true,
                     "highlight": false,
                     "type": "transitive",
+                    "deleted": false,
                     "children": []
                 },
                 {
@@ -355,6 +334,7 @@ const data: artifact = {
                     "visible": true,
                     "highlight": false,
                     "type": "transitive",
+                    "deleted": false,
                     "children": [
                         {
                             "coordinates": "(org.eclipse.jetty:jetty-io:jar:8.1.1.v20120215:test - omitted for duplicate)",
@@ -371,6 +351,7 @@ const data: artifact = {
                             "visible": true,
                             "highlight": false,
                             "type": "transitive",
+                            "deleted": false,
                             "children": []
                         }
                     ]
@@ -392,6 +373,7 @@ const data: artifact = {
             "visible": true,
             "highlight": false,
             "type": "direct",
+            "deleted": false,
             "children": [
                 {
                     "coordinates": "(org.eclipse.jetty:jetty-security:jar:8.1.1.v20120215:test - omitted for duplicate)",
@@ -408,6 +390,7 @@ const data: artifact = {
                     "visible": true,
                     "highlight": false,
                     "type": "transitive",
+                    "deleted": false,
                     "children": []
                 }
             ]
@@ -427,6 +410,7 @@ const data: artifact = {
             "visible": true,
             "highlight": false,
             "type": "inherited",
+            "deleted": false,
             "children": [
                 {
                     "coordinates": "org.eclipse.jetty:jetty-util:jar:8.1.1.v20120215:test",
@@ -443,6 +427,7 @@ const data: artifact = {
                     "visible": true,
                     "highlight": false,
                     "type": "transitive",
+                    "deleted": false,
                     "children": []
                 },
                 {
@@ -460,6 +445,7 @@ const data: artifact = {
                     "visible": true,
                     "highlight": false,
                     "type": "transitive",
+                    "deleted": false,
                     "children": [
                         {
                             "coordinates": "(org.eclipse.jetty:jetty-util:jar:8.1.1.v20120215:test - omitted for duplicate)",
@@ -476,6 +462,7 @@ const data: artifact = {
                             "visible": true,
                             "highlight": false,
                             "type": "transitive",
+                            "deleted": false,
                             "children": []
                         }
                     ]
@@ -495,6 +482,7 @@ const data: artifact = {
                     "visible": true,
                     "highlight": false,
                     "type": "transitive",
+                    "deleted": false,
                     "children": []
                 }
             ]
@@ -514,6 +502,7 @@ const data: artifact = {
             "visible": true,
             "highlight": false,
             "type": "direct",
+            "deleted": false,
             "children": [
                 {
                     "coordinates": "(org.eclipse.jetty:jetty-continuation:jar:8.1.1.v20120215:test - omitted for duplicate)",
@@ -530,6 +519,7 @@ const data: artifact = {
                     "visible": true,
                     "highlight": false,
                     "type": "transitive",
+                    "deleted": false,
                     "children": []
                 },
                 {
@@ -547,6 +537,7 @@ const data: artifact = {
                     "visible": true,
                     "highlight": false,
                     "type": "transitive",
+                    "deleted": false,
                     "children": [
                         {
                             "coordinates": "(org.eclipse.jetty:jetty-http:jar:8.1.1.v20120215:test - omitted for duplicate)",
@@ -563,6 +554,7 @@ const data: artifact = {
                             "visible": true,
                             "highlight": false,
                             "type": "transitive",
+                            "deleted": false,
                             "children": []
                         }
                     ]
@@ -582,6 +574,7 @@ const data: artifact = {
                     "visible": true,
                     "highlight": false,
                     "type": "transitive",
+                    "deleted": false,
                     "children": []
                 }
             ]
@@ -601,6 +594,7 @@ const data: artifact = {
             "visible": true,
             "highlight": false,
             "type": "direct",
+            "deleted": false,
             "children": [
                 {
                     "coordinates": "(org.eclipse.jetty:jetty-server:jar:8.1.1.v20120215:test - omitted for duplicate)",
@@ -617,6 +611,7 @@ const data: artifact = {
                     "visible": true,
                     "highlight": false,
                     "type": "transitive",
+                    "deleted": false,
                     "children": []
                 }
             ]
@@ -636,6 +631,7 @@ const data: artifact = {
             "visible": true,
             "highlight": false,
             "type": "direct",
+            "deleted": false,
             "children": [
                 {
                     "coordinates": "(org.apache.tomcat:catalina:jar:6.0.29:test - omitted for duplicate)",
@@ -652,6 +648,7 @@ const data: artifact = {
                     "visible": true,
                     "highlight": false,
                     "type": "transitive",
+                    "deleted": false,
                     "children": []
                 },
                 {
@@ -669,6 +666,7 @@ const data: artifact = {
                     "visible": true,
                     "highlight": false,
                     "type": "transitive",
+                    "deleted": false,
                     "children": []
                 },
                 {
@@ -686,6 +684,7 @@ const data: artifact = {
                     "visible": true,
                     "highlight": false,
                     "type": "transitive",
+                    "deleted": false,
                     "children": []
                 }
             ]
@@ -705,6 +704,7 @@ const data: artifact = {
             "visible": true,
             "highlight": false,
             "type": "direct",
+            "deleted": false,
             "children": [
                 {
                     "coordinates": "(org.apache.tomcat:juli:jar:6.0.29:test - omitted for duplicate)",
@@ -721,6 +721,7 @@ const data: artifact = {
                     "visible": true,
                     "highlight": false,
                     "type": "transitive",
+                    "deleted": false,
                     "children": []
                 },
                 {
@@ -738,6 +739,7 @@ const data: artifact = {
                     "visible": true,
                     "highlight": false,
                     "type": "transitive",
+                    "deleted": false,
                     "children": []
                 }
             ]
@@ -757,6 +759,7 @@ const data: artifact = {
             "visible": true,
             "highlight": false,
             "type": "direct",
+            "deleted": false,
             "children": []
         },
         {
@@ -774,6 +777,7 @@ const data: artifact = {
             "visible": true,
             "highlight": false,
             "type": "direct",
+            "deleted": false,
             "children": []
         },
         {
@@ -791,6 +795,7 @@ const data: artifact = {
             "visible": true,
             "highlight": false,
             "type": "direct",
+            "deleted": false,
             "children": [
                 {
                     "coordinates": "(commons-logging:commons-logging:jar:1.0.4:compile - omitted for conflict with 1.1.1)",
@@ -807,6 +812,7 @@ const data: artifact = {
                     "visible": true,
                     "highlight": false,
                     "type": "transitive",
+                    "deleted": false,
                     "children": []
                 },
                 {
@@ -824,6 +830,7 @@ const data: artifact = {
                     "visible": true,
                     "highlight": false,
                     "type": "transitive",
+                    "deleted": false,
                     "children": []
                 }
             ]
@@ -843,6 +850,7 @@ const data: artifact = {
             "visible": true,
             "highlight": false,
             "type": "direct",
+            "deleted": false,
             "children": []
         },
         {
@@ -860,6 +868,7 @@ const data: artifact = {
             "visible": true,
             "highlight": false,
             "type": "direct",
+            "deleted": false,
             "children": []
         },
         {
@@ -877,6 +886,7 @@ const data: artifact = {
             "visible": true,
             "highlight": false,
             "type": "direct",
+            "deleted": false,
             "children": [
                 {
                     "coordinates": "org.glassfish.grizzly:grizzly-framework:jar:2.3.7:compile",
@@ -893,6 +903,7 @@ const data: artifact = {
                     "visible": true,
                     "highlight": false,
                     "type": "transitive",
+                    "deleted": false,
                     "children": []
                 },
                 {
@@ -910,6 +921,7 @@ const data: artifact = {
                     "visible": true,
                     "highlight": false,
                     "type": "transitive",
+                    "deleted": false,
                     "children": [
                         {
                             "coordinates": "(org.glassfish.grizzly:grizzly-framework:jar:2.3.7:compile - omitted for duplicate)",
@@ -926,6 +938,7 @@ const data: artifact = {
                             "visible": true,
                             "highlight": false,
                             "type": "transitive",
+                            "deleted": false,
                             "children": []
                         }
                     ]
@@ -947,6 +960,7 @@ const data: artifact = {
             "visible": true,
             "highlight": false,
             "type": "direct",
+            "deleted": false,
             "children": [
                 {
                     "coordinates": "(org.glassfish.grizzly:grizzly-http:jar:2.3.5:test - omitted for conflict with 2.3.7)",
@@ -963,6 +977,7 @@ const data: artifact = {
                     "visible": true,
                     "highlight": false,
                     "type": "transitive",
+                    "deleted": false,
                     "children": []
                 }
             ]
