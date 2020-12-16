@@ -33,7 +33,8 @@ interface projectProps {
 export const Project = ({ data }: React.PropsWithChildren<projectProps>) => {
     let history = useHistory();
 
-    const { dispatch } = useAppState();
+    const { dispatch, state } = useAppState();
+    const { filteredBloated } = state;
 
     const handleClick = async (url: string) => {
         await fetchFromFile(url)
@@ -44,7 +45,10 @@ export const Project = ({ data }: React.PropsWithChildren<projectProps>) => {
                 dispatch({ type: "RESET_FILTERS", payload: null })
                 //replace the current project for the new one
                 dispatch({ type: "LOAD_LOCAL_FILE", payload: project });
+                //
+                dispatch({ type: "SELECT_BLOAT", payload: filteredBloated });
                 //navigate to the view page
+
                 history.push("/result");
             })
             .catch((err) => {

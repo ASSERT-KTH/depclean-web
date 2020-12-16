@@ -73,7 +73,8 @@
 }
 
 .treeLink-highlight{
-  stroke:hsla(2,79%,68%, 0.8);;
+  stroke:hsla(2,79%,68%, 0.8);
+  stroke-dasharray:4 1 2;
 }
 
 .treeLink-visible{
@@ -119,6 +120,13 @@
 
 .node-invisible{
   opacity: 0.1;
+}
+
+.node-deleted{
+  opacity:0.1;
+}
+.treeLink-deleted{
+  opacity:0.2;
 }
 
 .site-layout-content {

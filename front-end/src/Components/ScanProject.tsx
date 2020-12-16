@@ -13,13 +13,16 @@ interface projectProps {
 export const Project = ({ data }: React.PropsWithChildren<projectProps>) => {
 
     let history = useHistory();
-    const { dispatch } = useAppState();
+    const { dispatch, state } = useAppState();
+    const { filteredBloated } = state;
 
     const handleClick = async (d: any) => {
         //reset the filters first
         dispatch({ type: "RESET_FILTERS", payload: null })
         //replace the current project for the new one
         dispatch({ type: "LOAD_LOCAL_FILE", payload: data.data });
+        //
+        dispatch({ type: "SELECT_BLOAT", payload: filteredBloated });
         //navigate to the view page
         history.push("/result");
     }

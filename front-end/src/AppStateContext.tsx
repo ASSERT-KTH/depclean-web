@@ -988,7 +988,7 @@ const data: artifact = {
 const childrenAccessor = (d: any) => d.children;
 //Data state for all the application
 const dependCheckGroup: string[] = ["direct", "transitive", "inherited"];
-const bloatedCheckGroup: string[] = [];
+const bloatedCheckGroup: string[] = ["direct", "transitive", "inherited"];
 const viewText: string[] = ["groupid", "artifactid", "version"];
 const nodes = d3.hierarchy(data, childrenAccessor);
 const scopeCheckGroup: string[] = ["compile", "test", "provided", "runtime", "system"]
@@ -1055,20 +1055,19 @@ const appStateReducer = (state: AppState, action: Action): AppState => {
         }
 
         case "SELECT_VIEW": {
-            state.textDisplay = action.payload;
             return {
-                ...state
+                ...state,
+                textDisplay: action.payload
 
             }
         }
         case "SELECT_COLOR": {
-            state.colorSelected = action.payload;
             return {
-                ...state
+                ...state,
+                colorSelected: action.payload
             }
         }
         case "LOAD_LOCAL_FILE": {
-
             state.project = action.payload;
             state.filteredProject = cloneProject(action.payload);
             const newNodes = d3.hierarchy(action.payload, childrenAccessor);
@@ -1079,9 +1078,9 @@ const appStateReducer = (state: AppState, action: Action): AppState => {
             }
         }
         case "VIEW_DEPENDENCY_LIST": {
-            state.viewDependencyList = action.payload;
             return {
-                ...state
+                ...state,
+                viewDependencyList: action.payload,
             }
         }
         case "RESET_FILTERS": {
@@ -1103,18 +1102,31 @@ const appStateReducer = (state: AppState, action: Action): AppState => {
         }
         case "DEBLOAT_PROJECT": {
 
+            let messageState: "ORIGINAL" | "DEBLOAT_DIRECT" | "DEBLOAT_ALL" = "ORIGINAL";
             const projectDebloated: artifact = cloneProject(state.project);
-            projectDebloated.children =
-                action.payload === 0 ? state.project.children :
-                    action.payload === 50 ? debloatDirect(projectDebloated.children) :
-                        action.payload === 100 ? debloatAll(projectDebloated.children, ["direct", "transitive"]) : projectDebloated.children;
+
+            switch (action.payload) {
+                case 0:
+                    messageState = "ORIGINAL";
+                    projectDebloated.children = state.project.children;
+                    break;
+                case 50:
+                    messageState = "DEBLOAT_DIRECT";
+                    projectDebloated.children = debloatDirect(projectDebloated.children);
+                    // code block
+                    break;
+                case 100:
+                    messageState = "DEBLOAT_ALL";
+                    projectDebloated.children = debloatAll(projectDebloated.children, ["direct", "transitive"]);
+                    // code block
+                    break;
+                default:
+                    messageState = "ORIGINAL";
+                // code block
+            }
 
             const filteredDebloated = getTreeHierarchy(projectDebloated, childrenAccessor);
-            // const nodes = d3.hierarchy(newProject, childrenAccessor);
-            const messageState =
-                action.payload === 0 ? "ORIGINAL" :
-                    action.payload === 50 ? "DEBLOAT_DIRECT" :
-                        action.payload === 100 ? "DEBLOAT_ALL" : "ORIGINAL";
+
 
             return {
                 ...state,

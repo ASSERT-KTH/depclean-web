@@ -14,7 +14,8 @@ import { StatusMessage } from 'src/Components/ScanStatusMessage';
 
 export const Search = () => {
     let history = useHistory();
-    const { dispatch } = useAppState();
+    const { dispatch, state } = useAppState();
+    const { filteredBloated } = state;
     const [size, setSize] = useState({
         width: window.innerWidth,
         height: window.innerHeight
@@ -46,7 +47,10 @@ export const Search = () => {
                 dispatch({ type: "RESET_FILTERS", payload: null })
                 //replace the current project for the new one
                 dispatch({ type: "LOAD_LOCAL_FILE", payload: project });
+                //
+                dispatch({ type: "SELECT_BLOAT", payload: filteredBloated });
                 //navigate to the view page
+
                 history.push("/result");
             })
             .catch((error) => {

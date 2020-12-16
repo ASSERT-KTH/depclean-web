@@ -217,6 +217,7 @@ export const debloatDirect = (children: artifact[]): artifact[] => {
         //  d.status === "bloated" && d.type === "direct"
         const isBloated = d.status === "bloated" && d.type === "direct";
         d.highlight = isBloated;
+        d.deleted = isBloated;
         d.children = isBloated ? debloatTransitive(d.children) : d.children;
         return d;
     })
@@ -225,21 +226,38 @@ export const debloatDirect = (children: artifact[]): artifact[] => {
 
 const debloatTransitive = (children: artifact[]): artifact[] => {
     const artifacts = children.map((d: artifact) => {
-        d.highlight = d.status === "bloated" && d.type === "transitive" ? true : false;
+        const isBloated = d.status === "bloated" && d.type === "transitive" ? true : false;
+        d.highlight = isBloated
+        d.deleted = isBloated;
         d.children = debloatTransitive(d.children)
         return d;
     })
     return [...artifacts];
 }
 
-
+//get a depClean pom.XML and filter it according to the type array
+//filter if they are bloated
+//if filterType includes the type of the artifact
+//and if status == bloated
+export const deleteBloat = (data: artifact[], filterType: string[]): artifact[] => {
+    const unFiltered = data.map((node: artifact) => {
+        const isDebloated = filterType.includes(node.type) && node.status === "bloated";
+        node.highlight = isDebloated;
+        node.deleted = isDebloated;
+        node.children = deleteBloat(node.children, filterType)
+        return node;
+    });
+    return unFiltered;
+}
 
 export const debloatAll = (data: artifact[], filterType: string[]): artifact[] => {
     const unFiltered = data.map((node: artifact) => {
-        node.highlight = filterType.includes(node.type) && node.status === "bloated";
+        const isBloated = filterType.includes(node.type) && node.status === "bloated";
+        node.highlight = isBloated;
+        node.deleted = isBloated;
         const filteredChildren = node.children.filter((d: artifact) => filterType.includes(node.type))
         const filteredInherited = node.children.filter((d: artifact) => node.type === "inherited")
-        node.children = [...filteredInherited, ...highlightBloat(filteredChildren, filterType)]
+        node.children = [...filteredInherited, ...deleteBloat(filteredChildren, filterType)]
         return node;
     });
     return unFiltered;

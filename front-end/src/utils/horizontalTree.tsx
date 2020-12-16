@@ -33,7 +33,7 @@ export const getOmmitedLinks = (nodes: any) => {
             version: node.data.version
         };
         //if either of the source or target are not visible then it should not pain it
-        return parent.data.visible === true && replacement.data.visible === true ? [...linksMap, link] : [...linksMap];
+        return (parent.data.deleted === false && replacement.data.deleted === false) || (parent.data.visible === false && replacement.data.visible === false) ? [...linksMap, link] : [...linksMap];
     }
     return nodes
         .filter(filterOmmited)
