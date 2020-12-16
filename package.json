@@ -2,6 +2,7 @@
   "dependencies": {
     "@types/d3-delaunay": "^5.3.0",
     "@types/lodash": "^4.14.165",
+    "axios": "^0.21.0",
     "d3-delaunay": "^5.3.0",
     "lodash": "^4.17.20",
     "react-dropzone": "^11.2.4"
