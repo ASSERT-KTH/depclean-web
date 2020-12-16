@@ -10,6 +10,7 @@ import { createProject } from 'src/utils/dataRetrieve';
 import { artifact } from 'src/interfaces/interfaces'
 import { useAppState } from "src/AppStateContext";
 import { useHistory } from 'react-router-dom';
+import { StatusMessage } from 'src/Components/ScanStatusMessage';
 
 export const Search = () => {
     let history = useHistory();
@@ -22,6 +23,7 @@ export const Search = () => {
     const [user, setUser] = useState("skyscreamer")
     const [project, setProject] = useState("JSONassert")
     const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(false);
 
     const onChangeSearch = debounce((text: string) => {
         const reg = /\s+/g;
@@ -35,6 +37,7 @@ export const Search = () => {
 
     const onClick = () => {
         setLoading(true);
+        setError(false);
         getData(user, project)
             .then((response: any) => {
                 setLoading(false);
@@ -49,6 +52,7 @@ export const Search = () => {
             .catch((error) => {
                 message.error(`Could not Depclean this`);
                 setLoading(false);
+                setError(true);
                 if (error.response) {
                     // When response status code is out of 2xx range 
                     console.log(error.response.data)
@@ -63,10 +67,7 @@ export const Search = () => {
                 }
             })
     }
-    //get to a load state
-    //make the call
-    //await
-    //then treat the data
+
     //show that is loading FUNNY MESSAGE
     //on dismoutn cancel the call
     //after the call is done it should load got to the viz
@@ -82,10 +83,15 @@ export const Search = () => {
         }
         window.addEventListener('resize', handleResize)
     })
-
+    const messages = ["Depcleaning project, it can take up to 2 minutes", "Checking project in Git hub", "Downloading project from Github", "Installing DepClean", "Running Depclean"]
     const userInfo = user === "" ? <span className="unHighlight">{"<user>"}</span> : <span className="color-green">{user}</span>
     const projectInfo = project === "" ? <span className="unHighlight">{"<project>"}</span> : <span className="color-green">{project}</span>
-
+    const statusMessage = loading || error ?
+        <StatusMessage
+            statusMessages={messages}
+            errorMessage={"Could not Depclean this project"}
+            status={(error === false) ? "loading" : "error"}
+        /> : <></>;
 
     return (
         <Row id="search"
@@ -107,6 +113,8 @@ export const Search = () => {
                 <div className="flex flex-center flex-justify-center main-url">
                     <p>{`https://github.com/`}{userInfo}/{projectInfo}</p>
                 </div>
+                {statusMessage}
+                <div className="spacer-h spacer-h-m"></div>
                 <div>
 
                     <Input.Group>

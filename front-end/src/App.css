@@ -713,3 +713,15 @@ line.Axis__line {
   color:white !important; 
   background-color: #61766d!important ;
 }
+
+.message{
+  font-size: 32px;
+  margin: auto;
+}
+.message-loading{
+  color: #64C19A;
+}
+
+.message-error{
+ color:#EE706B; 
+}
