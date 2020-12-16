@@ -353,37 +353,39 @@ p{
 .dataInfo{
   display: flex;
   flex-direction: column;
-  font-weight: 800;
+  font-weight: 600;
   font-size: 14px;
   color: hsla(0,0%,0%, .4);
   margin-right:20px;
 }
 
 .dataInfo span{
-  font-size: 42px;
-  font-weight: 600;
+  font-size: 32px;
+  font-weight: 400;
   margin-bottom: -12px;
   color: hsla(0,0%,0%, .6);
 }
 
 .dependencies{
-   color: hsla(0,0%,0%, .3);
+   color: hsla(0,0%,0%, .7);
 }
 .dependencies span{
-   color: hsla(0,0%,0%, .3);
+   color: hsla(0,0%,0%, .7);
 }
 .dependencies h3{
-   color: hsla(0,0%,0%, .3);
+   color: hsla(0,0%,0%, .7);
+   font-size: 14px;
 }
 
 .bloated{
-  color:hsla(2,79%,68%,.3);
+  color:hsla(2,79%,68%,.7);
 }
 .bloated span{
-  color:hsla(2,79%,68%,.3);
+  color:hsla(2,79%,68%,.7);
 }
 .bloated h3{
-  color:hsla(2,79%,68%,.3);
+  color:hsla(2,79%,68%,.7);
+  font-size: 14px;
 }
 
 /* GALLERY */
