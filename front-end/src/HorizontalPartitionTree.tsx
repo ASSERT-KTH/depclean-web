@@ -29,7 +29,7 @@ interface HorizontalTreeProps {
     dimensions: dimension,
 }
 
-export const HorizontalTree = ({
+export const HorizontalPartitionTree = ({
     data,
     dimensions
 }: React.PropsWithChildren<HorizontalTreeProps>) => {

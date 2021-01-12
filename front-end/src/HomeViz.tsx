@@ -5,7 +5,7 @@ import { Row, Col, Divider, Checkbox } from 'antd';
 import { CategoryCheckbox } from './CategoryCheckbox';
 import { CategoryRadialBox } from './CategoryRadialBox';
 import { DependenceProvency } from './DependenceProvency';
-import { HorizontalTree } from './HorizontalTree';
+import { HorizontalPartitionTree } from './HorizontalPartitionTree';
 import { useAppState } from "./AppStateContext";
 import { v4 as uuidv4 } from 'uuid';
 import { DependencyList } from './DependencyList';
@@ -159,7 +159,7 @@ export const HomeViz = () => {
                 </Col >
 
                 {/* VIZ D3 */}
-                <HorizontalTree
+                <HorizontalPartitionTree
                     key={uuidv4()}
                     data={filtered}
                     dimensions={dimensions}

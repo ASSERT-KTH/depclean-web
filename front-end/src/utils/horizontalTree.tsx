@@ -44,11 +44,14 @@ export const getOmmitedLinks = (nodes: any) => {
 export const getParitionTree = (size: number[]) => {
     return d3.partition()
         .size([size[0], size[1]])
-        .padding(1) //modify this to give the proper dimensions
+        .padding(5) //modify this to give the proper dimensions
 }
 
 export const getSizeHierarchy = (data: any) => {
-    return d3.hierarchy(data)
+    console.log("in data", data)
+    return data
         .sum(sizeAccesor)
         .sort((a: any, b: any) => b.height - a.height || b.value - a.value)
 }
+
+
