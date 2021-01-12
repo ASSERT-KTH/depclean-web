@@ -41,17 +41,32 @@ export const getOmmitedLinks = (nodes: any) => {
         .reduce(createLinks, [])
 }
 
-export const getParitionTree = (size: number[]) => {
+export const getParitionTree = (size: number[], padding: number) => {
     return d3.partition()
         .size([size[0], size[1]])
-        .padding(5) //modify this to give the proper dimensions
+        .padding(1) //modify this to give the proper dimensions
 }
 
+//Sum the data and sort 
 export const getSizeHierarchy = (data: any) => {
-    console.log("in data", data)
     return data
         .sum(sizeAccesor)
         .sort((a: any, b: any) => b.height - a.height || b.value - a.value)
 }
 
+//filter ommited nodes and test
+export const filterOmmitedandTest = (node: any) => (d: any) => d.data.type !== "omitted" && d.data.type !== "test";
+
+//adds padding to the Partition nodes in betweeen
+export const addPadding = (padding: number) => {
+    //return mapping function
+    return (node: any) => {
+        //the tree is inverted. Therefore y is the one to recalculate
+        const nodeWidth = node.y1 - node.y0;
+        const baseWidth = nodeWidth + padding;
+        node.y0 = node.depth === 0 ? node.y0 : (baseWidth * node.depth);
+        node.y1 = node.depth === 0 ? node.y1 : node.y0 + nodeWidth;
+        return node;
+    }
+}
 
