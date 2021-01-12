@@ -1,7 +1,8 @@
 // import * as d3 from 'd3';
 import React from 'react';
 import { v4 as uuidv4 } from 'uuid';
-
+import * as d3 from 'd3';
+import { sizeAccesor } from 'src/accessors/treeAccessors'
 
 export const parseOmitedLinks = (data: any) => {
     return data.map((d: any) => <text
@@ -38,4 +39,16 @@ export const getOmmitedLinks = (nodes: any) => {
     return nodes
         .filter(filterOmmited)
         .reduce(createLinks, [])
+}
+
+export const getParitionTree = (size: number[]) => {
+    return d3.partition()
+        .size([size[0], size[1]])
+        .padding(1) //modify this to give the proper dimensions
+}
+
+export const getSizeHierarchy = (data: any) => {
+    return d3.hierarchy(data)
+        .sum(sizeAccesor)
+        .sort((a: any, b: any) => b.height - a.height || b.value - a.value)
 }

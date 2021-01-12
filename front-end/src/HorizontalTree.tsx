@@ -7,7 +7,7 @@ import { Nodes } from './vizUtils/Nodes';
 import { Tooltip } from './vizUtils/tooltip';
 import { DelaunayGrid } from 'src/vizUtils/Delaunay';
 import { useAppState } from "./AppStateContext";
-import { parseOmitedLinks, getOmmitedLinks } from "src/utils/horizontalTree";
+import { parseOmitedLinks, getOmmitedLinks, getParitionTree, getSizeHierarchy } from "src/utils/horizontalTree";
 
 interface dimension {
     width: number,
@@ -93,6 +93,12 @@ export const HorizontalTree = ({
     // onEnter={ void}
     // onLeave={ void}
 
+    //must have hierarchy data and make the sum of the size
+    const partitionData = getSizeHierarchy(data);
+    //get the partition  tree
+    const treeSize: number[] = [dimensions.boundedHeight - dimensions.marginBottom - dimensions.marginTop, dimensions.boundedWidth - dimensions.marginBottom - dimensions.marginTop]
+    const paritionTree = getParitionTree(treeSize)
+    console.log(paritionTree(partitionData))
     //CREATE the tree structure  and the hierarchy
     const tree = d3.tree()
         .nodeSize([30, 100])
