@@ -2,16 +2,15 @@ import React, { useState } from 'react';
 import { Col } from 'antd';
 import * as d3 from 'd3';
 import { v4 as uuidv4 } from 'uuid';
-import { Squares } from './vizUtils/Squares';
 import { Tooltip } from './vizUtils/tooltip';
+import { PartitionNode } from 'src/vizUtils/ParitionNode';
+import {
+    getParitionTree, getSizeHierarchy, filterOmmitedandTest
+} from "src/utils/horizontalTree";
+
+// import { Squares } from './vizUtils/Squares';
 // import { DelaunayGrid } from 'src/vizUtils/Delaunay';
 // import { useAppState } from "./AppStateContext";
-import {
-    getParitionTree, getSizeHierarchy, addPadding, filterOmmitedandTest
-} from "src/utils/horizontalTree";
-import {
-    xAccessor, yAccessor, wAccessor, hAccessor, nameAccessor, tittleAccessor, colorAccessor
-} from 'src/accessors/squareAccessors';
 
 interface dimension {
     width: number,
@@ -61,23 +60,24 @@ export const HorizontalPartitionTree = ({
 
     //must have hierarchy data and make the sum of the size
     const partitionData = getSizeHierarchy(data);
+    //node.height
+    //make width according to height so it fits. 
+
     //get the partition  tree
     const treeSize: number[] = [
-        dimensions.boundedHeight - dimensions.marginBottom - dimensions.marginTop,
-        dimensions.boundedWidth - dimensions.marginBottom - dimensions.marginTop
+        dimensions.boundedHeight,
+        dimensions.boundedWidth * 0.8
     ]
     const paritionTree = getParitionTree(treeSize, 10)
-
-
     //GET ALL THE NODES WITH A TREE STRUCTURE
     const treeNodes = paritionTree(partitionData).descendants();
     //filter the nodes that are ommitted and whose type are test
     const nodes = treeNodes
         .filter(filterOmmitedandTest)
-        .map(addPadding(20));
+    // .map(addPadding(100));
 
     return (
-        <Col span="20">
+        <Col span="20" >
             <div className="wrapper">
                 <Tooltip value={toolTipValue} position={toolTipPos} opacity={tpOpacity} />
                 <svg width={dimensions.boundedWidth} height={dimensions.boundedHeight} key={uuidv4()} >
@@ -86,21 +86,11 @@ export const HorizontalPartitionTree = ({
                         transform={"translate(" + dimensions.marginLeft + "," + dimensions.marginTop + ")"}
                         key={uuidv4()}
                     >
-                        <Squares
+                        <PartitionNode
                             data={nodes}
-                            keyNumber={uuidv4()}
-                            xAccessor={yAccessor}
-                            yAccessor={xAccessor}
-                            widthAccessor={hAccessor}
-                            heightAccessor={wAccessor}
-                            nameAccessor={nameAccessor}
                             onEnter={mouseEnter}
                             onLeave={mouseLeave}
-                            valueAccessor={tittleAccessor}
-                            colorAccessor={colorAccessor}
-                            showText={false}
                         />
-
                     </g>
 
                 </svg>

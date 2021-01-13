@@ -96,14 +96,12 @@ export const HomeViz = () => {
         width: size.width,
         height: size.height,
         marginTop: 50,
-        marginRight: 50,
+        marginRight: 20,
         marginBottom: 50,
-        marginLeft: 50,
-        boundedHeight: size.height - 100,
-        boundedWidth: size.width * 0.7,
+        marginLeft: 20,
+        boundedHeight: size.height - 250,
+        boundedWidth: size.width - (size.width * 0.0416666667) - (size.width * 0.0833333333),
     }
-
-
 
 
     return (
@@ -115,7 +113,7 @@ export const HomeViz = () => {
             </Row>
 
             <Row className="vizContainer" id="DependencyTree" key={uuidv4()}
-                style={{ width: size.width, height: size.height }}
+            // style={{ width: size.width, height: size.height }}
             >
                 {/* CATEGORY LIST */}
                 <Col span="2" offset={1}>

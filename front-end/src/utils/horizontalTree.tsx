@@ -51,7 +51,7 @@ export const getParitionTree = (size: number[], padding: number) => {
 export const getSizeHierarchy = (data: any) => {
     return data
         .sum(sizeAccesor)
-        .sort((a: any, b: any) => b.height - a.height || b.value - a.value)
+        .sort((a: any, b: any) => a.height - b.height || a.value - b.value)
 }
 
 //filter ommited nodes and test
