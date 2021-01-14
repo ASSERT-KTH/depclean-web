@@ -5,10 +5,9 @@ import { v4 as uuidv4 } from 'uuid';
 import { Tooltip } from './vizUtils/tooltip';
 import { PartitionNode } from 'src/vizUtils/ParitionNode';
 import {
-    getParitionTree, getSizeHierarchy, filterOmmitedandTest
+    getParitionTree, getSizeHierarchy, filterOmmitedandTest, addNewSize
 } from "src/utils/horizontalTree";
 
-// import { Squares } from './vizUtils/Squares';
 // import { DelaunayGrid } from 'src/vizUtils/Delaunay';
 // import { useAppState } from "./AppStateContext";
 
@@ -52,11 +51,11 @@ export const HorizontalPartitionTree = ({
                 <div className="toolTip-sub">Scope: {d.data.scope}</div>
                 <div className="toolTip-sub">Size: <span className="toolTip-value">{d3.format(".4f")(d.data.size)}</span></div>
             </div>)
-        setToolTipPos({ x: (d.y0 + (d.y1 - d.y0) / 2) + dimensions.marginTop, y: d.x0 + dimensions.marginTop })
+        setToolTipPos({ x: dimensions.marginLeft + (d.y0 + (d.h / 2)), y: d.x0 + d.y + dimensions.marginTop })
         setTpOpacity(1);
     }
+    //hide the tooltip on mouse leave
     const mouseLeave = () => setTpOpacity(0);
-
 
     //must have hierarchy data and make the sum of the size
     const partitionData = getSizeHierarchy(data);
@@ -68,13 +67,13 @@ export const HorizontalPartitionTree = ({
         dimensions.boundedHeight,
         dimensions.boundedWidth * 0.8
     ]
-    const paritionTree = getParitionTree(treeSize, 10)
+    const partitionTree = getParitionTree(treeSize, 10)
     //GET ALL THE NODES WITH A TREE STRUCTURE
-    const treeNodes = paritionTree(partitionData).descendants();
+    const treeNodes = partitionTree(partitionData).descendants();
     //filter the nodes that are ommitted and whose type are test
     const nodes = treeNodes
         .filter(filterOmmitedandTest)
-    // .map(addPadding(100));
+    // .map(addNewSize(0.66, 30, dimensions.boundedHeight))
 
     return (
         <Col span="20" >

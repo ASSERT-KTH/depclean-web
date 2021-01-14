@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { getColorGenerator, getColorDataAccessor, getArtifactsId } from 'src/utils/treeAccess';
 import { useAppState } from "src/AppStateContext";
 import {
-    xAccessor, yAccessor, wAccessor, hAccessor
+    xAccessor, wAccessor, hAccessor, yAccessor
 } from 'src/accessors/squareAccessors';
 interface paritionNodeProps {
     data: any[],
@@ -15,7 +15,7 @@ interface paritionNodeProps {
 export const PartitionNode = ({
     data,
     onEnter,
-    onLeave
+    onLeave,
 }: React.PropsWithChildren<paritionNodeProps>) => {
     //get the main state
     const { state } = useAppState();
@@ -36,8 +36,8 @@ export const PartitionNode = ({
             <rect
                 className={classAccessor(node)}
                 key={uuidv4()}
-                cx={yAccessor(node)}
-                cy={xAccessor(node)}
+                // x={}
+                y={yAccessor(node)}
                 rx={0}
                 width={hAccessor(node)}
                 height={wAccessor(node)}

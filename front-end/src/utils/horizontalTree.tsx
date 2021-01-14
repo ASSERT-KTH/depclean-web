@@ -55,7 +55,24 @@ export const getSizeHierarchy = (data: any) => {
 }
 
 //filter ommited nodes and test
-export const filterOmmitedandTest = (node: any) => (d: any) => d.data.type !== "omitted" && d.data.type !== "test";
+export const filterOmmitedandTest = (node: any) => node.data.type !== "omitted" && node.data.type !== "test";
+
+//adds padding to the Partition nodes in betweeen
+export const addNewSize = (hightPercent: number, width: number, height: number) => {
+    //return mapping function
+    return (node: any) => {
+        console.log(node)
+        //modify height .h and width .w
+        node.h = width;
+        //make the node visible if it is less than 1
+        const nHeight = (node.x1 - node.x0) * hightPercent;
+        node.w = nHeight < 1 ? 1 : nHeight;
+        //add property Y with new position
+        node.y = ((node.x1 - node.x0) * (1 - hightPercent) / 2);
+        return node;
+    }
+}
+
 
 //adds padding to the Partition nodes in betweeen
 export const addPadding = (padding: number) => {

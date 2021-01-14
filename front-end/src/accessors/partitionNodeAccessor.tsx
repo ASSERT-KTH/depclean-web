@@ -8,3 +8,8 @@ export const classAccessor = (d: any) => {
         (d.data.visible ? " node-visible" : " node-invisible") +
         (d.data.deleted ? " node-deleted" : "")
 }
+
+//get the width and hight from a new calculated variable
+export const wAccessor = (d: any) => d.w;
+export const hAccessor = (d: any) => d.h;
+export const yAccessor = (d: any) => d.y;
