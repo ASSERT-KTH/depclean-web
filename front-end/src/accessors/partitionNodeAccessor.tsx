@@ -12,4 +12,5 @@ export const classAccessor = (d: any) => {
 //get the width and hight from a new calculated variable
 export const wAccessor = (d: any) => d.w;
 export const hAccessor = (d: any) => d.h;
-export const yAccessor = (d: any) => d.y;
+export const yDisplacedAccessor = (d: any) => d.y;
+

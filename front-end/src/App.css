@@ -47,10 +47,10 @@
 }
 
 .treeLink{
-  fill:none;
-  stroke: hsla(0,0%,0%, 0.2);
-  stroke-width: 1px;
-  opacity: 0.7;
+  fill:white;
+  /* opacity: 0.7!important; */
+  /* stroke: hsla(0,0%,0%, 0.2); */
+  /* stroke-width: 1px; */
   transition: all 0.2s ease-out;
 }
 
@@ -60,6 +60,20 @@
   stroke: rgb(43, 134, 237);
   stroke-width: 1px;
   opacity: 0.4;
+}
+
+.treeLink-highlight{
+  /* stroke:hsla(2,79%,68%, 0.8); */
+  /* stroke-dasharray:4 1 2; */
+  fill:#EF433C !important;
+}
+
+.treeLink-visible{
+  opacity: 1;
+}
+
+.treeLink-invisible{
+  opacity: 0.1 !important;
 }
 
 .omitted-label{
@@ -72,18 +86,7 @@
   opacity:0.1;
 }
 
-.treeLink-highlight{
-  stroke:hsla(2,79%,68%, 0.8);
-  stroke-dasharray:4 1 2;
-}
 
-.treeLink-visible{
-  opacity: 1;
-}
-
-.treeLink-invisible{
-  opacity: 0.1 !important;
-}
 
 
 .node{
@@ -92,7 +95,7 @@
 
 .node-internal{
   /* stroke:gray; */
-  fill:white;
+  /* fill:white; */
   stroke-width:3;
 
 }
@@ -110,8 +113,8 @@
 
 .node-highlight{
   /* fill:red; */
-  stroke-width:3;
-  stroke:#EF433C;
+  /* stroke-width:3; */
+  fill:#EF433C;
 }
 
 .node-visible{

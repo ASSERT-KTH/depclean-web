@@ -187,6 +187,24 @@ export const getColorGenerator = (colorSelected: string, data: string[]) => {
     }
 }
 
+//returns color depending on type
+export const getColorByType = (type: string) => {
+    switch (type) {
+        case 'parent':
+            return "#30611E";
+        case 'direct':
+            return "#98BC8B";
+        case 'omitted':
+            return "#30611E";
+        case 'transitive':
+            return "#7EBEE9";
+        case 'inherited':
+            return "#EAD17A";
+        default:
+            return "#30611E";
+    }
+}
+
 //Returns an color data accessor according to the color selected
 export const getColorDataAccessor = (colorSelected: string) => {
     switch (colorSelected) {

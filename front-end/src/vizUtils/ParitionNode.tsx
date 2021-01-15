@@ -1,47 +1,35 @@
 import React from 'react';
-import { classAccessor } from 'src/accessors/partitionNodeAccessor'
 import { v4 as uuidv4 } from 'uuid';
-import { getColorGenerator, getColorDataAccessor, getArtifactsId } from 'src/utils/treeAccess';
-import { useAppState } from "src/AppStateContext";
+import { classAccessor, hAccessor, wAccessor, yDisplacedAccessor } from 'src/accessors/partitionNodeAccessor'
 import {
-    xAccessor, wAccessor, hAccessor, yAccessor
+    xAccessor, yAccessor
 } from 'src/accessors/squareAccessors';
 interface paritionNodeProps {
     data: any[],
     onEnter: any,
     onLeave: any,
+    colorAccessor: any
 }
 
 export const PartitionNode = ({
     data,
     onEnter,
     onLeave,
+    colorAccessor
 }: React.PropsWithChildren<paritionNodeProps>) => {
-    //get the main state
-    const { state } = useAppState();
-    //Get all the nodes
-    const {
-        colorSelected
-    } = state;
-
-    const getIds = getArtifactsId(data)
-    const colorGenerator: d3.ScaleOrdinal<string, unknown, never> = getColorGenerator(colorSelected, getIds);
-    const colorDataAccessor: (d: any) => string = getColorDataAccessor(colorSelected)
-    const color: any = (d: any) => colorGenerator(colorDataAccessor(d));
-
 
 
     const nodes = data.map((node) => (
-        <g transform={"translate(" + node.y0 + "," + node.x0 + ")"} key={uuidv4()}>
+        <g transform={"translate(" + yAccessor(node) + "," + xAccessor(node) + ")"} key={uuidv4()}>
             <rect
                 className={classAccessor(node)}
                 key={uuidv4()}
-                // x={}
-                y={yAccessor(node)}
-                rx={0}
+                // x={xAccessor(node)}
+                y={yDisplacedAccessor(node)}
+                // rx={0}
                 width={hAccessor(node)}
                 height={wAccessor(node)}
-                fill={color(node)}
+                fill={colorAccessor(node)}
                 onMouseEnter={() => onEnter(node)}
                 onMouseLeave={() => onLeave(node)}
             />
