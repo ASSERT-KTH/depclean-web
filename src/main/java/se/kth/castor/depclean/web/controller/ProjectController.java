@@ -3,6 +3,7 @@ package se.kth.castor.depclean.web.controller;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,6 +18,7 @@ import java.nio.file.Paths;
 @Slf4j
 public class ProjectController {
 
+   @CrossOrigin
    @GetMapping("/project/{user}/{repo}")
    Project all(@PathVariable String user, @PathVariable String repo) throws IOException {
       String repoName = user + "/" + repo;
