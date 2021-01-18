@@ -566,8 +566,9 @@ line.Axis__line {
   text-anchor:end;
 }
 /* TREE MAP */
-.tree-map rect.square_treemap {
+.square_treemap {
   stroke: white;
+  opacity: 0.4;
 }
 
 .text-message{

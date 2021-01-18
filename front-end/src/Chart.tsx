@@ -68,7 +68,7 @@ export const Chart = ({
         .domain([0, chartData.length + 1])
         .interpolator(colorInterpolator);
     const indexAccesor = (d: any) => d.index;
-    const colorAccessor = (d: any) => "#D9D9D9"//color(indexAccesor(d))
+    const colorAccessor = (d: any) => color(indexAccesor(d))
     //LEGEND DATA
     const initialPos = [chartSize + dimensions.marginLeft + 10, dimensions.marginTop]
 

@@ -68,7 +68,7 @@ export const MainInfo = () => {
                     </h1>
                     <span className="version-num">{version}</span>
                 </div>
-                <div className="">
+                <div className="pull-left">
                     <Chart
                         nodes={nodesDep}
                         dimensions={dimensions}
