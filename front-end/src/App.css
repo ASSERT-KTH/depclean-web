@@ -351,8 +351,9 @@ p{
 
 /* MAIN INFO */
 #MainInfo h1{
-  font-size: 32px;
+  font-size: 22px;
   font-weight: 700;
+  margin-bottom: 0;
 }
 
 /* MAIN PAGE */

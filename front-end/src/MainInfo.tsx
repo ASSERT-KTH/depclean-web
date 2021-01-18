@@ -35,12 +35,13 @@ export const MainInfo = () => {
 
 
     return (
-        <Col span={20} offset={2}>
+        <Col span={22} offset={1}>
             <div className="flex flex-enter margin-20 " >
                 <div>
                     <h1 >
-                        {tittle} <span className="version-num">{version}</span>
+                        {tittle}
                     </h1>
+                    <span className="version-num">{version}</span>
                 </div>
                 <div className="pull-left slider-theme">
                     <span className="tittle"><ExclamationCircleOutlined /> Debloat artifacts</span>
