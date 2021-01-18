@@ -17,7 +17,7 @@ import "antd/dist/antd.css";
 import './App.css';
 
 
-const { Content, Footer } = Layout;
+const { Content } = Layout;
 
 function App() {
 
@@ -39,8 +39,8 @@ function App() {
 
         </Content>
 
-        <Footer>
-        </Footer>
+        {/* <Footer>
+        </Footer> */}
 
 
       </Layout>

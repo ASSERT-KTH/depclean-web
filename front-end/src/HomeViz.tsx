@@ -4,7 +4,7 @@ import { MainInfo } from './MainInfo';
 import { Row, Col, Divider, Checkbox } from 'antd';
 import { CategoryCheckbox } from './CategoryCheckbox';
 import { CategoryRadialBox } from './CategoryRadialBox';
-import { DependenceProvency } from './DependenceProvency';
+// import { DependenceProvency } from './DependenceProvency';
 import { HorizontalPartitionTree } from './HorizontalPartitionTree';
 import { useAppState } from "./AppStateContext";
 import { v4 as uuidv4 } from 'uuid';
@@ -168,10 +168,9 @@ export const HomeViz = () => {
 
             </Row>
 
-            <Row id="dependenceProvency">
-                {/* TABS */}
+            {/* <Row id="dependenceProvency">
                 <DependenceProvency />
-            </Row>
+            </Row> */}
         </div>
     )
 }

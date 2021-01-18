@@ -1,3 +1,13 @@
+export interface dimension {
+    width: number,
+    height: number,
+    marginTop: number,
+    marginRight: number,
+    marginBottom: number,
+    marginLeft: number,
+    boundedHeight: number,
+    boundedWidth: number,
+}
 
 export interface reportI {
     direct: number,

@@ -7,17 +7,9 @@ import { v4 as uuidv4 } from 'uuid';
 import { Tooltip } from './vizUtils/tooltip';
 import { AxisHorizontal } from 'src/vizUtils/AxisHorizontal';
 import { AxisVertical } from 'src/vizUtils/AxisVertical';
+import { dimension } from 'src/interfaces/interfaces'
 
-interface dimension {
-    width: number,
-    height: number,
-    marginTop: number,
-    marginRight: number,
-    marginBottom: number,
-    marginLeft: number,
-    boundedHeight: number,
-    boundedWidth: number,
-}
+
 
 interface ChartProps {
     nodes: any[],
@@ -43,14 +35,13 @@ export const Chart = ({
     const [tpOpacity, setTpOpacity] = useState(0)
 
     //declare chart width and height
-    const chartSize = (dimensions.boundedWidth * 0.7);
-    const chartHeight = 300;
+    const chartSize = (dimensions.boundedWidth);
+    const chartHeight = dimensions.boundedHeight * 0.69;
     const chartDimensions = {
         ...dimensions,
         boundedWidth: chartSize,
         height: chartHeight
     }
-
 
     const chartXScale = d3.scaleLinear()
         .domain([0, 100])
@@ -77,7 +68,7 @@ export const Chart = ({
         .domain([0, chartData.length + 1])
         .interpolator(colorInterpolator);
     const indexAccesor = (d: any) => d.index;
-    const colorAccessor = (d: any) => color(indexAccesor(d))
+    const colorAccessor = (d: any) => "#D9D9D9"//color(indexAccesor(d))
     //LEGEND DATA
     const initialPos = [chartSize + dimensions.marginLeft + 10, dimensions.marginTop]
 
@@ -102,9 +93,9 @@ export const Chart = ({
         <div className="flex flex-justify-center" >
             <div className="wrapper">
                 <Tooltip value={toolTipValue} position={toolTipPos} opacity={tpOpacity} />
-                <svg width={dimensions.boundedWidth} height={dimensions.height} >
+                <svg width={dimensions.width} height={dimensions.height} >
 
-                    <g transform={"translate(" + dimensions.marginLeft + "," + dimensions.marginTop + ")"} >
+                    <g transform={"translate(" + dimensions.marginLeft + "," + 0 + ")"} >
 
                         <Squares
                             data={chartData}
@@ -122,12 +113,6 @@ export const Chart = ({
                         />
                     </g>
 
-                    <Legend
-                        data={chartData}
-                        nameAccessor={nameAccessor}
-                        initialPos={initialPos}
-                        color={color}
-                    />
                     <AxisHorizontal
                         dimensions={chartDimensions}
                         formatTick={formatTick}
@@ -142,6 +127,12 @@ export const Chart = ({
                         scale={chartXScale}
                         numTicks={numTicks}
                     />
+                    {/* <Legend
+                        data={chartData}
+                        nameAccessor={nameAccessor}
+                        initialPos={initialPos}
+                        color={color}
+                    /> */}
                 </svg>
             </div>
         </div >

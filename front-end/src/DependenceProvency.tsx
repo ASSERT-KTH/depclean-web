@@ -20,18 +20,18 @@ export const DependenceProvency = () => {
     const sName: string = `Size ${rootInfo[2].num}Mb`;
     const nodesFiltered = filtered.descendants().filter((d: any) => d.data.type !== "omitted" && d.data.type !== "test")
 
-    const nodesDep = getNodesWithDepCategory(nodesFiltered.splice(1));
+    const nodesDep = getNodesWithDepCategory(nodesFiltered.splice(1)).filter((d: any) => d.type !== "unknown" && d.status !== "unkown");
     const colorUsage = d3.interpolate("red", "blue")
     const colorGroupId = d3.scaleOrdinal(d3.schemeCategory10);
 
     const [dimensions, setDimensions] = useState({
         width: window.innerWidth,
-        height: 500,
+        height: 600,
         marginTop: 50,
         marginRight: 50,
         marginBottom: 50,
         marginLeft: 50,
-        boundedHeight: 500 - 50 - 50,
+        boundedHeight: 600 - 50 - 50,
         boundedWidth: window.innerWidth * 0.9,
     });
 
@@ -39,12 +39,12 @@ export const DependenceProvency = () => {
         function handleResize() {
             setDimensions({
                 width: window.innerWidth,
-                height: 500,
+                height: 600,
                 marginTop: 50,
                 marginRight: 50,
                 marginBottom: 50,
                 marginLeft: 50,
-                boundedHeight: 500 - 50 - 50,
+                boundedHeight: 600 - 50 - 50,
                 boundedWidth: window.innerWidth * 0.9,
             })
         }
@@ -55,6 +55,7 @@ export const DependenceProvency = () => {
     const sizeAccesor = (d: any) => d.size;
     const dataHierarchy = filtered
         .sum(sizeAccesor)
+    // .sort((a: any, b: any) => b.size - a.size)
     // .sort((a: any, b: any) => b.value - a.value)
 
     return (

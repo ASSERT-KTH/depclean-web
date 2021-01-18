@@ -37,7 +37,7 @@ export const AxisHorizontal = ({
         <React.Fragment></React.Fragment>
 
     return (
-        <g className="axis axisHorizontal" transform={`translate( ${dimensions.marginLeft}, ${dimensions.boundedHeight - dimensions.marginBottom
+        <g className="axis axisHorizontal" transform={`translate( ${dimensions.marginLeft}, ${dimensions.height - 8
             })`} >
 
             <line

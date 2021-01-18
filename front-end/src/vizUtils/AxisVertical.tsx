@@ -33,7 +33,7 @@ export const AxisVertical = ({
                 transform: `rotate(-90deg)`,
             }}
             textAnchor="middle"
-            alignmentBaseline="central"
+            alignmentBaseline="hanging"
         >
             {label}
         </text>) :
@@ -41,8 +41,7 @@ export const AxisVertical = ({
 
     return (
         <g className="axis axisVertical"
-            transform={`translate(${30}, ${(dimensions.height) / 2 + dimensions.marginTop
-                })`}
+            transform={`translate(${0}, ${(dimensions.height) / 2})`}
         >
             {textLabel}
         </g>
