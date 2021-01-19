@@ -60,6 +60,7 @@ export const HorizontalPartitionTree = ({
                 <div className="toolTip-sub">{d.data.version}</div>
                 <div className="toolTip-sub">{d.data.groupId}</div>
                 <div className="toolTip-sub">Scope: {d.data.scope}</div>
+                <div className="toolTip-sub">Usage ratio: {d.data.usageRatio === 0 ? 0 : d3.format(".5f")(d.data.usageRatio)}%</div>
                 <div className="toolTip-sub">Size: <span className="toolTip-value">{formatFileSize(d.data.size, 2)}</span></div>
             </div>)
         setToolTipPos({ x: dimensions.marginLeft + (d.y0 + d.h), y: d.x0 + d.y + dimensions.marginTop + (d.w / 2) })

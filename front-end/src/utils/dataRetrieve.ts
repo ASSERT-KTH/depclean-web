@@ -40,6 +40,9 @@ export const createProject = (data: any): artifact => {
         highlight: false,
         visible: true,
         deleted: false,
+        allTypes: data.allTypes,
+        usedTypes: data.usedTypes,
+        usageRatio: data.usageRatio,
     }
     return project;
 }

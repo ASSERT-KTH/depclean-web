@@ -53,7 +53,10 @@ export interface artifact {
     children: artifact[],
     highlight: boolean,
     visible: boolean,
-    deleted: boolean
+    deleted: boolean,
+    allTypes: string[],
+    usedTypes: string[],
+    usageRatio: number,
 }
 
 export interface AppState {
