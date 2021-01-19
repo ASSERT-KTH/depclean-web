@@ -2,31 +2,32 @@
 import { ArrowRightOutlined, ArrowUpOutlined } from '@ant-design/icons';
 import React from 'react';
 import { DataGroup } from 'src/DataGroup';
-import { countDependencies, countBloated } from "src/utils/treeAccess";
+import { countDependencies, countBloated, getTreeSize } from "src/utils/treeAccess";
+import { formatFileSize } from 'src/Components/tooltip';
 
 
 export const getMainMessage = (filtered: any) => {
     const descent = filtered.descendants();
     const dependencyInfo = countDependencies(descent);
     const bloatedInfo = countBloated(descent);
+    //get project size
+    const sizeInfo = getTreeSize(descent);
     dependencyInfo.sort((a: any, b: any) => a.name.localeCompare(b.name))
     const message = bloatedInfo.length === 0 ?
         <div className="flex flex-center text-message">
             <div>No bloated dependencies!</div>
         </div> :
         <>
-            {/* <div className="flex flex-center text-message">
-                <div>But...<ArrowRightOutlined /></div>
-            </div> */}
+
             <DataGroup
                 tittle="Bloated"
                 dataInfo={bloatedInfo}
                 theme="bloated"
             />
 
-            <div className="flex flex-center text-message">
+            {/* <div className="flex flex-center text-message">
                 <div>Debloat it maybe <ArrowUpOutlined /></div>
-            </div>
+            </div> */}
         </>
     return (
         <>
@@ -37,6 +38,11 @@ export const getMainMessage = (filtered: any) => {
             />
 
             {message}
+            <DataGroup
+                tittle="Project size"
+                dataInfo={sizeInfo}
+                theme="dependencies"
+            />
         </>
 
     )
@@ -55,6 +61,7 @@ const countDirectBloated = (bloatedMap: any, artifact: any) => {
 //get all the  children from a list of artifacts
 export const getAllTransitive = (artifacts: any) => {
     const reduceTransitive = (transitiveArr: any, artifact: any) => {
+        console.log(artifact)
         const innerChilds = getAllTransitive(artifact.children)
         return [...transitiveArr, ...artifact.children, ...innerChilds].flat()
     }
@@ -78,14 +85,37 @@ const addNumBloated = (projectInfo: any, type: string, numSubstract: number) => 
     return [toModify, ...others];
 }
 
+const countSize = (size: { name: string, num: number }, artifact: any) => {
+    const counter: number = size.num + artifact.size;
+    return {
+        ...size,
+        name: "",
+        num: counter
+    }
+}
+const fomatSize = (node: any) => {
+    node.num = formatFileSize(node.num, 2)
+    return node;
+}
+
+const filterDirectUsed = (d: any) => {
+    return d.type === "direct" && d.status === "used"
+}
+
 export const getDirectBloatedMessage = (filtered: any, project: any) => {
     //filter all the direct debloated
     const directDebloated = project.children.filter(filterDirectBloated);
+    const directUsed = project.children.filter(filterDirectUsed);
     //get all the transitive in one array
     const allTransitive = getAllTransitive(directDebloated);
+    const directChildren = getAllTransitive(directUsed)
     //get the transitive that are used
     const usedTransitive = allTransitive.filter(getUsedTransitive)
     const bloatedTransitive = allTransitive.filter(getBloatedTranstive)
+
+    //get the size of the project
+    const totalSize = [[project, ...directUsed, ...directChildren].reduce(countSize, { name: "", num: 0 })].map(fomatSize);
+
     //create the message for the direct bloated
     const bloatedDirectInfo = [directDebloated.reduce(countDirectBloated, { name: "direct", num: 0 })];
     //create the message for the transitive
@@ -140,6 +170,11 @@ export const getDirectBloatedMessage = (filtered: any, project: any) => {
                 tittle="Bloated"
                 dataInfo={bloatedInfo}
                 theme="bloated" />
+
+            <DataGroup
+                tittle="Project size"
+                dataInfo={totalSize}
+                theme="dependnecies" />
         </>
 
     )
@@ -152,6 +187,7 @@ export const getAllBloatedMessage = (filtered: any, project: any) => {
     const directArtifacts = project.children.filter(filterNonDebloatable);
     //filter all the direct debloated
     const directDebloated = project.children.filter(filterDirectBloated);
+    const directUsed = project.children.filter(filterDirectUsed);
     // get all the transitive in an flat array
     const allTransitive = getAllTransitive(directArtifacts);
     //get the transitive that are used
@@ -161,6 +197,9 @@ export const getAllBloatedMessage = (filtered: any, project: any) => {
     const bloatedDirectInfo = [directDebloated.reduce(countDirectBloated, { name: "direct", num: 0 })];
     //create the message for the transitive
     const bloatedTransitiveInfo = [bloatedTransitive.reduce(countDirectBloated, { name: "transitive", num: 0 })]
+
+    //get the size of the project
+    const totalSize = [[project, ...directUsed, ...usedTransitive].reduce(countSize, { name: "", num: 0 })].map(fomatSize);
 
     //substract the results to the currentone
 
@@ -202,6 +241,11 @@ export const getAllBloatedMessage = (filtered: any, project: any) => {
                 tittle="Bloated"
                 dataInfo={bloatedInfo}
                 theme="bloated" />
+
+            <DataGroup
+                tittle="Project size"
+                dataInfo={totalSize}
+                theme="dependnecies" />
 
         </>
 

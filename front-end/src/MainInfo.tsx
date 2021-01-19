@@ -16,6 +16,7 @@ export const MainInfo = () => {
     const { debloatNum, filteredBloated, filtered } = state;
     const nodesFiltered = filtered.descendants().filter((d: any) => d.data.type !== "omitted" && d.data.type !== "test" && d.data.deleted === false)
 
+    //all nodes without the parent, ommited 
     const nodesDep = getNodesWithDepCategory(nodesFiltered.splice(1));
     const colorUsage = d3.interpolate("red", "blue")
     //GET THE INFORMATIN
@@ -90,15 +91,9 @@ export const MainInfo = () => {
                         tooltipVisible={false}
                         onChange={onChange}
                     />
-
-
-
-
                 </div>
             </div>
             <Message />
-
-
         </Col>
     )
 }

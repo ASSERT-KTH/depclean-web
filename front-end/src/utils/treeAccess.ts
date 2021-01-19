@@ -3,6 +3,7 @@ import * as d3 from 'd3';
 // import { isConstructorDeclaration } from 'typescript';
 import { v4 as uuidv4 } from 'uuid';
 import { artifact } from 'src/interfaces/interfaces';
+import { formatFileSize } from 'src/Components/tooltip';
 
 //Creates a new type that includes depClean
 export const getNodesWithDepCategory = (nodes: any): object[] => {
@@ -57,6 +58,7 @@ export const getTreeInfo = (root: any): object[] => {
     return infoArr;
 }
 
+
 //Counts all the dependencies
 //returns an array with the dependencies name and number
 export const countDependencies = (nodes: any): object[] => {
@@ -108,6 +110,8 @@ export const countBloated = (nodes: any): object[] => {
     }
     return depArr;
 }
+
+
 
 //get a depClean pom.XML and filter it according to the type array
 //filter if they are bloated
@@ -281,3 +285,13 @@ export const debloatAll = (data: artifact[], filterType: string[]): artifact[] =
     return unFiltered;
 }
 
+
+
+//get the toal size of a tree
+export const getTreeSize = (nodes: any) => {
+    const totalSize: number = d3.sum(nodes, (d: any) => d.data.size)
+    return [{
+        name: "",
+        num: formatFileSize(totalSize, 2)
+    }];
+}
