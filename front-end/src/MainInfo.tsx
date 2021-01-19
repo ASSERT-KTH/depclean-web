@@ -76,6 +76,7 @@ export const MainInfo = () => {
                         labelY={"Artifacts"}
                         colorInterpolator={colorUsage}
                         numTicks={5}
+                        tooltipPos={"BOTTOM"}
                     />
                 </div>
                 <div className="pull-left slider-theme">

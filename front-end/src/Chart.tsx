@@ -18,7 +18,8 @@ interface ChartProps {
     labelX?: string,
     labelY?: string,
     colorInterpolator: any,
-    numTicks: number
+    numTicks: number,
+    tooltipPos?: "TOP" | "LEFT" | "BOTTOM" | "RIGHT"
 }
 
 export const Chart = ({
@@ -28,7 +29,8 @@ export const Chart = ({
     labelX,
     labelY,
     colorInterpolator,
-    numTicks
+    numTicks,
+    tooltipPos
 }: React.PropsWithChildren<ChartProps>) => {
     const [toolTipValue, setToolTipValue] = useState(<div></div>);
     const [toolTipPos, setToolTipPos] = useState({ x: 0, y: 0 });
@@ -42,6 +44,8 @@ export const Chart = ({
         boundedWidth: chartSize,
         height: chartHeight
     }
+
+    const toolTip: "TOP" | "LEFT" | "BOTTOM" | "RIGHT" = tooltipPos === undefined ? "TOP" : tooltipPos;
 
     const chartXScale = d3.scaleLinear()
         .domain([0, 100])
@@ -80,7 +84,7 @@ export const Chart = ({
                 <div className="toolTip-sub"><span className="toolTip-value">{valueAccessor(d)}</span></div>
                 <div className="toolTip-sub"><span className="toolTip-value">{valueAccesor(d)}</span></div>
             </div>)
-        setToolTipPos({ x: dimensions.marginLeft + posAccessor(d) + wAccessor(d) / 2, y: dimensions.marginTop })
+        setToolTipPos({ x: dimensions.marginLeft + posAccessor(d) + wAccessor(d) / 2, y: dimensions.marginTop + chartHeight })
         setTpOpacity(1);
     }
     const mouseLeave = (d: any) => {
@@ -92,7 +96,7 @@ export const Chart = ({
 
         <div className="flex flex-justify-center" >
             <div className="wrapper">
-                <Tooltip value={toolTipValue} position={toolTipPos} opacity={tpOpacity} />
+                <Tooltip value={toolTipValue} position={toolTipPos} opacity={tpOpacity} display={toolTip} />
                 <svg width={dimensions.width} height={dimensions.height} >
 
                     <g transform={"translate(" + dimensions.marginLeft + "," + 0 + ")"} >
