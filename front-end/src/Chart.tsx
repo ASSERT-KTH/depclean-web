@@ -37,11 +37,10 @@ export const Chart = ({
     const [tpOpacity, setTpOpacity] = useState(0)
 
     //declare chart width and height
-    const chartSize = (dimensions.boundedWidth);
     const chartHeight = dimensions.boundedHeight * 0.69;
     const chartDimensions = {
         ...dimensions,
-        boundedWidth: chartSize,
+        boundedWidth: dimensions.boundedWidth,
         height: chartHeight
     }
 
@@ -49,7 +48,7 @@ export const Chart = ({
 
     const chartXScale = d3.scaleLinear()
         .domain([0, 100])
-        .range([0, chartSize])
+        .range([0, chartDimensions.boundedWidth])
         .nice()
     //Calculate all chart 
     const chartData = chart(nodes, category, chartXScale);

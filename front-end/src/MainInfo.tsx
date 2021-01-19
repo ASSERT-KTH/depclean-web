@@ -37,7 +37,7 @@ export const MainInfo = () => {
         marginBottom: marginBottom,
         marginLeft: marginLeft,
         boundedHeight: height - marginTop + marginBottom,
-        boundedWidth: width - marginRight + marginLeft,
+        boundedWidth: width - marginRight - marginLeft,
     };
 
     const marks = {
@@ -75,7 +75,7 @@ export const MainInfo = () => {
                         category={"dependencyUsage"}
                         labelY={"Artifacts"}
                         colorInterpolator={colorUsage}
-                        numTicks={5}
+                        numTicks={3}
                         tooltipPos={"BOTTOM"}
                     />
                 </div>
