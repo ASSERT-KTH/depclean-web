@@ -179,7 +179,7 @@
 }
 
 /* Adds an arrow pointing down at the hovered bar */
-.tooltip:before {
+.tooltip-top:before {
   content: '';
   position: absolute;
   bottom: 0;
@@ -191,6 +191,59 @@
   border-top-color: transparent;
   border-left-color: transparent;
   transform: translate(-50%, 50%) rotate(45deg);
+  transform-origin: center center;
+  z-index: 10;
+}
+/* Adds an arrow pointing down at the hovered bar */
+.tooltip-left:before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  top: 50%;
+  left:0;
+  width: 12px;
+  height: 12px;
+  background: white;
+  border: 1px solid #ddd;
+  border-top-color: transparent;
+  border-left-color: transparent;
+  transform: translate(-50%, 50%) rotate(135deg);
+  transform-origin: center center;
+  z-index: 10;
+}
+
+/* Adds an arrow pointing down at the hovered bar */
+.tooltip-bottom:before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  top: -2%;
+  left:50%;
+  width: 12px;
+  height: 12px;
+  background: white;
+  border: 1px solid #ddd;
+  border-top-color: transparent;
+  border-left-color: transparent;
+  transform: translate(-50%, 50%) rotate(225deg);
+  transform-origin: center top;
+  z-index: 10;
+}
+
+/* Adds an arrow pointing down at the hovered bar */
+.tooltip-right:before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  top: 50%;
+  left:100%;
+  width: 12px;
+  height: 12px;
+  background: white;
+  border: 1px solid #ddd;
+  border-top-color: transparent;
+  border-left-color: transparent;
+  transform: translate(-50%, 50%) rotate(-45deg);
   transform-origin: center center;
   z-index: 10;
 }

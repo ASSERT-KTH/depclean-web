@@ -61,7 +61,7 @@ export const HorizontalPartitionTree = ({
                 <div className="toolTip-sub">Scope: {d.data.scope}</div>
                 <div className="toolTip-sub">Size: <span className="toolTip-value">{d3.format(".4f")(d.data.size)}</span></div>
             </div>)
-        setToolTipPos({ x: dimensions.marginLeft + (d.y0 + (d.h / 2)), y: d.x0 + d.y + dimensions.marginTop })
+        setToolTipPos({ x: dimensions.marginLeft + (d.y0 + d.h), y: d.x0 + d.y + dimensions.marginTop + (d.w / 2) })
         setTpOpacity(1);
     }
     //hide the tooltip on mouse leave
@@ -113,7 +113,7 @@ export const HorizontalPartitionTree = ({
     return (
         <Col span="20" >
             <div className="wrapper">
-                <Tooltip value={toolTipValue} position={toolTipPos} opacity={tpOpacity} />
+                <Tooltip value={toolTipValue} position={toolTipPos} opacity={tpOpacity} display={"LEFT"} />
                 <svg width={dimensions.boundedWidth} height={dimensions.boundedHeight} key={uuidv4()} >
                     <g
                         className="bounds"
