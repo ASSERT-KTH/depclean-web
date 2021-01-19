@@ -178,6 +178,10 @@
   /* max-width: 150px; */
 }
 
+.tooltip-left{
+  text-align:left;
+}
+
 /* Adds an arrow pointing down at the hovered bar */
 .tooltip-top:before {
   content: '';

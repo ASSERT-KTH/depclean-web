@@ -10,7 +10,8 @@ import { getColorDataAccessor, getColorByType } from 'src/utils/treeAccess';
 import {
     getParitionTree, getSizeHierarchy, filterOmmitedandTest, addNewSize
 } from "src/utils/horizontalTree";
-import { linkAccesor, linksClassAccessor } from 'src/accessors/partitionTreeAccessor'
+import { linkAccesor, linksClassAccessor } from 'src/accessors/partitionTreeAccessor';
+import { formatFileSize } from 'src/Components/tooltip';
 // import { DelaunayGrid } from 'src/vizUtils/Delaunay';
 // import { useAppState } from "./AppStateContext";
 
@@ -55,11 +56,11 @@ export const HorizontalPartitionTree = ({
     const mouseEnter = (d: any) => {
         setToolTipValue(
             <div>
-                <div className="toolTip-tittle">ArtifactId: {d.data.artifactId}</div>
-                <div className="toolTip-sub">GroupId: {d.data.groupId}</div>
-                <div className="toolTip-sub">Version: {d.data.version}</div>
+                <div className="toolTip-tittle">{d.data.artifactId}</div>
+                <div className="toolTip-sub">{d.data.version}</div>
+                <div className="toolTip-sub">{d.data.groupId}</div>
                 <div className="toolTip-sub">Scope: {d.data.scope}</div>
-                <div className="toolTip-sub">Size: <span className="toolTip-value">{d3.format(".4f")(d.data.size)}</span></div>
+                <div className="toolTip-sub">Size: <span className="toolTip-value">{formatFileSize(d.data.size, 2)}</span></div>
             </div>)
         setToolTipPos({ x: dimensions.marginLeft + (d.y0 + d.h), y: d.x0 + d.y + dimensions.marginTop + (d.w / 2) })
         setTpOpacity(1);
