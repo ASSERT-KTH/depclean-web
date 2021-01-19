@@ -6,7 +6,7 @@ import { Tooltip } from './vizUtils/tooltip';
 import { useAppState } from "src/AppStateContext";
 import { PartitionNode } from 'src/vizUtils/ParitionNode';
 import { PartitionLinks } from 'src/vizUtils/PartitionLinks';
-import { getColorGenerator, getColorDataAccessor, getArtifactsId, getColorByType } from 'src/utils/treeAccess';
+import { getColorDataAccessor, getColorByType } from 'src/utils/treeAccess';
 import {
     getParitionTree, getSizeHierarchy, filterOmmitedandTest, addNewSize
 } from "src/utils/horizontalTree";

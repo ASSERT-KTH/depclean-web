@@ -13,6 +13,10 @@
   z-index: 1;
 }
 
+.sideMenu{
+  padding: 50px 0 0 30px;
+}
+
 /* MENU STYLES */
 .ant-menu-item{
   font-size: 16px;
@@ -144,7 +148,15 @@
   position: absolute;
   right: 70px;
 }
-
+.filterButton{
+  position: absolute;
+  font-size: 16px;
+  font-weight: 400;
+  left: 40px;
+  background-color:#64C19A;
+  border-color: transparent;
+  z-index: 100;
+}
 
 .wrapper{
   position: relative;

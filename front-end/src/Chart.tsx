@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import * as d3 from 'd3';
 import { chart } from './utils/CountCategories';
 import { Squares } from './vizUtils/Squares';
-import { Legend } from './vizUtils/Legend';
+// import { Legend } from './vizUtils/Legend';
 import { v4 as uuidv4 } from 'uuid';
 import { Tooltip } from './vizUtils/tooltip';
 import { AxisHorizontal } from 'src/vizUtils/AxisHorizontal';
@@ -70,7 +70,7 @@ export const Chart = ({
     const indexAccesor = (d: any) => d.index;
     const colorAccessor = (d: any) => color(indexAccesor(d))
     //LEGEND DATA
-    const initialPos = [chartSize + dimensions.marginLeft + 10, dimensions.marginTop]
+    // const initialPos = [chartSize + dimensions.marginLeft + 10, dimensions.marginTop]
 
     const mouseEnter = (d: any) => {
 

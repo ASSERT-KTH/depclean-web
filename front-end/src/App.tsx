@@ -6,6 +6,7 @@ import { Gallery } from './gallery';
 import { About } from './about';
 import { Search } from 'src/Search';
 import { Scan } from 'src/Components/Scan';
+import { SideMenu } from 'src/SideMenu';
 import {
   BrowserRouter as Router,
   Route,
@@ -21,12 +22,15 @@ const { Content } = Layout;
 
 function App() {
 
+
   return (
     <Router>
-      <Layout
-        className="layout"
-      >
-        <MainMenu />
+
+      <MainMenu />
+      <Layout className="layout">
+
+        <SideMenu />
+
         <Content>
           <Switch>
             <Route exact path="/about" component={About} />
