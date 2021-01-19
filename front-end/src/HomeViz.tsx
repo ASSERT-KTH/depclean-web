@@ -7,6 +7,7 @@ import { useAppState } from "./AppStateContext";
 import { v4 as uuidv4 } from 'uuid';
 import { DependencyList } from './DependencyList';
 import { dimension } from 'src/interfaces/interfaces';
+import { FilterOutlined } from '@ant-design/icons'
 
 export const HomeViz = () => {
     const [size, setSize] = useState({
@@ -60,6 +61,7 @@ export const HomeViz = () => {
                     type={"primary"}
                     onClick={() => handleClick()}
                 >
+                    <FilterOutlined rotate={hideMenu ? 90 : 0} />
                     Filter
                     </Button>
 

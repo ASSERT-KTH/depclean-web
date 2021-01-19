@@ -32,7 +32,7 @@ export const SideMenu = () => {
         collapsedWidth={0}
         className={"sideMenu"}
         trigger={null}
-        width={200}
+        width={150}
         collapsed={hideMenu}
     >
         <CategoryCheckbox
