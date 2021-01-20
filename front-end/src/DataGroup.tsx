@@ -17,7 +17,7 @@ export const DataGroup = ({
 }: React.PropsWithChildren<DataGroupProps>) => {
     // const fdata = dataInfo.filter((d: any) => { return d.name !== "parent" && d.name !== "omitted" })
     const data = dataInfo.map((item: any) => {
-        return (
+        return item.num === 0 ? <></> : (
             <DataInfo
                 quantity={item.num}
                 name={item.name}

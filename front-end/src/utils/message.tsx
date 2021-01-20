@@ -64,7 +64,7 @@ export const getGeneralReport = (project: artifact) => {
         size: {
             title: "Project size",
             totalSize: {
-                name: "Project size",
+                name: "",
                 num: formatFileSize(treeTotalSize, 2)
             }
         }
@@ -90,7 +90,7 @@ export const getDeletedDirectReport = (project: artifact) => {
     //return report
     return {
         deleted: {
-            title: "Deleted dependencies",
+            title: "Delete",
             direct: {
                 name: "direct",
                 num: direct.length
@@ -102,7 +102,7 @@ export const getDeletedDirectReport = (project: artifact) => {
             size: {
                 title: "Project size",
                 totalSize: {
-                    name: "Project size",
+                    name: "",
                     num: formatFileSize(treeTotalSize, 2)
                 }
             }
@@ -129,7 +129,7 @@ export const getAllDeletedReport = (project: artifact) => {
     //return report
     return {
         deleted: {
-            title: "Deleted dependencies",
+            title: "Delete",
             direct: {
                 name: "direct",
                 num: direct.length
@@ -141,7 +141,7 @@ export const getAllDeletedReport = (project: artifact) => {
             size: {
                 title: "Project size",
                 totalSize: {
-                    name: "Project size",
+                    name: "",
                     num: formatFileSize(treeTotalSize, 2)
                 }
             }

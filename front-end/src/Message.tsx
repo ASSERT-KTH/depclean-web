@@ -22,18 +22,18 @@ export const Message = () => {
 
     const message = messageState === "ORIGINAL" ? <></> :
         <>
-            <div className="flex flex-center text-message">
+            {/* <div className="flex text-message">
                 <div>If you<br></br>delete<ArrowRightOutlined /></div>
-            </div>
+            </div> */}
             <DataGroup
-                tittle={bloatMessage.title}
+                tittle={bloatMessage.deleted.title}
                 dataInfo={[bloatMessage.deleted.direct, bloatMessage.deleted.transitive]}
                 theme="bloated" />
             <DataGroup
-                tittle="Bloted size"
+                tittle="Size"
                 dataInfo={[bloatMessage.deleted.size.totalSize]}
                 theme="bloated" />
-            <div className="flex flex-center text-message">
+            <div className="flex text-message">
                 <div>Now this<br></br>project has<ArrowRightOutlined /></div>
             </div>
         </>
@@ -50,7 +50,7 @@ export const Message = () => {
     const totalSize = [generalReport.size.totalSize];
 
     return (
-        <div className="flex flex-center flex-wrap margin-buttom-40 ">
+        <div className="flex flex-wrap margin-buttom-20 ">
             {message}
             <DataGroup
                 tittle={generalReport.dependencies.title}

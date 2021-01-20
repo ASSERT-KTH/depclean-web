@@ -35,10 +35,10 @@ export const HomeViz = () => {
     let dimensions: dimension = {
         width: size.width,
         height: size.height,
-        marginTop: 50,
-        marginRight: 20,
+        marginTop: 70,
+        marginRight: 50,
         marginBottom: 50,
-        marginLeft: 20,
+        marginLeft: 50,
         boundedHeight: size.height - 250,
         boundedWidth: size.width - (size.width * 0.0416666667) - (size.width * 0.0833333333),
     }
@@ -49,9 +49,7 @@ export const HomeViz = () => {
     }
     return (
         <div>
-
-            <Row id="MainInfo" key={uuidv4()} style={{ backgroundColor: "white" }}>
-                {/* <LateralMenu /> */}
+            <Row id="MainInfo" className={"margin-buttom-20"} key={uuidv4()} >
                 <MainInfo />
             </Row>
 
