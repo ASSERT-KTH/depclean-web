@@ -249,9 +249,9 @@ export const debloatDirect = (children: artifact[]): artifact[] => {
 const debloatTransitive = (children: artifact[]): artifact[] => {
     const artifacts = children.map((d: artifact) => {
         const isBloated = d.status === "bloated" && d.type === "transitive" ? true : false;
-        d.highlight = isBloated
+        d.highlight = isBloated;
         d.deleted = isBloated;
-        d.children = debloatTransitive(d.children)
+        d.children = debloatTransitive(d.children);
         return d;
     })
     return [...artifacts];
@@ -295,3 +295,4 @@ export const getTreeSize = (nodes: any) => {
         num: formatFileSize(totalSize, 2)
     }];
 }
+

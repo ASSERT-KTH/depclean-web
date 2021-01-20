@@ -36,6 +36,7 @@ export interface scanProjectI {
     project: artifact
 }
 
+
 //Interface for an artifact in the POM XML
 export interface artifact {
     coordinates: string,
