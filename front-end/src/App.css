@@ -155,8 +155,8 @@
   font-size: 16px;
   font-weight: 400;
   left: 50px;
-  background-color:#64C19A;
-  border-color: transparent;
+  /* background-color:#64C19A; */
+  /* border-color: transparent; */
   z-index: 100;
 }
 

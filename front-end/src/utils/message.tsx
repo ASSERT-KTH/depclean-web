@@ -16,6 +16,13 @@ export const getGeneralReport = (project: artifact) => {
     const nodes: artifact[] = getAllTransitive(project.children)
         .filter(filterDeleted(false))
         .filter(removeOmmited)
+    //COUNT USED
+    const directUsed: artifact[] = direct
+        .filter(filterBloated("direct", "used"))
+    const transitiveUsed: artifact[] = nodes
+        .filter(filterBloated("transitive", "used"))
+    const inheritedUsed: artifact[] = artifactChildren
+        .filter(filterBloated("inherited", "used"))
     //COUNT BLOATED
     const directBloated: artifact[] = direct
         .filter(filterBloated("direct", "bloated"))
@@ -31,18 +38,18 @@ export const getGeneralReport = (project: artifact) => {
 
     return {
         dependencies: {
-            title: "Dependencies",
+            title: "Used",
             direct: {
                 name: "direct",
-                num: direct.length
+                num: directUsed.length
             },
             inherited: {
                 name: "inherited",
-                num: inherited.length,
+                num: inheritedUsed.length,
             },
             transitive: {
                 name: "transitive",
-                num: nodes.length
+                num: transitiveUsed.length
             }
         },
         bloated: {

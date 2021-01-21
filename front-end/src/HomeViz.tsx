@@ -56,7 +56,7 @@ export const HomeViz = () => {
             <Row className="vizContainer" id="DependencyTree" key={uuidv4()}>
                 <Button
                     className="filterButton"
-                    type={"primary"}
+                    type={"dashed"}
                     onClick={() => handleClick()}
                 >
                     <FilterOutlined rotate={hideMenu ? 90 : 0} />

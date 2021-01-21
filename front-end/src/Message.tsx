@@ -21,7 +21,7 @@ export const Message = () => {
             <></>;
 
     const message = messageState === "ORIGINAL" ? <></> :
-        <>
+        <div className={"flex flex-wrap pull-left"}>
             {/* <div className="flex text-message">
                 <div>If you<br></br>delete<ArrowRightOutlined /></div>
             </div> */}
@@ -33,10 +33,10 @@ export const Message = () => {
                 tittle="Size"
                 dataInfo={[bloatMessage.deleted.size.totalSize]}
                 theme="bloated" />
-            <div className="flex text-message">
+            {/* <div className="flex text-message">
                 <div>Now this<br></br>project has<ArrowRightOutlined /></div>
-            </div>
-        </>
+            </div> */}
+        </div>
 
 
     //REFACTOR 
@@ -51,7 +51,7 @@ export const Message = () => {
 
     return (
         <div className="flex flex-wrap margin-buttom-20 ">
-            {message}
+
             <DataGroup
                 tittle={generalReport.dependencies.title}
                 dataInfo={dependencies}
@@ -67,6 +67,8 @@ export const Message = () => {
                 dataInfo={totalSize}
                 theme="dependencies"
             />
+
+            {message}
         </div>
     )
 }
