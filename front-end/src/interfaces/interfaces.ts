@@ -74,5 +74,6 @@ export interface AppState {
     viewOmitted: boolean
     debloatNum: number
     messageState: "ORIGINAL" | "DEBLOAT_DIRECT" | "DEBLOAT_ALL",
-    hideMenu: boolean
+    hideMenu: boolean,
+    viewLinks: boolean
 }

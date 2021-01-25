@@ -16,6 +16,18 @@ export const parseOmitedLinks = (data: any) => {
     </text>)
 }
 
+export const parseOmitedParitionLinks = (data: any) => {
+    return data.map((d: any) => <text
+        key={uuidv4()}
+        x={d.target.y + (d.source.y - d.target.y) / 2}
+        y={d.target.x + (d.source.x - d.target.x) / 2}
+        textAnchor="middle"
+        className="omitted-label"
+    >
+        {d.version}
+    </text>)
+}
+
 //returns all the links of the ommited
 export const getOmmitedLinks = (nodes: any) => {
     //get all the ommited
@@ -27,12 +39,14 @@ export const getOmmitedLinks = (nodes: any) => {
     //get the target for each of the ommited
     const createLinks = (linksMap: any, node: any) => {
         const parent = node.parent;
+        console.log(node)
         const replacement = nodes.find(findNode(node));
         const link = {
-            source: { x: parent.x, y: parent.y }, //parents position
-            target: { x: replacement.x, y: replacement.y }, // replacement position
+            source: { x: parent.x0 + parent.w / 2, y: parent.y0 + parent.h / 2 }, //parents position
+            target: { x: replacement.x0 + parent.w / 2, y: replacement.y0 + parent.h / 2 }, // replacement position
             version: node.data.version
         };
+        console.log(link)
         //if either of the source or target are not visible then it should not pain it
         return (parent.data.deleted === false && replacement.data.deleted === false) || (parent.data.visible === false && replacement.data.visible === false) ? [...linksMap, link] : [...linksMap];
     }

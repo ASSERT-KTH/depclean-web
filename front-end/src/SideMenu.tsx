@@ -1,7 +1,7 @@
 import React from 'react';
 import { Layout, Divider, Checkbox } from 'antd';
 import { useLocation } from 'react-router-dom';
-import { bloated, used, colorOptions, omitted } from 'src/Components/homeViz';
+import { bloated, used, colorOptions, omitted, link } from 'src/Components/homeViz';
 import { CategoryCheckbox } from './CategoryCheckbox';
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 import { CategoryRadialBox } from './CategoryRadialBox';
@@ -21,7 +21,8 @@ export const SideMenu = () => {
         filteredBloated,
         // textDisplay,
         viewOmitted,
-        hideMenu
+        hideMenu,
+        viewLinks
     } = state;
 
     const location = useLocation()
@@ -42,6 +43,7 @@ export const SideMenu = () => {
             checked={filteredBloated}
             onClick={(checkedValues: string[]) => dispatch({ type: "SELECT_BLOAT", payload: checkedValues })}
         /> */}
+        <h3>Dependencies</h3>
         <CategoryCheckbox
             key={uuidv4()}
             tittle={used.tittle}
@@ -66,11 +68,18 @@ export const SideMenu = () => {
             onClick={(checkedValues: string[]) => dispatch({ type: "SELECT_SCOPE", payload: checkedValues })}
         /> */}
         <Divider />
+        <h3>Relations</h3>
+        <Checkbox
+            key={uuidv4()}
+            checked={viewLinks}
+            onChange={(e: CheckboxChangeEvent) => dispatch({ type: "VIEW_LINKS", payload: !viewLinks })}
+        >{link.tittle}</Checkbox>
         <Checkbox
             key={uuidv4()}
             checked={viewOmitted}
             onChange={(e: CheckboxChangeEvent) => dispatch({ type: "VIEW_OMITTED", payload: !viewOmitted })}
         >{omitted.tittle}</Checkbox>
+
         <Divider />
 
         <CategoryRadialBox

@@ -15,7 +15,7 @@ export const Links = ({
 
     return (
         <g>
-            {data.map((d, i) => (
+            {data.map((d) => (
                 <path
                     d={linkAccesor(d)}
                     className={classAccessor(d)}

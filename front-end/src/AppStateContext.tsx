@@ -52,6 +52,10 @@ type Action =
         payload: boolean
     }
     | {
+        type: "VIEW_LINKS"
+        payload: boolean
+    }
+    | {
         type: "DEBLOAT_PROJECT"
         payload: number
     }
@@ -90,16 +94,14 @@ const appData: AppState = {
     filteredBloated: bloatedCheckGroup,
     filteredScope: scopeCheckGroup,
 
-    textDisplay: viewText,
     colorSelected: "NONE",
-
     viewDependencyList: false,
-    viewOmitted: true,
+    viewOmitted: false,
+    viewLinks: true,
 
     debloatNum: 0,
-
+    textDisplay: viewText,
     messageState: "ORIGINAL",
-
     hideMenu: true,
 }
 
@@ -223,6 +225,12 @@ const appStateReducer = (state: AppState, action: Action): AppState => {
             return {
                 ...state,
                 viewOmitted: action.payload
+            }
+        }
+        case "VIEW_LINKS": {
+            return {
+                ...state,
+                viewLinks: action.payload
             }
         }
         case "DEBLOAT_PROJECT": {

@@ -53,3 +53,10 @@ export const omitted = {
         { label: "Omitted", value: "omitted", checked: true, disabled: false },
     ]
 }
+
+export const link = {
+    tittle: "Links",
+    children: [
+        { label: "Links", value: "links", checked: true, disabled: false },
+    ]
+}
