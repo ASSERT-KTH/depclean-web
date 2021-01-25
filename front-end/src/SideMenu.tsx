@@ -1,7 +1,7 @@
 import React from 'react';
 import { Layout, Divider, Checkbox } from 'antd';
 import { useLocation } from 'react-router-dom';
-import { dep, bloated, colorOptions, scope, omitted } from 'src/Components/homeViz';
+import { bloated, used, colorOptions, omitted } from 'src/Components/homeViz';
 import { CategoryCheckbox } from './CategoryCheckbox';
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 import { CategoryRadialBox } from './CategoryRadialBox';
@@ -9,7 +9,7 @@ import { useAppState } from "./AppStateContext";
 import { v4 as uuidv4 } from 'uuid';
 
 const { Sider } = Layout;
-// import { dep, bloated, colorOptions, scope, omitted } from 'src/Components/homeViz';
+// import { bloated, bloated, colorOptions, scope, omitted } from 'src/Components/homeViz';
 
 export const SideMenu = () => {
     //get the main state
@@ -17,7 +17,7 @@ export const SideMenu = () => {
     //Get all the nodes
     const {
         filteredDependencies,
-        filteredScope,
+        // filteredScope,
         filteredBloated,
         // textDisplay,
         viewOmitted,
@@ -35,28 +35,36 @@ export const SideMenu = () => {
         width={200}
         collapsed={hideMenu}
     >
-        <CategoryCheckbox
+        {/* <CategoryCheckbox
             key={uuidv4()}
             tittle={bloated.tittle}
             children={bloated.children}
             checked={filteredBloated}
             onClick={(checkedValues: string[]) => dispatch({ type: "SELECT_BLOAT", payload: checkedValues })}
-        />
+        /> */}
         <CategoryCheckbox
             key={uuidv4()}
-            tittle={dep.tittle}
-            children={dep.children}
+            tittle={used.tittle}
+            children={used.children}
             checked={filteredDependencies}
-            onClick={(checkedValues: string[]) => dispatch({ type: "SELECT_DEPENDENCY", payload: checkedValues })}
+            onClick={(checkedValues: string[]) => dispatch({ type: "FILTER_USED_DEPENDENCIES", payload: checkedValues })}
         />
         <Divider />
+        <CategoryCheckbox
+            key={uuidv4()}
+            tittle={bloated.tittle}
+            children={bloated.children}
+            checked={filteredBloated}
+            onClick={(checkedValues: string[]) => dispatch({ type: "FILTER_BLOATED_DEPENDENCIES", payload: checkedValues })}
+        />
+        {/* <Divider />
         <CategoryCheckbox
             key={uuidv4()}
             tittle={scope.tittle}
             children={scope.children}
             checked={filteredScope}
             onClick={(checkedValues: string[]) => dispatch({ type: "SELECT_SCOPE", payload: checkedValues })}
-        />
+        /> */}
         <Divider />
         <Checkbox
             key={uuidv4()}
@@ -69,6 +77,7 @@ export const SideMenu = () => {
             key={uuidv4()}
             tittle={colorOptions.tittle}
             children={colorOptions.children}
+            onClick={(e: any) => dispatch({ type: "SELECT_COLOR", payload: e.target.value })}
         />
 
     </Sider>;

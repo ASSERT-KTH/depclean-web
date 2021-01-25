@@ -67,7 +67,7 @@ export interface AppState {
     filtered: any,
     filteredDependencies: string[],
     filteredBloated: string[],
-    colorSelected: "color-type" | "color-artifact-id",
+    colorSelected: "NONE" | "DEPENDENCY_TYPE" | "USAGE_RATIO" | "GROUP_ID",
     textDisplay: string[],
     filteredScope: string[],
     viewDependencyList: boolean,

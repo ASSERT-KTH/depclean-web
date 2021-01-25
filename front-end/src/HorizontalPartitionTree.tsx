@@ -6,25 +6,16 @@ import { Tooltip } from './vizUtils/tooltip';
 import { useAppState } from "src/AppStateContext";
 import { PartitionNode } from 'src/vizUtils/ParitionNode';
 import { PartitionLinks } from 'src/vizUtils/PartitionLinks';
-import { getColorDataAccessor, getColorByType } from 'src/utils/treeAccess';
+import { getColorDataAccessor, getCGenerator, noColorNode } from 'src/utils/treeAccess';
 import {
     getParitionTree, getSizeHierarchy, filterOmmitedandTest, addNewSize
 } from "src/utils/horizontalTree";
 import { linkAccesor, linksClassAccessor } from 'src/accessors/partitionTreeAccessor';
 import { formatFileSize } from 'src/Components/tooltip';
+import { dimension } from 'src/interfaces/interfaces';
 // import { DelaunayGrid } from 'src/vizUtils/Delaunay';
 // import { useAppState } from "./AppStateContext";
 
-interface dimension {
-    width: number,
-    height: number,
-    marginTop: number,
-    marginRight: number,
-    marginBottom: number,
-    marginLeft: number,
-    boundedHeight: number,
-    boundedWidth: number,
-}
 
 interface HorizontalTreeProps {
     data: d3.HierarchyNode<object[]>,
@@ -71,26 +62,6 @@ export const HorizontalPartitionTree = ({
 
     //must have hierarchy data and make the sum of the size
     const partitionData = getSizeHierarchy(data);
-    //node.height
-    //make width according to height so it fits. 
-
-
-    // const nodeHeight = dimensions.boundedHeight * 0.66;
-    // const nodeWidth = 10
-
-    // const treeMapData = d3.treemap()
-    //     .size([nodeWidth, nodeHeight])
-    //     .tile(d3.treemapSlice)
-    //     (partitionData)
-    // treeMapData.each(function (d: any) {
-    //     d.h = d.y1 - d.y0;
-    //     d.w = d.x1 - d.x0;
-    // });
-    // const treeNodes = d3.partition()(treeMapData).descendants();
-    // const nodes = treeNodes
-    //     .filter(filterOmmitedandTest)
-    //     .map(addNewSize(0.66, nodeWidth, dimensions.boundedHeight))
-    // console.log(nodes)
 
 
     //get the partition  tree
@@ -100,17 +71,17 @@ export const HorizontalPartitionTree = ({
     ]
     const partitionTree = getParitionTree(treeSize, 1)
     //GET ALL THE NODES WITH A TREE STRUCTURE
-    const treeNodes = partitionTree(partitionData).descendants();
     //filter the nodes that are ommitted and whose type are test
     const heightPercent = 0.9;
-    const nodes = treeNodes
+    const nodes = partitionTree(partitionData)
+        .descendants()
         .filter(filterOmmitedandTest)
         .map(addNewSize(heightPercent, 80, dimensions.boundedHeight))
 
     // const getIds = getArtifactsId(nodes)
-    // const colorGenerator: d3.ScaleOrdinal<string, unknown, never> = getColorGenerator(colorSelected, getIds);
     const colorDataAccessor: (d: any) => string = getColorDataAccessor(colorSelected)
-    const color: any = (d: any) => getColorByType(colorDataAccessor(d));
+    const colorGenerator: any = getCGenerator(colorSelected, nodes);
+    const color: any = (d: any) => colorGenerator(colorDataAccessor(d));
 
     return (
         <Col span="20" >
@@ -126,7 +97,7 @@ export const HorizontalPartitionTree = ({
                             data={nodes.slice(1)}
                             linkAccesor={linkAccesor(heightPercent)}
                             classAccessor={linksClassAccessor}
-                            colorAccessor={color}
+                            colorAccessor={noColorNode}
                         />
 
                         <PartitionNode

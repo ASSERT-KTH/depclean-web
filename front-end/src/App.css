@@ -53,8 +53,10 @@
 }
 
 .treeLink{
-  fill:white;
-  /* opacity: 0.7!important; */
+  /* fill:none; */
+  /* background-image: linear-gradient(to right, red , yellow); */
+  /* fill:gray;/ */
+  /* opacity: 0.5!important; */
   /* stroke: hsla(0,0%,0%, 0.2); */
   /* stroke-width: 1px; */
   transition: all 0.2s ease-out;
@@ -135,7 +137,7 @@
   opacity:0.1;
 }
 .treeLink-deleted{
-  opacity:0.2;
+  opacity:0.1!important;
 }
 
 .site-layout-content {

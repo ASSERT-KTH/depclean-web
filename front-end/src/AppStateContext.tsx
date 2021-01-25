@@ -1,5 +1,9 @@
 import React, { createContext, useReducer, useContext } from "react";
-import { filterArtifacts, getTreeHierarchy, cloneProject, highlightBloat, debloatDirect, debloatAll } from "./utils/treeAccess";
+import {
+    filterArtifacts, getTreeHierarchy, cloneProject,
+    highlightBloat, debloatDirect, debloatAll,
+    filterArifactByType
+} from "./utils/treeAccess";
 // import { fetchFromFile } from './utils/dataRetrieve';
 import { artifact, AppState } from 'src/interfaces/interfaces';
 import * as d3 from 'd3';
@@ -29,7 +33,7 @@ type Action =
     }
     | {
         type: "SELECT_COLOR"
-        payload: "color-type" | "color-artifact-id",
+        payload: "NONE" | "DEPENDENCY_TYPE" | "USAGE_RATIO" | "GROUP_ID",
     }
     | {
         type: "LOAD_LOCAL_FILE"
@@ -54,7 +58,14 @@ type Action =
     | {
         type: "HIDE_MENU"
         payload: boolean
+    } | {
+        type: "FILTER_USED_DEPENDENCIES"
+        payload: string[]
+    } | {
+        type: "FILTER_BLOATED_DEPENDENCIES"
+        payload: string[]
     }
+
 
 
 
@@ -62,7 +73,8 @@ type Action =
 const childrenAccessor = (d: any) => d.children;
 //Data state for all the application
 const dependCheckGroup: string[] = ["direct", "transitive", "inherited"];
-const bloatedCheckGroup: string[] = ["direct", "transitive", "inherited"];
+const bloatedCheckGroup: string[] = ["direct", "transitive", "inherited"];//"direct", "transitive", "inherited"
+
 const viewText: string[] = ["groupid", "artifactid", "version"];
 const nodes = d3.hierarchy(data, childrenAccessor);
 const scopeCheckGroup: string[] = ["compile", "test", "provided", "runtime", "system"]
@@ -79,7 +91,7 @@ const appData: AppState = {
     filteredScope: scopeCheckGroup,
 
     textDisplay: viewText,
-    colorSelected: "color-type",
+    colorSelected: "NONE",
 
     viewDependencyList: false,
     viewOmitted: true,
@@ -96,36 +108,70 @@ const appData: AppState = {
 const appStateReducer = (state: AppState, action: Action): AppState => {
 
     switch (action.type) {
+        case "FILTER_USED_DEPENDENCIES": {
+            //CLONE the filtered project
+            //filter all the children necessary
+            const filteredProject: artifact = cloneProject(state.filteredProject);
+            filteredProject.children = filterArifactByType(state.filteredProject.children, state.filteredScope, action.payload, "used");
+            return {
+                ...state,
+                filteredDependencies: action.payload,
+                filteredProject: filteredProject,
+                filtered: getTreeHierarchy(filteredProject, childrenAccessor)
+            }
+        }
+
+        case "FILTER_BLOATED_DEPENDENCIES": {
+            //CLONE the filtered project
+            //filter all the children necessary
+            const filteredProject: artifact = cloneProject(state.filteredProject);
+            filteredProject.children = filterArifactByType(state.filteredProject.children, state.filteredScope, action.payload, "bloated");
+            return {
+                ...state,
+                filteredBloated: action.payload,
+                filteredProject: filteredProject,
+                filtered: getTreeHierarchy(filteredProject, childrenAccessor)
+            }
+        }
         case "SELECT_DEPENDENCY": {
             //set the filters
-            state.filteredDependencies = action.payload;
-            state.filteredProject.children = filterArtifacts(state.filteredProject.children, state.filteredScope, state.filteredDependencies);
-            state.filtered = getTreeHierarchy(state.filteredProject, childrenAccessor);
-
+            const filteredProject: artifact = cloneProject(state.filteredProject);
+            filteredProject.children = filterArtifacts(state.filteredProject.children, state.filteredScope, action.payload);
+            // state.filtered = getTreeHierarchy(filteredProject, childrenAccessor);
             return {
-                ...state
+                ...state,
+                filteredDependencies: action.payload,
+                filteredProject: filteredProject,
+                filtered: getTreeHierarchy(filteredProject, childrenAccessor)
 
             }
         }
 
         case "SELECT_BLOAT": {
-            state.filteredBloated = action.payload;
-            state.filteredProject.children = highlightBloat(state.filteredProject.children, action.payload);
-            state.filtered = getTreeHierarchy(state.filteredProject, childrenAccessor);
+            const filteredProject: artifact = cloneProject(state.filteredProject);
+            filteredProject.children = highlightBloat(filteredProject.children, action.payload);
+            // state.filtered = getTreeHierarchy(state.filteredProject, childrenAccessor);
 
             return {
-                ...state
+                ...state,
+                filteredBloated: action.payload,
+                filteredProject: filteredProject,
+                filtered: getTreeHierarchy(state.filteredProject, childrenAccessor)
 
             }
         }
 
         case "SELECT_SCOPE": {
-            state.filteredScope = [...action.payload, "provided", "runtime", "system"];
-            state.filteredProject.children = filterArtifacts(state.filteredProject.children, state.filteredScope, state.filteredDependencies);
-            state.filtered = getTreeHierarchy(state.filteredProject, childrenAccessor);
+            const filteredScope = [...action.payload, "provided", "runtime", "system"];
+            const filteredProject: artifact = cloneProject(state.filteredProject);
+            filteredProject.children = filterArtifacts(filteredProject.children, filteredScope, state.filteredDependencies);
+            // state.filtered = getTreeHierarchy(state.filteredProject, childrenAccessor);
 
             return {
-                ...state
+                ...state,
+                filteredScope: filteredScope,
+                filteredProject: filteredProject,
+                filtered: getTreeHierarchy(state.filteredProject, childrenAccessor)
 
             }
         }
@@ -134,7 +180,6 @@ const appStateReducer = (state: AppState, action: Action): AppState => {
             return {
                 ...state,
                 textDisplay: action.payload
-
             }
         }
         case "SELECT_COLOR": {
@@ -144,13 +189,17 @@ const appStateReducer = (state: AppState, action: Action): AppState => {
             }
         }
         case "LOAD_LOCAL_FILE": {
-            state.project = action.payload;
-            state.filteredProject = cloneProject(action.payload);
+            // state.project = action.payload;
+            // state.filteredProject = cloneProject(action.payload);
             const newNodes = d3.hierarchy(action.payload, childrenAccessor);
-            state.nodes = newNodes;
-            state.filtered = newNodes;
+            // state.nodes = newNodes;
+            // state.filtered = newNodes;
             return {
-                ...state
+                ...state,
+                project: action.payload,
+                filteredProject: cloneProject(action.payload),
+                nodes: newNodes,
+                filtered: newNodes,
             }
         }
         case "VIEW_DEPENDENCY_LIST": {
@@ -164,7 +213,7 @@ const appStateReducer = (state: AppState, action: Action): AppState => {
                 ...state,
                 filteredDependencies: dependCheckGroup,
                 filteredBloated: bloatedCheckGroup,
-                colorSelected: "color-type",
+                colorSelected: "NONE",
                 filteredScope: scopeCheckGroup,
                 viewOmitted: true,
                 debloatNum: 0,

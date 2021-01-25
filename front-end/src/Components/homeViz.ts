@@ -1,11 +1,12 @@
 
-//DEFINE CHECKBOXES AND LABELS
-export const dep = {
-    tittle: "Dependencies",
+
+
+export const used = {
+    tittle: "Used",
     children: [
-        { label: 'Direct', value: 'direct', disabled: true, checked: false },
-        { label: 'Transitive', value: 'transitive', disabled: false, checked: true },
-        { label: 'Inherited', value: 'inherited', disabled: false, checked: true },
+        { label: "Direct", value: "direct", checked: true, disabled: false },
+        { label: "Transitive", value: "transitive", checked: true, disabled: false },
+        { label: "Inherited", value: "inherited", checked: true, disabled: false }
     ]
 }
 
@@ -21,8 +22,11 @@ export const bloated = {
 export const colorOptions = {
     tittle: "Color by",
     children: [
-        { label: "Type", value: "color-type" },
-        { label: "Group Id", value: "color-artifact-id" },
+        { label: "None", value: "NONE" },
+        { label: "Used - Bloated", value: "DEPENDENCY_TYPE" },
+        { label: "Usage Ratio", value: "USAGE_RATIO" },
+        // { label: "Type", value: "DEPENDENCY_TYPE" },
+        { label: "Group Id", value: "GROUP_ID" },
     ]
 }
 
