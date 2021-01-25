@@ -827,3 +827,37 @@ line.Axis__line {
 .ant-layout-content {
   background-color: white;
 }
+
+#legend{
+  position: absolute;
+    z-index: 10;
+    top: 0;
+    left: 15%;
+    flex-direction: column;
+    height: 60px;
+    width: 410px;
+    flex-wrap: wrap; 
+}
+
+.dashed{
+  background: #fff;
+  color: rgba(0, 0, 0, 0.85);
+  border-color: #d9d9d9;
+  border-style: dashed;
+  padding: 10px;
+  border-width: 1px;
+}
+.color-legend{
+  margin-right:10px;
+  
+}
+.color-legend span{
+  font-size: 12px;
+  margin-left:5px;
+}
+
+.color-container{
+  width:30px;
+  height:30px;
+}
+

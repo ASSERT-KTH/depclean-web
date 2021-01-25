@@ -77,3 +77,13 @@ export interface AppState {
     hideMenu: boolean,
     viewLinks: boolean
 }
+
+export interface colorPallete {
+    tittle: string,
+    color: string
+}
+
+
+export interface legendColorInterface {
+    pallete: colorPallete[]
+}

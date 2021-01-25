@@ -2,7 +2,7 @@
 import * as d3 from 'd3';
 // import { isConstructorDeclaration } from 'typescript';
 import { v4 as uuidv4 } from 'uuid';
-import { artifact } from 'src/interfaces/interfaces';
+import { artifact, colorPallete } from 'src/interfaces/interfaces';
 import { formatFileSize } from 'src/Components/tooltip';
 
 //Creates a new type that includes depClean
@@ -187,15 +187,44 @@ export const formatTree = (project: any) => {
     return obj;
 }
 //DIFFERENT COLOR GENERATORS
-const noColor = (data: any) => {
-    // const data: any = nodes;
-    const extent: any = d3.extent(data, (node: any) => node.depth);
-    const colorGenerator = d3.scaleOrdinal()
-        .domain(extent)
-        .range(["#64C19A", "#2F4858"]);
-    return (val: number) => colorGenerator(val.toString());
+const noColor = () => {
+    // // const data: any = nodes;
+    // const extent: any = d3.extent(data, (node: any) => node.depth);
+    // const colorGenerator = d3.scaleOrdinal()
+    //     .domain(extent)
+    //     .range(["#64C19A", "#2F4858"]);
+    // return (val: number) => colorGenerator(val.toString());
+    return "#64C19A"
 }
 export const noColorNode = (type: string) => "#eef3f6";
+
+
+export const dependencyPallete: colorPallete[] = [
+    {
+        tittle: "direct-used",
+        color: "#006AD2"
+    },
+    {
+        tittle: "direct-bloated",
+        color: "#F8514A"
+    },
+    {
+        tittle: "transitive-used",
+        color: "#9ACAFF"
+    },
+    {
+        tittle: "transitive-bloated",
+        color: "#F05D00"
+    },
+    {
+        tittle: "inherited-used",
+        color: "#F3EED9"
+    },
+    {
+        tittle: "inherited-bloated",
+        color: "#FFE5DD"
+    }
+]
 //returns a color depending on the artifact type
 const dependencytypeColor = (type: string) => {
     switch (type) {
@@ -251,7 +280,7 @@ const groupIDColor = (data: any) => {
 export const getCGenerator = (colorSelected: string, nodes: any) => {
     switch (colorSelected) {
         case "NONE":
-            return noColor(nodes);
+            return noColor;
         case "DEPENDENCY_TYPE":
             return dependencytypeColor;
         case "USAGE_RATIO":

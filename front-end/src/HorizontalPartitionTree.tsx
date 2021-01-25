@@ -69,7 +69,7 @@ export const HorizontalPartitionTree = ({
     const partitionTree = getParitionTree(treeSize, 1)
     //GET ALL THE NODES WITH A TREE STRUCTURE
     //filter the nodes that are ommitted and whose type are test
-    const heightPercent = 0.9;
+    const heightPercent = 0.8;
     const nodes = partitionTree(partitionData)
         .descendants()
         .filter(filterOmmitedandTest)
@@ -109,11 +109,10 @@ export const HorizontalPartitionTree = ({
             <div className="wrapper">
                 <Tooltip value={toolTipValue} position={toolTipPos} opacity={tpOpacity} display={"LEFT"} />
                 <svg width={dimensions.boundedWidth} height={dimensions.boundedHeight} key={uuidv4()} >
-                    <g
-                        className="bounds"
+                    <g className="bounds"
                         transform={"translate(" + dimensions.marginLeft + "," + dimensions.marginTop + ")"}
-                        key={uuidv4()}
-                    >
+                        key={uuidv4()}>
+
                         {links}
                         <PartitionNode
                             data={nodes}

@@ -8,12 +8,18 @@ import { v4 as uuidv4 } from 'uuid';
 import { DependencyList } from './DependencyList';
 import { dimension } from 'src/interfaces/interfaces';
 import { FilterOutlined } from '@ant-design/icons'
+import { Legend } from 'src/Legend';
 
 export const HomeViz = () => {
     const [size, setSize] = useState({
         width: window.innerWidth,
         height: window.innerHeight
     });
+    //get the main state
+    const { state, dispatch } = useAppState();
+    //Get all the nodes
+    const { filtered, hideMenu } = state;
+
     //modify size on resize
     useEffect(() => {
         function handleResize() {
@@ -25,17 +31,12 @@ export const HomeViz = () => {
         window.addEventListener('resize', handleResize)
     })
 
-    //get the main state
-    const { state, dispatch } = useAppState();
-    //Get all the nodes
-    const { filtered, hideMenu } = state;
 
     //DATA FOR TREE
-
     let dimensions: dimension = {
         width: size.width,
         height: size.height,
-        marginTop: 70,
+        marginTop: 90,
         marginRight: 50,
         marginBottom: 50,
         marginLeft: 50,
@@ -44,24 +45,24 @@ export const HomeViz = () => {
     }
 
     const handleClick = () => {
-        console.log("click")
         dispatch({ type: "HIDE_MENU", payload: !hideMenu });
     }
+
     return (
         <div>
             <Row id="MainInfo" className={"margin-buttom-20"} key={uuidv4()} >
                 <MainInfo />
             </Row>
-
             <Row className="vizContainer" id="DependencyTree" key={uuidv4()}>
                 <Button
                     className="filterButton"
                     type={"dashed"}
-                    onClick={() => handleClick()}
-                >
+                    onClick={() => handleClick()}>
                     <FilterOutlined rotate={hideMenu ? 90 : 0} />
                     Filter
-                    </Button>
+                </Button>
+
+                <Legend />
 
                 <HorizontalPartitionTree
                     key={uuidv4()}
@@ -71,10 +72,6 @@ export const HomeViz = () => {
                 <DependencyList />
 
             </Row>
-
-            {/* <Row id="dependenceProvency">
-                <DependenceProvency />
-            </Row> */}
         </div>
     )
 }
