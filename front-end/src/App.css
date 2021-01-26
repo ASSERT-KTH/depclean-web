@@ -855,6 +855,13 @@ line.Axis__line {
   font-size: 12px;
   margin-left:5px;
 }
+.color-ratio{
+  padding-top:5px;
+}
+.color-ratio span{
+  font-size:12px;
+  margin:0 5px;
+}
 
 .color-container{
   width:30px;

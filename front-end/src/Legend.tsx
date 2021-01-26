@@ -1,7 +1,8 @@
 import React from 'react';
 import { useAppState } from "src/AppStateContext";
-import { dependencyPallete } from "src/utils/treeAccess";
+import { dependencyPallete, ratioColor } from "src/utils/treeAccess";
 import { LegendColor } from "src/LegendColor";
+import { LegendRatio } from 'src/LegendRatio';
 
 export const Legend = () => {
     //get the main state
@@ -12,7 +13,7 @@ export const Legend = () => {
     const colorLegend = colorSelected === "DEPENDENCY_TYPE" ?
         <LegendColor pallete={dependencyPallete} /> :
         colorSelected === "USAGE_RATIO" ?
-            <div>Usage ratio</div> :
+            <LegendRatio pallete={ratioColor} /> :
             <></>
 
     return <div

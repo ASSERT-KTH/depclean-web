@@ -125,6 +125,15 @@ export const HorizontalPartitionTree = ({
                         {ommitedLabels}
                     </g>
 
+                    {/* <DelaunayGrid
+                        data={nodes}
+                        dimensions={dimensions}
+                        xAccessor={xAccessor}
+                        yAccessor={yAccessor}
+                        onEnter={mouseEnter}
+                        onLeave={mouseLeave}
+                    /> */}
+
                 </svg>
             </div>
         </Col>

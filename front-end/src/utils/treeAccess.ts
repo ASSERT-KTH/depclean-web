@@ -246,20 +246,31 @@ const dependencytypeColor = (type: string) => {
             return "#000000";
     }
 }
+
+export const ratioColor: colorPallete[] = [
+    {
+        tittle: "0%",
+        color: "#F05D00"
+    },
+    {
+        tittle: "100%",
+        color: "#006AD2"
+    }
+]
 const usageRagioColor = (nodes: any) => {
-    const data: any = nodes.slice(1);
-    const max: any = d3.max(data, (node: any) => node.data.usageRatio)
+    // const data: any = nodes.slice(1);
+    const max: any = 1;//d3.max(data, (node: any) => node.data.usageRatio)
 
     return (val: number) => {
         switch (val) {
             case -1:
-                return "#006AD2";
-            case 0:
-                return "#F8514A";
+                return ratioColor[1].color;
+            // case 0:
+            //     return "#F8514A";
             default:
                 const col = d3.scaleOrdinal()
                     .domain([0, max])
-                    .range(["#006AD2", "#F05D00"]);
+                    .range([ratioColor[0].color, ratioColor[1].color]);
                 return col(val.toString());
         }
     }
