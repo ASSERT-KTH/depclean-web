@@ -87,3 +87,21 @@ export interface colorPallete {
 export interface legendColorInterface {
     pallete: colorPallete[]
 }
+
+export interface report {
+    direct: number,
+    inherited: number,
+    transitive: number
+}
+
+export interface project {
+    tittle: string,
+    id: number,
+    version: string,
+    cleanURL: string,
+    gitURL: string,
+    img: string,
+    normalReport: report,
+    depCleanReport: report,
+    description: string,
+}

@@ -4,7 +4,7 @@ import * as d3 from 'd3';
 import { v4 as uuidv4 } from 'uuid';
 import { artifact, colorPallete } from 'src/interfaces/interfaces';
 import { formatFileSize } from 'src/Components/tooltip';
-
+import { getNodes } from 'src/utils/TreeToArray';
 //Creates a new type that includes depClean
 export const getNodesWithDepCategory = (nodes: any): object[] => {
     return nodes.map((d: any) => {
@@ -181,11 +181,22 @@ export const formatTree = (project: any) => {
             title: name,
             key: key,
             children: children.length > 0 ? formatTree(children) : [],
+            deleted: d.deleted,
         }
         return n;
     });
     return obj;
 }
+
+export const reduceChildren = (children: [], node: any) => {
+    const nodeChildren = node.children.reduce(reduceChildren, [])
+    return [...children, node, ...nodeChildren]
+}
+export const filterDeleted = (deleted: boolean) => {
+    return (d: any) => d.deleted === deleted;
+}
+export const mapKey = (d: any) => d.key;
+
 //DIFFERENT COLOR GENERATORS
 const noColor = () => {
     // // const data: any = nodes;
@@ -262,11 +273,13 @@ const usageRagioColor = (nodes: any) => {
     const max: any = 1;//d3.max(data, (node: any) => node.data.usageRatio)
 
     return (val: number) => {
+        console.log(val)
         switch (val) {
             case -1:
                 return ratioColor[1].color;
-            // case 0:
-            //     return "#F8514A";
+            case undefined:
+                return "grey";
+
             default:
                 const col = d3.scaleOrdinal()
                     .domain([0, max])
@@ -357,6 +370,7 @@ export const getColorDataAccessor = (colorSelected: string) => {
             return ((d: any): string => d.data.type);
     }
 }
+
 
 
 

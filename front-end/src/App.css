@@ -868,3 +868,6 @@ line.Axis__line {
   height:30px;
 }
 
+.ant-tree .ant-tree-node-content-wrapper.ant-tree-node-selected {
+  background-color: hsla(2,79%,68%,.5);
+}

@@ -29,7 +29,7 @@ export const DataGroup = ({
     const container = dataInfo.length === 0 ? <></> :
         <>
             <h3>{tittle}</h3>
-            <div className="flex">
+            <div className="flex" key={uuidv4()}>
                 {data}
             </div>
         </>

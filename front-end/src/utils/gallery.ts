@@ -27,7 +27,7 @@ export const galleryData: gallery = {
             version: "3.7.0-SNAPSHOT",
             cleanURL: "maven-core.json",
             gitURL: "https://github.com/apache/maven",
-            img: "maven.jpg",
+            img: "img.mavenCore.jpg",
             normalReport: {
                 direct: 26,
                 inherited: 1,
@@ -46,7 +46,7 @@ export const galleryData: gallery = {
             version: "1.12-SNAPSHOT",
             cleanURL: "flink-core.json",
             gitURL: "https://github.com/apache/flink",
-            img: "flink.jpg",
+            img: "img.flinkCore.jpg",
             normalReport: {
                 direct: 13,
                 inherited: 12,
@@ -65,7 +65,7 @@ export const galleryData: gallery = {
             version: "999-SNAPSHOT",
             cleanURL: "quarkus-core-runtime.json",
             gitURL: "https://github.com/quarkusio/quarkus",
-            img: "quarkus.jpg",
+            img: "img.quarkus.png",
             normalReport: {
                 direct: 18,
                 inherited: 0,
