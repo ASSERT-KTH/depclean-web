@@ -2,22 +2,14 @@ import React, { useState } from 'react';
 import * as d3 from 'd3';
 import { chart } from './utils/CountCategories';
 import { Squares } from './vizUtils/Squares';
-import { Legend } from './vizUtils/Legend';
+// import { Legend } from './vizUtils/Legend';
 import { v4 as uuidv4 } from 'uuid';
 import { Tooltip } from './vizUtils/tooltip';
 import { AxisHorizontal } from 'src/vizUtils/AxisHorizontal';
 import { AxisVertical } from 'src/vizUtils/AxisVertical';
+import { dimension } from 'src/interfaces/interfaces'
+import { dependencytypeColor } from 'src/utils/treeAccess';
 
-interface dimension {
-    width: number,
-    height: number,
-    marginTop: number,
-    marginRight: number,
-    marginBottom: number,
-    marginLeft: number,
-    boundedHeight: number,
-    boundedWidth: number,
-}
 
 interface ChartProps {
     nodes: any[],
@@ -26,7 +18,8 @@ interface ChartProps {
     labelX?: string,
     labelY?: string,
     colorInterpolator: any,
-    numTicks: number
+    numTicks: number,
+    tooltipPos?: "TOP" | "LEFT" | "BOTTOM" | "RIGHT"
 }
 
 export const Chart = ({
@@ -36,30 +29,30 @@ export const Chart = ({
     labelX,
     labelY,
     colorInterpolator,
-    numTicks
+    numTicks,
+    tooltipPos
 }: React.PropsWithChildren<ChartProps>) => {
     const [toolTipValue, setToolTipValue] = useState(<div></div>);
     const [toolTipPos, setToolTipPos] = useState({ x: 0, y: 0 });
     const [tpOpacity, setTpOpacity] = useState(0)
 
     //declare chart width and height
-    const chartSize = (dimensions.boundedWidth * 0.7);
-    const chartHeight = 300;
+    const chartHeight = dimensions.boundedHeight * 0.69;
     const chartDimensions = {
         ...dimensions,
-        boundedWidth: chartSize,
+        boundedWidth: dimensions.boundedWidth,
         height: chartHeight
     }
 
+    const toolTip: "TOP" | "LEFT" | "BOTTOM" | "RIGHT" = tooltipPos === undefined ? "TOP" : tooltipPos;
 
     const chartXScale = d3.scaleLinear()
         .domain([0, 100])
-        .range([0, chartSize])
+        .range([0, chartDimensions.boundedWidth])
         .nice()
     //Calculate all chart 
     const chartData = chart(nodes, category, chartXScale);
     const total = d3.sum(chartData, (d: any) => d.value)
-
 
     //DATA ACCESSORS
     const formatTick = (d: any) => d + "%";
@@ -73,13 +66,10 @@ export const Chart = ({
     // const indexAccessor = (d: any) => d.index;
     // const colorInterpolator = d3.interpolate("red", "blue")
 
-    const color = d3.scaleSequential()
-        .domain([0, chartData.length + 1])
-        .interpolator(colorInterpolator);
-    const indexAccesor = (d: any) => d.index;
-    const colorAccessor = (d: any) => color(indexAccesor(d))
+    const indexAccesor = (d: any) => d.data.categorys;
+    const colorAccessor = (d: any) => dependencytypeColor(indexAccesor(d))
     //LEGEND DATA
-    const initialPos = [chartSize + dimensions.marginLeft + 10, dimensions.marginTop]
+    // const initialPos = [chartSize + dimensions.marginLeft + 10, dimensions.marginTop]
 
     const mouseEnter = (d: any) => {
 
@@ -89,7 +79,7 @@ export const Chart = ({
                 <div className="toolTip-sub"><span className="toolTip-value">{valueAccessor(d)}</span></div>
                 <div className="toolTip-sub"><span className="toolTip-value">{valueAccesor(d)}</span></div>
             </div>)
-        setToolTipPos({ x: dimensions.marginLeft + posAccessor(d) + wAccessor(d) / 2, y: dimensions.marginTop })
+        setToolTipPos({ x: dimensions.marginLeft + posAccessor(d) + wAccessor(d) / 2, y: dimensions.marginTop + chartHeight })
         setTpOpacity(1);
     }
     const mouseLeave = (d: any) => {
@@ -101,10 +91,10 @@ export const Chart = ({
 
         <div className="flex flex-justify-center" >
             <div className="wrapper">
-                <Tooltip value={toolTipValue} position={toolTipPos} opacity={tpOpacity} />
-                <svg width={dimensions.boundedWidth} height={dimensions.height} >
+                <Tooltip value={toolTipValue} position={toolTipPos} opacity={tpOpacity} display={toolTip} />
+                <svg width={dimensions.width} height={dimensions.height} >
 
-                    <g transform={"translate(" + dimensions.marginLeft + "," + dimensions.marginTop + ")"} >
+                    <g transform={"translate(" + dimensions.marginLeft + "," + 0 + ")"} >
 
                         <Squares
                             data={chartData}
@@ -122,12 +112,6 @@ export const Chart = ({
                         />
                     </g>
 
-                    <Legend
-                        data={chartData}
-                        nameAccessor={nameAccessor}
-                        initialPos={initialPos}
-                        color={color}
-                    />
                     <AxisHorizontal
                         dimensions={chartDimensions}
                         formatTick={formatTick}
@@ -142,6 +126,12 @@ export const Chart = ({
                         scale={chartXScale}
                         numTicks={numTicks}
                     />
+                    {/* <Legend
+                        data={chartData}
+                        nameAccessor={nameAccessor}
+                        initialPos={initialPos}
+                        color={color}
+                    /> */}
                 </svg>
             </div>
         </div >

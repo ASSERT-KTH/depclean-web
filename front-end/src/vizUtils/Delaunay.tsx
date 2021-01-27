@@ -1,17 +1,9 @@
 import React from 'react';
 import { Delaunay } from "d3-delaunay";
 import { v4 as uuidv4 } from 'uuid';
+import { dimension } from 'src/interfaces/interfaces';
 
-interface dimension {
-    width: number,
-    height: number,
-    marginTop: number,
-    marginRight: number,
-    marginBottom: number,
-    marginLeft: number,
-    boundedHeight: number,
-    boundedWidth: number,
-}
+
 interface delaunayProps {
     data: any,
     dimensions: dimension,
@@ -30,7 +22,7 @@ export const DelaunayGrid = ({
     onEnter,
     onLeave
 }: React.PropsWithChildren<delaunayProps>) => {
-    // console.log(data)
+
     // Create a new Delaunay triangulation passing in our dataset, x accessor function, and y accessor function
     const delaunay = Delaunay.from(data, (d: any) => yAccessor(d), (d: any) => xAccessor(d))
 
@@ -38,15 +30,15 @@ export const DelaunayGrid = ({
     const voronoi = delaunay.voronoi()
 
     // Specify the size of our diagram
-    voronoi.xmax = dimensions.boundedWidth - dimensions.marginBottom;
-    voronoi.ymax = dimensions.boundedHeight - dimensions.marginBottom;
+    voronoi.xmax = dimensions.boundedWidth;
+    voronoi.ymax = dimensions.boundedHeight;
 
     const mouseEnter = (d: any) => { if (d.data.visible) onEnter(d) }
     const mouseLeave = (d: any) => { if (d.data.visible) onLeave(d) }
 
 
     return (
-        <g transform={"translate(" + -dimensions.marginLeft / 2 + "," + 0 + ")"}>
+        <g transform={"translate(" + dimensions.marginLeft / 2 + "," + dimensions.marginTop + ")"}>
             {data.map((d: any, i: number) => {
                 return (
                     <path

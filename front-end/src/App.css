@@ -12,6 +12,12 @@
   box-shadow: 0 2px 10px 0 rgba(0,0,0,.06);
   z-index: 1;
 }
+.sideMenu{
+  background-color: #F1F3F5;
+}
+.sideMenu .ant-layout-sider-children{
+  padding: 350px 0 0 30px;
+}
 
 /* MENU STYLES */
 .ant-menu-item{
@@ -47,10 +53,12 @@
 }
 
 .treeLink{
-  fill:none;
-  stroke: hsla(0,0%,0%, 0.2);
-  stroke-width: 1px;
-  opacity: 0.7;
+  /* fill:none; */
+  /* background-image: linear-gradient(to right, red , yellow); */
+  /* fill:gray;/ */
+  /* opacity: 0.5!important; */
+  /* stroke: hsla(0,0%,0%, 0.2); */
+  /* stroke-width: 1px; */
   transition: all 0.2s ease-out;
 }
 
@@ -59,7 +67,21 @@
   stroke-dasharray:4 1 2;
   stroke: rgb(43, 134, 237);
   stroke-width: 1px;
-  opacity: 0.4;
+  /* opacity: 0.4; */
+}
+
+.treeLink-highlight{
+  /* stroke:hsla(2,79%,68%, 0.8); */
+  /* stroke-dasharray:4 1 2; */
+  fill:#EF433C !important;
+}
+
+.treeLink-visible{
+  opacity: 1;
+}
+
+.treeLink-invisible{
+  opacity: 0.1 !important;
 }
 
 .omitted-label{
@@ -72,18 +94,7 @@
   opacity:0.1;
 }
 
-.treeLink-highlight{
-  stroke:hsla(2,79%,68%, 0.8);
-  stroke-dasharray:4 1 2;
-}
 
-.treeLink-visible{
-  opacity: 1;
-}
-
-.treeLink-invisible{
-  opacity: 0.1 !important;
-}
 
 
 .node{
@@ -92,7 +103,7 @@
 
 .node-internal{
   /* stroke:gray; */
-  fill:white;
+  /* fill:white; */
   stroke-width:3;
 
 }
@@ -110,8 +121,8 @@
 
 .node-highlight{
   /* fill:red; */
-  stroke-width:3;
-  stroke:#EF433C;
+  /* stroke-width:3; */
+  fill:#EF433C;
 }
 
 .node-visible{
@@ -126,7 +137,7 @@
   opacity:0.1;
 }
 .treeLink-deleted{
-  opacity:0.2;
+  opacity:0.1!important;
 }
 
 .site-layout-content {
@@ -141,7 +152,15 @@
   position: absolute;
   right: 70px;
 }
-
+.filterButton{
+  position: absolute;
+  font-size: 16px;
+  font-weight: 400;
+  left: 50px;
+  /* background-color:#64C19A; */
+  /* border-color: transparent; */
+  z-index: 100;
+}
 
 .wrapper{
   position: relative;
@@ -163,8 +182,12 @@
   /* max-width: 150px; */
 }
 
+.tooltip-left{
+  text-align:left;
+}
+
 /* Adds an arrow pointing down at the hovered bar */
-.tooltip:before {
+.tooltip-top:before {
   content: '';
   position: absolute;
   bottom: 0;
@@ -176,6 +199,59 @@
   border-top-color: transparent;
   border-left-color: transparent;
   transform: translate(-50%, 50%) rotate(45deg);
+  transform-origin: center center;
+  z-index: 10;
+}
+/* Adds an arrow pointing down at the hovered bar */
+.tooltip-left:before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  top: 50%;
+  left:0;
+  width: 12px;
+  height: 12px;
+  background: white;
+  border: 1px solid #ddd;
+  border-top-color: transparent;
+  border-left-color: transparent;
+  transform: translate(-50%, 50%) rotate(135deg);
+  transform-origin: center center;
+  z-index: 10;
+}
+
+/* Adds an arrow pointing down at the hovered bar */
+.tooltip-bottom:before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  top: -2%;
+  left:50%;
+  width: 12px;
+  height: 12px;
+  background: white;
+  border: 1px solid #ddd;
+  border-top-color: transparent;
+  border-left-color: transparent;
+  transform: translate(-50%, 50%) rotate(225deg);
+  transform-origin: center top;
+  z-index: 10;
+}
+
+/* Adds an arrow pointing down at the hovered bar */
+.tooltip-right:before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  top: 50%;
+  left:100%;
+  width: 12px;
+  height: 12px;
+  background: white;
+  border: 1px solid #ddd;
+  border-top-color: transparent;
+  border-left-color: transparent;
+  transform: translate(-50%, 50%) rotate(-45deg);
   transform-origin: center center;
   z-index: 10;
 }
@@ -199,7 +275,8 @@
 }
 .square-text{
  display: block;
- padding:15px;
+ padding:5px 0 0 15px;
+
  overflow: hidden;
  -webkit-user-select: none; /* Safari */        
   -moz-user-select: none; /* Firefox */
@@ -209,7 +286,7 @@
 
 
 .square-text .title{
-  font-size: 1.3em;
+  font-size: 14px;
   font-weight: 600;
   color:white;
   display: block;
@@ -220,7 +297,7 @@
 }
 
 .square-text .sub-title{
-  font-size: 1em;
+  font-size: 12px;
   color:white;
   display: block;
   -webkit-user-select: none; /* Safari */        
@@ -310,6 +387,9 @@ p{
   margin-top:20px;
 }
 
+.margin-buttom-20{
+  margin-bottom:20px
+}
 .margin-buttom-40{
   margin-bottom:40px
 }
@@ -348,8 +428,10 @@ p{
 
 /* MAIN INFO */
 #MainInfo h1{
-  font-size: 32px;
+  font-size: 22px;
   font-weight: 700;
+  margin-bottom: 0;
+  margin-right: 40px;
 }
 
 /* MAIN PAGE */
@@ -362,15 +444,15 @@ p{
   display: flex;
   flex-direction: column;
   font-weight: 600;
-  font-size: 14px;
+  font-size: 12px;
   color: hsla(0,0%,0%, .4);
   margin-right:20px;
 }
 
 .dataInfo span{
-  font-size: 32px;
+  font-size: 24px;
   font-weight: 400;
-  margin-bottom: -12px;
+  margin-bottom: -6px;
   color: hsla(0,0%,0%, .6);
 }
 
@@ -383,6 +465,7 @@ p{
 .dependencies h3{
    color: hsla(0,0%,0%, .7);
    font-size: 14px;
+   margin: 0;
 }
 
 .bloated{
@@ -394,6 +477,7 @@ p{
 .bloated h3{
   color:hsla(2,79%,68%,.7);
   font-size: 14px;
+  margin: 0;
 }
 
 /* GALLERY */
@@ -545,14 +629,14 @@ line.Axis__line {
 }
 
 .axis_label{
-    font-size: 18px;
-    font-weight: 600;
+    font-size: 14px;
+    font-weight: 300;
     fill: rgb(0 0 0 / 0.3);
 }
 
 .axis__tick{
-  font-size: 16px;
-  font-weight: 400;
+  font-size: 14px;
+  font-weight: 300;
   fill: rgb(0 0 0 / 0.3);
 }
 
@@ -560,14 +644,14 @@ line.Axis__line {
   text-anchor:end;
 }
 /* TREE MAP */
-.tree-map rect.square_treemap {
+.square_treemap {
   stroke: white;
+  opacity: 0.4;
 }
 
 .text-message{
     font-size: 14px;
     font-weight: 600;
-    height: 100px;
     margin-right: 30px;
     color: rgb(193, 193, 193);
     
@@ -734,4 +818,56 @@ line.Axis__line {
 
 .message-error{
  color:#EE706B; 
+}
+
+#MainInfo{
+  background-color: #F8F9FA;
+}
+
+.ant-layout-content {
+  background-color: white;
+}
+
+#legend{
+  position: absolute;
+    z-index: 10;
+    top: 0;
+    left: 15%;
+    flex-direction: column;
+    height: 60px;
+    width: 410px;
+    flex-wrap: wrap; 
+}
+
+.dashed{
+  background: #fff;
+  color: rgba(0, 0, 0, 0.85);
+  border-color: #d9d9d9;
+  border-style: dashed;
+  padding: 10px;
+  border-width: 1px;
+}
+.color-legend{
+  margin-right:10px;
+  
+}
+.color-legend span{
+  font-size: 12px;
+  margin-left:5px;
+}
+.color-ratio{
+  padding-top:5px;
+}
+.color-ratio span{
+  font-size:12px;
+  margin:0 5px;
+}
+
+.color-container{
+  width:30px;
+  height:30px;
+}
+
+.ant-tree .ant-tree-node-content-wrapper.ant-tree-node-selected {
+  background-color: hsla(2,79%,68%,.5);
 }

@@ -32,13 +32,13 @@ export const HorizontalTree = ({
     const [toolTipValue, setToolTipValue] = useState(<div></div>);
     const [toolTipPos, setToolTipPos] = useState({ x: 0, y: 0 });
     const [tpOpacity, setTpOpacity] = useState(0)
-
     //get the main state
     const { state } = useAppState();
     //Get all the nodes
     const {
         viewOmitted
     } = state;
+
 
     const mouseEnter = (d: any) => {
         setToolTipValue(

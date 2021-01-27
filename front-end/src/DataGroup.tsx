@@ -15,10 +15,9 @@ export const DataGroup = ({
     dataInfo,
     theme
 }: React.PropsWithChildren<DataGroupProps>) => {
-    const fdata = dataInfo.filter((d: any) => { return d.name !== "parent" && d.name !== "omitted" })
-    const data = fdata.map((item: any) => {
-
-        return (
+    // const fdata = dataInfo.filter((d: any) => { return d.name !== "parent" && d.name !== "omitted" })
+    const data = dataInfo.map((item: any) => {
+        return item.num === 0 ? <></> : (
             <DataInfo
                 quantity={item.num}
                 name={item.name}
@@ -27,13 +26,18 @@ export const DataGroup = ({
             />
         )
     })
-    return (
-        <div key={uuidv4()} style={{ marginRight: "20px" }} className={theme}>
+    const container = dataInfo.length === 0 ? <></> :
+        <>
             <h3>{tittle}</h3>
-            <div className="flex">
+            <div className="flex" key={uuidv4()}>
                 {data}
             </div>
-        </div>
-    )
+        </>
+
+
+    return <div key={uuidv4()} style={{ marginRight: "20px" }} className={theme}>
+        {container}
+    </div>
+
 }
 

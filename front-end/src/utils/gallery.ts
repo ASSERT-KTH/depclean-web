@@ -27,7 +27,7 @@ export const galleryData: gallery = {
             version: "3.7.0-SNAPSHOT",
             cleanURL: "maven-core.json",
             gitURL: "https://github.com/apache/maven",
-            img: "maven.jpg",
+            img: "img.mavenCore.jpg",
             normalReport: {
                 direct: 26,
                 inherited: 1,
@@ -41,12 +41,12 @@ export const galleryData: gallery = {
             description: "Apache Maven is a software project management and comprehension tool. "
         },
         {
-            tittle: "Apache Flink core",
+            tittle: "Flink core",
             id: 2,
             version: "1.12-SNAPSHOT",
             cleanURL: "flink-core.json",
             gitURL: "https://github.com/apache/flink",
-            img: "flink.jpg",
+            img: "img.flinkCore.jpg",
             normalReport: {
                 direct: 13,
                 inherited: 12,
@@ -60,12 +60,12 @@ export const galleryData: gallery = {
             description: "Apache Flink is an open source stream processing framework with powerful stream- and batch-processing capabilities"
         },
         {
-            tittle: "Aquarkus",
+            tittle: "Quarkus",
             id: 3,
             version: "999-SNAPSHOT",
             cleanURL: "quarkus-core-runtime.json",
             gitURL: "https://github.com/quarkusio/quarkus",
-            img: "quarkus.jpg",
+            img: "img.quarkus.png",
             normalReport: {
                 direct: 18,
                 inherited: 0,

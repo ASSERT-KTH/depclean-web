@@ -1,3 +1,13 @@
+export interface dimension {
+    width: number,
+    height: number,
+    marginTop: number,
+    marginRight: number,
+    marginBottom: number,
+    marginLeft: number,
+    boundedHeight: number,
+    boundedWidth: number,
+}
 
 export interface reportI {
     direct: number,
@@ -26,6 +36,7 @@ export interface scanProjectI {
     project: artifact
 }
 
+
 //Interface for an artifact in the POM XML
 export interface artifact {
     coordinates: string,
@@ -43,7 +54,10 @@ export interface artifact {
     children: artifact[],
     highlight: boolean,
     visible: boolean,
-    deleted: boolean
+    deleted: boolean,
+    allTypes: string[],
+    usedTypes: string[],
+    usageRatio: number,
 }
 
 export interface AppState {
@@ -53,11 +67,41 @@ export interface AppState {
     filtered: any,
     filteredDependencies: string[],
     filteredBloated: string[],
-    colorSelected: "color-type" | "color-artifact-id",
+    colorSelected: "NONE" | "DEPENDENCY_TYPE" | "USAGE_RATIO" | "GROUP_ID",
     textDisplay: string[],
     filteredScope: string[],
     viewDependencyList: boolean,
     viewOmitted: boolean
     debloatNum: number
     messageState: "ORIGINAL" | "DEBLOAT_DIRECT" | "DEBLOAT_ALL",
+    hideMenu: boolean,
+    viewLinks: boolean
+}
+
+export interface colorPallete {
+    tittle: string,
+    color: string
+}
+
+
+export interface legendColorInterface {
+    pallete: colorPallete[]
+}
+
+export interface report {
+    direct: number,
+    inherited: number,
+    transitive: number
+}
+
+export interface project {
+    tittle: string,
+    id: number,
+    version: string,
+    cleanURL: string,
+    gitURL: string,
+    img: string,
+    normalReport: report,
+    depCleanReport: report,
+    description: string,
 }

@@ -10,23 +10,23 @@ interface radialBox {
 
 interface categoryProps {
     tittle: string,
-    children: radialBox[]
+    children: radialBox[],
+    onClick: any,
 }
 
 export const CategoryRadialBox = ({
     tittle,
-    children
+    children,
+    onClick
 }: React.PropsWithChildren<categoryProps>) => {
     //get the main state
-    const { state, dispatch } = useAppState();
+    const { state } = useAppState();
     //Get all the nodes
     const {
         colorSelected
     } = state;
 
-    function onChange(e: any) {
-        dispatch({ type: "SELECT_COLOR", payload: e.target.value })
-    };
+    function onChange(e: any) { onClick(e) };
 
     const radiobtn = children.map((d: any) => {
         return (

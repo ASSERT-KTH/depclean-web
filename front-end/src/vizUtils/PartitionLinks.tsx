@@ -5,20 +5,23 @@ interface LinkProps {
     data: any[],
     linkAccesor(d: any): any,
     classAccessor(d: any): string,
+    colorAccessor: any
 }
 
-export const Links = ({
+export const PartitionLinks = ({
     data,
     linkAccesor,
-    classAccessor
+    classAccessor,
+    colorAccessor
 }: React.PropsWithChildren<LinkProps>) => {
 
     return (
         <g>
-            {data.map((d) => (
+            {data.map((d, i) => (
                 <path
-                    d={linkAccesor(d)}
+                    style={{ fill: colorAccessor(d) }}
                     className={classAccessor(d)}
+                    d={linkAccesor(d)}
                     key={uuidv4()}
                 />
             ))}

@@ -2,12 +2,13 @@
 import * as d3 from 'd3';
 // import { isConstructorDeclaration } from 'typescript';
 import { v4 as uuidv4 } from 'uuid';
-import { artifact } from 'src/interfaces/interfaces';
-
+import { artifact, colorPallete } from 'src/interfaces/interfaces';
+import { formatFileSize } from 'src/Components/tooltip';
+// import { getNodes } from 'src/utils/TreeToArray';
 //Creates a new type that includes depClean
 export const getNodesWithDepCategory = (nodes: any): object[] => {
     return nodes.map((d: any) => {
-        d.data.dependencyUsage = `${d.data.status} - ${d.data.type}`;
+        d.data.dependencyUsage = d.data.type + "-" + d.data.status;
         return d;
     })
 }
@@ -56,6 +57,7 @@ export const getTreeInfo = (root: any): object[] => {
 
     return infoArr;
 }
+
 
 //Counts all the dependencies
 //returns an array with the dependencies name and number
@@ -109,6 +111,8 @@ export const countBloated = (nodes: any): object[] => {
     return depArr;
 }
 
+
+
 //get a depClean pom.XML and filter it according to the type array
 //filter if they are bloated
 //if filterType includes the type of the artifact
@@ -122,8 +126,22 @@ export const highlightBloat = (data: artifact[], filterType: string[]): artifact
     return unFiltered;
 }
 
+export const filterArifactByType = (data: artifact[], scopeType: string[], filter: string[], type: "used" | "bloated") => {
+    const unFiltered = data.map((node: artifact) => {
+        //two cases
+        //Do not filter if is is in the filter and has the type
+        //if it is not in the filter and has the type
+        node.visible = filter.includes(node.type) === true && node.status === type ? true :
+            filter.includes(node.type) === false && node.status === type ? false : node.visible;
+        node.children = filterArifactByType(node.children, scopeType, filter, type);
+        return node;
+    });
+    return unFiltered;
+}
+
 
 export const filterArtifacts = (data: artifact[], scopeType: string[], filterType: string[]): artifact[] => {
+
     //if the node is filtered then stop and return
     // if(!scopeType.includes(data.type) return;
     const unFiltered = data.map((node: artifact) => {
@@ -163,10 +181,139 @@ export const formatTree = (project: any) => {
             title: name,
             key: key,
             children: children.length > 0 ? formatTree(children) : [],
+            deleted: d.deleted,
         }
         return n;
     });
     return obj;
+}
+
+export const reduceChildren = (children: [], node: any) => {
+    const nodeChildren = node.children.reduce(reduceChildren, [])
+    return [...children, node, ...nodeChildren]
+}
+export const filterDeleted = (deleted: boolean) => {
+    return (d: any) => d.deleted === deleted;
+}
+export const mapKey = (d: any) => d.key;
+
+//DIFFERENT COLOR GENERATORS
+const noColor = () => {
+    // // const data: any = nodes;
+    // const extent: any = d3.extent(data, (node: any) => node.depth);
+    // const colorGenerator = d3.scaleOrdinal()
+    //     .domain(extent)
+    //     .range(["#64C19A", "#2F4858"]);
+    // return (val: number) => colorGenerator(val.toString());
+    return "#64C19A"
+}
+export const noColorNode = (type: string) => "#eef3f6";
+
+
+export const dependencyPallete: colorPallete[] = [
+    {
+        tittle: "direct-used",
+        color: "#006AD2"
+    },
+    {
+        tittle: "direct-bloated",
+        color: "#F8514A"
+    },
+    {
+        tittle: "transitive-used",
+        color: "#9ACAFF"
+    },
+    {
+        tittle: "transitive-bloated",
+        color: "#F05D00"
+    },
+    {
+        tittle: "inherited-used",
+        color: "#F3EED9"
+    },
+    {
+        tittle: "inherited-bloated",
+        color: "#FFE5DD"
+    }
+]
+//returns a color depending on the artifact type
+export const dependencytypeColor = (type: string) => {
+    switch (type) {
+        case "parent-used":
+            return "#006AD2";
+        case "direct-used":
+            return "#006AD2";
+        case "transitive-used":
+            return "#9ACAFF";
+        case "inherited-used":
+            return "#F3EED9";
+        case "direct-bloated":
+            return "#F8514A";
+        case "transitive-bloated":
+            return "#F05D00";
+        case "inherited-bloated":
+            return "#FFE5DD";
+        default:
+            return "#000000";
+    }
+}
+
+export const ratioColor: colorPallete[] = [
+    {
+        tittle: "0%",
+        color: "#F05D00"
+    },
+    {
+        tittle: "100%",
+        color: "#006AD2"
+    }
+]
+const usageRagioColor = (nodes: any) => {
+    // const data: any = nodes.slice(1);
+    const max: any = 1;//d3.max(data, (node: any) => node.data.usageRatio)
+
+    return (val: number) => {
+
+        switch (val) {
+            case -1:
+                return ratioColor[1].color;
+            case undefined:
+                return "grey";
+
+            default:
+                const col = d3.scaleOrdinal()
+                    .domain([0, max])
+                    .range([ratioColor[0].color, ratioColor[1].color]);
+                return col(val.toString());
+        }
+    }
+
+}
+
+const groupIDColor = (data: any) => {
+    const total = data.length;
+    const colors = data.map((d: string, i: number) => {
+        return d3.interpolateSpectral(i / total);
+    })
+    return d3.scaleOrdinal()
+        .domain(data)
+        .range(colors);
+}
+
+//Returns an color generator according to the color selected
+export const getCGenerator = (colorSelected: string, nodes: any) => {
+    switch (colorSelected) {
+        case "NONE":
+            return noColor;
+        case "DEPENDENCY_TYPE":
+            return dependencytypeColor;
+        case "USAGE_RATIO":
+            return usageRagioColor(nodes);
+        case "GROUP_ID":
+            return groupIDColor(nodes);
+        default:
+            return noColor;
+    }
 }
 
 //Returns an color generator according to the color selected
@@ -187,17 +334,45 @@ export const getColorGenerator = (colorSelected: string, data: string[]) => {
     }
 }
 
+//returns color depending on type
+export const getColorByType = (type: string) => {
+    switch (type) {
+        case 'parent':
+            return "#30611E";
+        case 'direct':
+            return "#98BC8B";
+        case 'omitted':
+            return "#30611E";
+        case 'transitive':
+            return "#7EBEE9";
+        case 'inherited':
+            return "#EAD17A";
+        default:
+            return "#30611E";
+    }
+}
+
 //Returns an color data accessor according to the color selected
 export const getColorDataAccessor = (colorSelected: string) => {
     switch (colorSelected) {
-        case "color-type":
-            return ((d: any): string => d.data.type);
-        case "color-artifact-id":
+        case "NONE":
+            return ((d: any): string => d.depth);
+        case "DEPENDENCY_TYPE":
+            return ((d: any): string => {
+
+                return d.data.type + "-" + d.data.status
+            });
+        case "USAGE_RATIO":
+            return ((d: any): string => d.data.usageRatio);
+        case "GROUP_ID":
             return ((d: any): string => { return d.data.groupId });
         default:
             return ((d: any): string => d.data.type);
     }
 }
+
+
+
 
 
 export const getArtifactsId = (nodes: d3.HierarchyRectangularNode<unknown>[]): string[] => {
@@ -216,7 +391,7 @@ export const debloatDirect = (children: artifact[]): artifact[] => {
     const artifacts = children.map((d: artifact) => {
         //  d.status === "bloated" && d.type === "direct"
         const isBloated = d.status === "bloated" && d.type === "direct";
-        d.highlight = isBloated;
+        // d.highlight = false;
         d.deleted = isBloated;
         d.children = isBloated ? debloatTransitive(d.children) : d.children;
         return d;
@@ -227,9 +402,9 @@ export const debloatDirect = (children: artifact[]): artifact[] => {
 const debloatTransitive = (children: artifact[]): artifact[] => {
     const artifacts = children.map((d: artifact) => {
         const isBloated = d.status === "bloated" && d.type === "transitive" ? true : false;
-        d.highlight = isBloated
+        // d.highlight = false;
         d.deleted = isBloated;
-        d.children = debloatTransitive(d.children)
+        d.children = debloatTransitive(d.children);
         return d;
     })
     return [...artifacts];
@@ -262,4 +437,16 @@ export const debloatAll = (data: artifact[], filterType: string[]): artifact[] =
     });
     return unFiltered;
 }
+
+
+
+//get the toal size of a tree
+export const getTreeSize = (nodes: any) => {
+    const totalSize: number = d3.sum(nodes, (d: any) => d.data.size)
+    return [{
+        name: "",
+        num: formatFileSize(totalSize, 2)
+    }];
+}
+
 
