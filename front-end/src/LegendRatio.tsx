@@ -1,5 +1,5 @@
 import React from 'react';
-import { legendColorInterface, colorPallete } from 'src/interfaces/interfaces';
+import { legendColorInterface } from 'src/interfaces/interfaces';
 
 
 

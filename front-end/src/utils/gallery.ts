@@ -41,7 +41,7 @@ export const galleryData: gallery = {
             description: "Apache Maven is a software project management and comprehension tool. "
         },
         {
-            tittle: "Apache Flink core",
+            tittle: "Flink core",
             id: 2,
             version: "1.12-SNAPSHOT",
             cleanURL: "flink-core.json",
@@ -60,7 +60,7 @@ export const galleryData: gallery = {
             description: "Apache Flink is an open source stream processing framework with powerful stream- and batch-processing capabilities"
         },
         {
-            tittle: "Aquarkus",
+            tittle: "Quarkus",
             id: 3,
             version: "999-SNAPSHOT",
             cleanURL: "quarkus-core-runtime.json",

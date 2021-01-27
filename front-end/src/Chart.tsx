@@ -8,7 +8,7 @@ import { Tooltip } from './vizUtils/tooltip';
 import { AxisHorizontal } from 'src/vizUtils/AxisHorizontal';
 import { AxisVertical } from 'src/vizUtils/AxisVertical';
 import { dimension } from 'src/interfaces/interfaces'
-
+import { dependencytypeColor } from 'src/utils/treeAccess';
 
 
 interface ChartProps {
@@ -54,7 +54,6 @@ export const Chart = ({
     const chartData = chart(nodes, category, chartXScale);
     const total = d3.sum(chartData, (d: any) => d.value)
 
-
     //DATA ACCESSORS
     const formatTick = (d: any) => d + "%";
     const yAccessor = (d: any) => 0;
@@ -67,11 +66,8 @@ export const Chart = ({
     // const indexAccessor = (d: any) => d.index;
     // const colorInterpolator = d3.interpolate("red", "blue")
 
-    const color = d3.scaleSequential()
-        .domain([0, chartData.length + 1])
-        .interpolator(colorInterpolator);
-    const indexAccesor = (d: any) => d.index;
-    const colorAccessor = (d: any) => color(indexAccesor(d))
+    const indexAccesor = (d: any) => d.data.categorys;
+    const colorAccessor = (d: any) => dependencytypeColor(indexAccesor(d))
     //LEGEND DATA
     // const initialPos = [chartSize + dimensions.marginLeft + 10, dimensions.marginTop]
 

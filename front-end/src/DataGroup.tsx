@@ -35,9 +35,9 @@ export const DataGroup = ({
         </>
 
 
-    return (<div key={uuidv4()} style={{ marginRight: "20px" }} className={theme}>
+    return <div key={uuidv4()} style={{ marginRight: "20px" }} className={theme}>
         {container}
-    </div>)
+    </div>
 
 }
 

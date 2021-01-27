@@ -7,15 +7,17 @@ import { useAppState } from "src/AppStateContext";
 import { PartitionNode } from 'src/vizUtils/ParitionNode';
 import { PartitionLinks } from 'src/vizUtils/PartitionLinks';
 import { Links } from './vizUtils/Links';
-import { getColorDataAccessor, getCGenerator, noColorNode } from 'src/utils/treeAccess';
+import { getColorDataAccessor, getCGenerator, noColorNode, } from 'src/utils/treeAccess';
 import {
-    getParitionTree, getSizeHierarchy, filterOmmitedandTest, addNewSize
+    getParitionTree, getSizeHierarchy,
+    filterOmmitedandTest, addNewSize,
+
 } from "src/utils/horizontalTree";
-import { linkAccesor, linksClassAccessor } from 'src/accessors/partitionTreeAccessor';
+import { linkAccesor, linksClassAccessor, radialClassAccessor } from 'src/accessors/partitionTreeAccessor';
 import { formatFileSize } from 'src/Components/tooltip';
 import { dimension } from 'src/interfaces/interfaces';
 import { parseOmitedLinks, getOmmitedLinks } from "src/utils/horizontalTree";
-// import { DelaunayGrid } from 'src/vizUtils/Delaunay';
+import { DelaunayGrid } from 'src/vizUtils/Delaunay';
 // import { useAppState } from "./AppStateContext";
 
 
@@ -92,7 +94,7 @@ export const HorizontalPartitionTree = ({
     const linkradial = d3.linkVertical()
         .x(function (d: any) { return d.y; })
         .y(function (d: any) { return d.x; });
-    const radialClassAccessor = () => "treeLink treeLink-ommited"
+
 
     const ommitedLinks = viewOmitted ? getOmmitedLinks(partitionData.descendants()) : <React.Fragment />;
     const ommitedLabels = viewOmitted ? parseOmitedLinks(ommitedLinks) : <React.Fragment />
@@ -103,6 +105,9 @@ export const HorizontalPartitionTree = ({
             classAccessor={radialClassAccessor}
             key={uuidv4()}
         /> : <React.Fragment />
+
+    const xAccessor = (d: any) => d.x0 + (d.x1 - d.x0) / 2;
+    const yAccessor = (d: any) => d.y0 + (d.y1 - d.y0) / 2;
 
     return (
         <Col span="20" >
@@ -125,14 +130,14 @@ export const HorizontalPartitionTree = ({
                         {ommitedLabels}
                     </g>
 
-                    {/* <DelaunayGrid
+                    <DelaunayGrid
                         data={nodes}
                         dimensions={dimensions}
                         xAccessor={xAccessor}
                         yAccessor={yAccessor}
                         onEnter={mouseEnter}
                         onLeave={mouseLeave}
-                    /> */}
+                    />
 
                 </svg>
             </div>

@@ -4,11 +4,11 @@ import * as d3 from 'd3';
 import { v4 as uuidv4 } from 'uuid';
 import { artifact, colorPallete } from 'src/interfaces/interfaces';
 import { formatFileSize } from 'src/Components/tooltip';
-import { getNodes } from 'src/utils/TreeToArray';
+// import { getNodes } from 'src/utils/TreeToArray';
 //Creates a new type that includes depClean
 export const getNodesWithDepCategory = (nodes: any): object[] => {
     return nodes.map((d: any) => {
-        d.data.dependencyUsage = `${d.data.status} - ${d.data.type}`;
+        d.data.dependencyUsage = d.data.type + "-" + d.data.status;
         return d;
     })
 }
@@ -237,7 +237,7 @@ export const dependencyPallete: colorPallete[] = [
     }
 ]
 //returns a color depending on the artifact type
-const dependencytypeColor = (type: string) => {
+export const dependencytypeColor = (type: string) => {
     switch (type) {
         case "parent-used":
             return "#006AD2";
@@ -273,7 +273,7 @@ const usageRagioColor = (nodes: any) => {
     const max: any = 1;//d3.max(data, (node: any) => node.data.usageRatio)
 
     return (val: number) => {
-        console.log(val)
+
         switch (val) {
             case -1:
                 return ratioColor[1].color;
@@ -448,4 +448,5 @@ export const getTreeSize = (nodes: any) => {
         num: formatFileSize(totalSize, 2)
     }];
 }
+
 

@@ -14,17 +14,25 @@ export const linkAccesor = (heightPercent: number) => {
 
     return (d: any) => {
 
-        const displaceY = d.depth === 1 ? (d.x0 * heightPercent) / 1 : d.y;
+        // const displaceY = d.depth === 1 ? (d.x0 * heightPercent) / 1 : 0;
 
-        const parentY = d.depth === 1 ?
-            d.parent.x0 + d.parent.y + displaceY :
-            d.parent.x0 + d.parent.y + d.y + (d.x0 - d.parent.x0);
+        // const parentY = d.depth === 1 ?
+        //     d.parent.x0 + d.parent.y + displaceY :
+        //     d.parent.x0 + d.parent.y + displaceY;
+        // const parentY = d.depth === 1 ?
+        //     d.parent.x0 + d.parent.y + displaceY :
+        //     d.parent.x0 + d.parent.y + d.y + (d.x0 - d.parent.x0);
 
+        const parentCenterPoint = d.parent.x0 + d.parent.y + d.parent.w / 2;
 
-        const point1: [number, number] = [d.parent.y0 + d.parent.h + padding, parentY];
+        const parentCenter: [number, number] = [d.parent.y0 + d.parent.h + padding, parentCenterPoint];
+
+        const point1: [number, number] = parentCenter;
+        // const point1: [number, number] = [d.parent.y0 + d.parent.h + padding, parentY];
         const point2: [number, number] = [d.y0 - padding, d.x0 + d.y];
         const point3: [number, number] = [d.y0 - padding, d.x0 + d.y + d.w];
-        const point4: [number, number] = [d.parent.y0 + d.parent.h + padding, parentY + d.w];
+        // const point4: [number, number] = [d.parent.y0 + d.parent.h + padding, parentY + d.w];
+        const point4: [number, number] = parentCenter;
 
         //create an area with all points and links
         return [
@@ -48,3 +56,7 @@ export const linksClassAccessor = (d: any) => {
         (d.data.visible ? " treeLink-visible" : " treeLink-invisible") +
         (d.data.deleted || d.parent.data.deleted ? " treeLink-deleted" : "")
 }
+
+
+export const radialClassAccessor = () => "treeLink treeLink-ommited"
+

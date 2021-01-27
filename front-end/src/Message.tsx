@@ -3,7 +3,7 @@ import React from 'react';
 import { useAppState } from "./AppStateContext"
 import { getGeneralReport, getDeletedDirectReport, getAllDeletedReport, filterEmpty } from 'src/utils/message';
 import { DataGroup } from 'src/DataGroup';
-import { ArrowRightOutlined } from '@ant-design/icons';
+// import { ArrowRightOutlined } from '@ant-design/icons';
 
 export const Message = () => {
     //get the main state
