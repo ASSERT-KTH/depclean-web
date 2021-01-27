@@ -18,6 +18,7 @@ import { formatFileSize } from 'src/Components/tooltip';
 import { dimension } from 'src/interfaces/interfaces';
 import { parseOmitedLinks, getOmmitedLinks } from "src/utils/horizontalTree";
 import { DelaunayGrid } from 'src/vizUtils/Delaunay';
+import { midXAccessor, midYAccessor } from 'src/accessors/treeAccessors';
 // import { useAppState } from "./AppStateContext";
 
 
@@ -106,8 +107,6 @@ export const HorizontalPartitionTree = ({
             key={uuidv4()}
         /> : <React.Fragment />
 
-    const xAccessor = (d: any) => d.x0 + (d.x1 - d.x0) / 2;
-    const yAccessor = (d: any) => d.y0 + (d.y1 - d.y0) / 2;
 
     return (
         <Col span="20" >
@@ -133,8 +132,8 @@ export const HorizontalPartitionTree = ({
                     <DelaunayGrid
                         data={nodes}
                         dimensions={dimensions}
-                        xAccessor={xAccessor}
-                        yAccessor={yAccessor}
+                        xAccessor={midXAccessor}
+                        yAccessor={midYAccessor}
                         onEnter={mouseEnter}
                         onLeave={mouseLeave}
                     />
