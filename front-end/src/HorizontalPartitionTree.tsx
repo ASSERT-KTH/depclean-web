@@ -13,7 +13,7 @@ import {
     filterOmmitedandTest, addNewSize,
 
 } from "src/utils/horizontalTree";
-import { linkAccesor, linksClassAccessor, radialClassAccessor } from 'src/accessors/partitionTreeAccessor';
+import { linkAccesor, linksClassAccessor, radialClassAccessor, linkXaccessor, linkYaccessor } from 'src/accessors/partitionTreeAccessor';
 import { formatFileSize } from 'src/Components/tooltip';
 import { dimension } from 'src/interfaces/interfaces';
 import { parseOmitedLinks, getOmmitedLinks } from "src/utils/horizontalTree";
@@ -93,8 +93,8 @@ export const HorizontalPartitionTree = ({
         />
 
     const linkradial = d3.linkVertical()
-        .x(function (d: any) { return d.y; })
-        .y(function (d: any) { return d.x; });
+        .x(linkXaccessor)
+        .y(linkYaccessor);
 
 
     const ommitedLinks = viewOmitted ? getOmmitedLinks(partitionData.descendants()) : <React.Fragment />;
