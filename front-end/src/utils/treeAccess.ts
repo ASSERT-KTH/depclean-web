@@ -207,7 +207,20 @@ const noColor = () => {
     // return (val: number) => colorGenerator(val.toString());
     return "#64C19A"
 }
-export const noColorNode = (type: string) => "#eef3f6";
+const noLinkColor = (d: any) => "#eef3f6";
+
+const linkBloatedColor = (d: any) => {
+    return d.data.status === "bloated" ? "#FFD8D8" : "#eef3f6"
+};
+
+export const getLinkColorGenerator = (colorSelected: "NONE" | "DEPENDENCY_TYPE" | "USAGE_RATIO" | "GROUP_ID") => {
+    switch (colorSelected) {
+        case "DEPENDENCY_TYPE":
+            return linkBloatedColor;
+        default:
+            return noLinkColor;
+    }
+}
 
 
 export const dependencyPallete: colorPallete[] = [

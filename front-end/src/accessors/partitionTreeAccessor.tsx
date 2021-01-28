@@ -49,7 +49,7 @@ export const linkAccesor = (heightPercent: number) => {
     }
 };
 
-
+//
 export const linksClassAccessor = (d: any) => {
     return "treeLink " +
         // (d.data.highlight ? " treeLink-highlight" : "") +

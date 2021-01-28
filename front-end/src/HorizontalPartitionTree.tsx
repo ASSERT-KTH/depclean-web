@@ -7,13 +7,17 @@ import { useAppState } from "src/AppStateContext";
 import { PartitionNode } from 'src/vizUtils/ParitionNode';
 import { PartitionLinks } from 'src/vizUtils/PartitionLinks';
 import { Links } from './vizUtils/Links';
-import { getColorDataAccessor, getCGenerator, noColorNode, } from 'src/utils/treeAccess';
+import { getColorDataAccessor, getCGenerator, getLinkColorGenerator } from 'src/utils/treeAccess';
 import {
     getParitionTree, getSizeHierarchy,
     filterOmmitedandTest, addNewSize,
 
 } from "src/utils/horizontalTree";
-import { linkAccesor, linksClassAccessor, radialClassAccessor, linkXaccessor, linkYaccessor } from 'src/accessors/partitionTreeAccessor';
+import {
+    linkAccesor, linksClassAccessor,
+    radialClassAccessor, linkXaccessor,
+    linkYaccessor,
+} from 'src/accessors/partitionTreeAccessor';
 import { formatFileSize } from 'src/Components/tooltip';
 import { dimension } from 'src/interfaces/interfaces';
 import { parseOmitedLinks, getOmmitedLinks } from "src/utils/horizontalTree";
@@ -83,29 +87,16 @@ export const HorizontalPartitionTree = ({
     const colorGenerator: any = getCGenerator(colorSelected, nodes);
     const color: any = (d: any) => colorGenerator(colorDataAccessor(d));
 
-    const links = !viewLinks ?
-        (<></>) :
-        <PartitionLinks
-            data={nodes.slice(1)}
-            linkAccesor={linkAccesor(heightPercent)}
-            classAccessor={linksClassAccessor}
-            colorAccessor={noColorNode}
-        />
+    const linkColorGenerator: any = getLinkColorGenerator(colorSelected)
 
     const linkradial = d3.linkVertical()
         .x(linkXaccessor)
         .y(linkYaccessor);
 
+    //GRAPH LINKS LABLES 
+    const ommitedLinks = viewOmitted ? getOmmitedLinks(partitionData.descendants()) : <></>;
+    const ommitedLabels = viewOmitted ? parseOmitedLinks(ommitedLinks) : <></>
 
-    const ommitedLinks = viewOmitted ? getOmmitedLinks(partitionData.descendants()) : <React.Fragment />;
-    const ommitedLabels = viewOmitted ? parseOmitedLinks(ommitedLinks) : <React.Fragment />
-    const omittedLinksLines = viewOmitted ?
-        <Links
-            data={ommitedLinks}
-            linkAccesor={linkradial}
-            classAccessor={radialClassAccessor}
-            key={uuidv4()}
-        /> : <React.Fragment />
 
 
     return (
@@ -117,15 +108,30 @@ export const HorizontalPartitionTree = ({
                         transform={"translate(" + dimensions.marginLeft + "," + dimensions.marginTop + ")"}
                         key={uuidv4()}>
 
-                        {links}
+                        {!viewLinks ? <></> :
+                            <PartitionLinks
+                                data={nodes.slice(1)}
+                                linkAccesor={linkAccesor(heightPercent)}
+                                classAccessor={linksClassAccessor}
+                                colorAccessor={linkColorGenerator}
+                            />}
+
                         <PartitionNode
                             data={nodes}
                             onEnter={mouseEnter}
                             onLeave={mouseLeave}
                             colorAccessor={color}
                         />
+
                         {/* OMITTED LINKS */}
-                        {omittedLinksLines}
+                        {viewOmitted ?
+                            <Links
+                                data={ommitedLinks}
+                                linkAccesor={linkradial}
+                                classAccessor={radialClassAccessor}
+                                key={uuidv4()}
+                            /> : <></>}
+
                         {ommitedLabels}
                     </g>
 
