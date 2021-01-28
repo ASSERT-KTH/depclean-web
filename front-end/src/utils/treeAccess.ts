@@ -303,13 +303,22 @@ const usageRagioColor = (nodes: any) => {
 
 }
 
+const getUniqueArray = (data: any) => {
+    const groupId: string[] = data.map((d: any) => d.data.groupId);
+    return Array.from(new Set(groupId))
+}
+
 const groupIDColor = (data: any) => {
-    const total = data.length;
-    const colors = data.map((d: string, i: number) => {
+    //get array with unique d.data.groupId
+    const groupIds = getUniqueArray(data);
+
+    //make the calculus according to that
+    const total: any = groupIds.length - 1;
+    const colors = groupIds.map((d: string, i: number) => {
         return d3.interpolateSpectral(i / total);
     })
     return d3.scaleOrdinal()
-        .domain(data)
+        .domain(groupIds)
         .range(colors);
 }
 
