@@ -17,6 +17,12 @@
 }
 .sideMenu .ant-layout-sider-children{
   padding: 230px 0 0 30px;
+  display: flex;
+    flex-direction: column;
+}
+
+.ant-checkbox-wrapper + .ant-checkbox-wrapper {
+  margin-left: 0px;
 }
 
 /* MENU STYLES */
