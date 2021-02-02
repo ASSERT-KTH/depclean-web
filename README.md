@@ -10,7 +10,7 @@ DepClean Web is an interactive website visualization that allows a user to input
  
 Visualization of the Maven-core dependency, with bloated or used dependencies information by color, and dependency size. 
 
-<img src="https://github.com/castor-software/depclean-web/blob/main/.img/dependencyTree.jpg" align="left" alt="DepClean visualization of dependency tree"/>
+<img src="https://github.com/castor-software/depclean-web/blob/main/.img/dependencyTreeExample.jpg" align="left" alt="DepClean visualization of dependency tree"/>
 
 # Installing and running the backen-end
 Run the back-end using docker. First, pull the new docker image. Secondly, run the image. 
