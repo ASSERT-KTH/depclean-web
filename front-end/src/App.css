@@ -16,7 +16,13 @@
   background-color: #F1F3F5;
 }
 .sideMenu .ant-layout-sider-children{
-  padding: 350px 0 0 30px;
+  padding: 230px 0 0 30px;
+  display: flex;
+    flex-direction: column;
+}
+
+.ant-checkbox-wrapper + .ant-checkbox-wrapper {
+  margin-left: 0px;
 }
 
 /* MENU STYLES */
@@ -134,10 +140,10 @@
 }
 
 .node-deleted{
-  opacity:0.1;
+  opacity:0;
 }
 .treeLink-deleted{
-  opacity:0.1!important;
+  opacity:0!important;
 }
 
 .site-layout-content {
@@ -148,16 +154,16 @@
 
 .dependency-list{
   width: 400px;
-  background-color: white;
   position: absolute;
-  right: 70px;
+  left: 50px;
   z-index: 40;
 }
+
 .filterButton{
   position: absolute;
   font-size: 16px;
   font-weight: 400;
-  left: 50px;
+  right: 70px;
   /* background-color:#64C19A; */
   /* border-color: transparent; */
   z-index: 100;
@@ -176,7 +182,7 @@
   background: #fff;
   text-align: center;
   border: 1px solid #ddd;
-  z-index: 10;
+  z-index: 100;
   transition: all 0.2s ease-out;
   /* Prevent tooltip from receiving the mouse events we will be implementing */
   pointer-events: none;
@@ -444,7 +450,7 @@ p{
 .dataInfo{
   display: flex;
   flex-direction: column;
-  font-weight: 600;
+  font-weight: 500;
   font-size: 12px;
   color: hsla(0,0%,0%, .4);
   margin-right:20px;
@@ -452,7 +458,7 @@ p{
 
 .dataInfo span{
   font-size: 24px;
-  font-weight: 400;
+  font-weight: 600;
   margin-bottom: -6px;
   color: hsla(0,0%,0%, .6);
 }
@@ -465,8 +471,10 @@ p{
 }
 .dependencies h3{
    color: hsla(0,0%,0%, .7);
-   font-size: 14px;
+   font-size: 12px;
+   font-weight: 400;
    margin: 0;
+   opacity: 0.4;
 }
 
 .bloated{
@@ -477,7 +485,8 @@ p{
 }
 .bloated h3{
   color:hsla(2,79%,68%,.7);
-  font-size: 14px;
+  font-size: 12px;
+  font-weight: 400;
   margin: 0;
 }
 
@@ -832,6 +841,7 @@ line.Axis__line {
 #legend{
   position: absolute;
     z-index: 10;
+    background: rgba(255,255,255,0.7);
 }
 
 .dashed{
@@ -863,6 +873,9 @@ line.Axis__line {
   height:30px;
 }
 
+.ant-tree{
+  background: rgba(255,255,255,0.8);
+}
 .ant-tree .ant-tree-node-content-wrapper.ant-tree-node-selected {
   background-color: hsla(2,79%,68%,.5);
 }

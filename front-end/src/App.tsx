@@ -29,8 +29,6 @@ function App() {
       <MainMenu />
       <Layout className="layout">
 
-        <SideMenu />
-
         <Content>
           <Switch>
             <Route exact path="/about" component={About} />
@@ -42,7 +40,7 @@ function App() {
           </Switch>
 
         </Content>
-
+        <SideMenu />
         {/* <Footer>
         </Footer> */}
 

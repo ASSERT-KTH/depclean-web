@@ -4,7 +4,11 @@ import { useAppState } from "./AppStateContext";
 import { formatTree, reduceChildren, filterDeleted, mapKey } from "./utils/treeAccess";
 import { PlusOutlined, MinusOutlined } from '@ant-design/icons'
 
-export const DependencyList = () => {
+interface dependencyList {
+    height: number
+}
+
+export const DependencyList = ({ height }: React.PropsWithChildren<dependencyList>) => {
     //get the main state
     const { state, dispatch } = useAppState();
     //Get all the nodes
@@ -24,15 +28,15 @@ export const DependencyList = () => {
     return (
         <div className="dependency-list">
             <div className="flex flex-center">
-                <h3 style={{ margin: "0" }}>Dependency list</h3>
-                <Button onClick={() => handleClick()} className="pull-left" icon={!viewDependencyList ? <PlusOutlined /> : <MinusOutlined />}></Button>
+                <Button onClick={() => handleClick()} className="" icon={!viewDependencyList ? <PlusOutlined /> : <MinusOutlined />}></Button>
+                <h3 style={{ margin: "0 0 0 15px" }}>Dependency list</h3>
             </div>
             {viewDependencyList ?
                 <Tree
                     showLine={false}
                     showIcon={false}
                     treeData={treeData}
-                    height={500}
+                    height={height}
                     defaultExpandAll={true}
                     selectable={true}
                     multiple={true}
