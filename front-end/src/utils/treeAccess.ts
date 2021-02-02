@@ -303,7 +303,7 @@ const usageRagioColor = (nodes: any) => {
 
 }
 
-const getUniqueArray = (data: any) => {
+export const getUniqueArray = (data: any) => {
     const groupId: string[] = data.map((d: any) => d.data.groupId);
     return Array.from(new Set(groupId))
 }

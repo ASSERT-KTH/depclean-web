@@ -151,6 +151,7 @@
   background-color: white;
   position: absolute;
   right: 70px;
+  z-index: 40;
 }
 .filterButton{
   position: absolute;
@@ -831,12 +832,6 @@ line.Axis__line {
 #legend{
   position: absolute;
     z-index: 10;
-    top: 0;
-    left: 15%;
-    flex-direction: column;
-    height: 60px;
-    width: 410px;
-    flex-wrap: wrap; 
 }
 
 .dashed{
@@ -856,7 +851,7 @@ line.Axis__line {
   margin-left:5px;
 }
 .color-ratio{
-  padding-top:5px;
+  width:100%
 }
 .color-ratio span{
   font-size:12px;
@@ -870,4 +865,20 @@ line.Axis__line {
 
 .ant-tree .ant-tree-node-content-wrapper.ant-tree-node-selected {
   background-color: hsla(2,79%,68%,.5);
+}
+
+.legend-top{
+  top: 0;
+  left: 15%;
+  flex-direction: column;
+  height: 60px;
+  width: 410px;
+  flex-wrap: wrap; 
+}
+.legend-right{
+  top: 70px;
+  right: 10px;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 190px;
 }
