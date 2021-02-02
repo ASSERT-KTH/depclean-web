@@ -75,6 +75,9 @@ export const recordHeightWidth = (node: any) => {
 //filter ommited nodes and test
 export const filterOmmitedandTest = (node: any) => node.data.type !== "omitted" && node.data.type !== "test";
 
+export const filterDeleted = (node: any) => node.data.deleted === false;
+
+
 //adds padding to the Partition nodes in betweeen
 export const addNewSize = (hightPercent: number, width: number, height: number) => {
     //return mapping function

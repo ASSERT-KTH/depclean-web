@@ -69,7 +69,9 @@ export const HomeViz = () => {
                     data={filtered}
                     dimensions={dimensions}
                 />
-                <DependencyList />
+                <DependencyList
+                    height={dimensions.boundedHeight - 60}
+                />
 
             </Row>
         </div>

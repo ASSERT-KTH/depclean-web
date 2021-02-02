@@ -4,14 +4,17 @@ import { dependencyPallete, ratioColor, getCGenerator, getUniqueArray } from "sr
 import { LegendColor } from "src/LegendColor";
 import { LegendRatio } from 'src/LegendRatio';
 import { LegendGroup } from 'src/LegendGroup';
-import { filterOmmitedandTest } from 'src/utils/horizontalTree';
+import { filterOmmitedandTest, filterDeleted } from 'src/utils/horizontalTree';
 
 export const Legend = () => {
     //get the main state
     const { state } = useAppState();
     //Get all the nodes
     const { colorSelected, filtered } = state;
-    const nodes = colorSelected === "GROUP_ID" ? filtered.descendants().filter(filterOmmitedandTest) : null;
+    const nodes = colorSelected === "GROUP_ID" ? filtered.descendants()
+        .filter(filterOmmitedandTest)
+        .filter(filterDeleted)
+        : null;
 
     const colorLegend = colorSelected === "DEPENDENCY_TYPE" ?
         <LegendColor pallete={dependencyPallete} /> :
