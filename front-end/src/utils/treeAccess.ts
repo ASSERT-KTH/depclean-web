@@ -207,7 +207,20 @@ const noColor = () => {
     // return (val: number) => colorGenerator(val.toString());
     return "#64C19A"
 }
-export const noColorNode = (type: string) => "#eef3f6";
+const noLinkColor = (d: any) => "#eef3f6";
+
+const linkBloatedColor = (d: any) => {
+    return d.data.status === "bloated" ? "#FFD8D8" : "#eef3f6"
+};
+
+export const getLinkColorGenerator = (colorSelected: "NONE" | "DEPENDENCY_TYPE" | "USAGE_RATIO" | "GROUP_ID") => {
+    switch (colorSelected) {
+        case "DEPENDENCY_TYPE":
+            return linkBloatedColor;
+        default:
+            return noLinkColor;
+    }
+}
 
 
 export const dependencyPallete: colorPallete[] = [
@@ -290,13 +303,22 @@ const usageRagioColor = (nodes: any) => {
 
 }
 
+const getUniqueArray = (data: any) => {
+    const groupId: string[] = data.map((d: any) => d.data.groupId);
+    return Array.from(new Set(groupId))
+}
+
 const groupIDColor = (data: any) => {
-    const total = data.length;
-    const colors = data.map((d: string, i: number) => {
+    //get array with unique d.data.groupId
+    const groupIds = getUniqueArray(data);
+
+    //make the calculus according to that
+    const total: any = groupIds.length - 1;
+    const colors = groupIds.map((d: string, i: number) => {
         return d3.interpolateSpectral(i / total);
     })
     return d3.scaleOrdinal()
-        .domain(data)
+        .domain(groupIds)
         .range(colors);
 }
 
