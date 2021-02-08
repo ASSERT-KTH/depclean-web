@@ -12,14 +12,14 @@ Visualization of the Maven-core dependency, with bloated or used dependencies in
 
 <img src="https://github.com/castor-software/depclean-web/blob/main/.img/dependencyTreeExample.jpg" align="left" alt="DepClean visualization of dependency tree"/>
 
-# Installing and running the backen-end
+# Installing and running the back-end
 Run the back-end using docker. First, pull the new docker image. Secondly, run the image. 
 ```bash
 sudo docker pull cesarsotovalero/depclean-web:cors
 sudo docker run -p 8000:8081 cesarsotovalero/depclean-web:cors
 ```
 
-# Installing and running the font-end
+# Installing and running the front-end
 
 In a terminal clone the repository and swith to the cloned folder
 
