@@ -1,6 +1,6 @@
 import React from 'react';
 import { useAppState } from "src/AppStateContext";
-import { dependencyPallete, ratioColor, getCGenerator, getUniqueArray } from "src/utils/treeAccess";
+import { dependencyPallete, ratioColor, getCGenerator, sortByNumDependencies, getProviders, mapGroupId } from "src/utils/treeAccess";
 import { LegendColor } from "src/LegendColor";
 import { LegendRatio } from 'src/LegendRatio';
 import { LegendGroup } from 'src/LegendGroup';
@@ -24,13 +24,15 @@ export const Legend = () => {
                 <LegendGroup
                     colorPallete={getCGenerator(colorSelected, nodes)}
                     rectSize={10}
-                    groupIds={getUniqueArray(nodes)}
+                    groupIds={Object.entries(nodes
+                        .reduce(getProviders, {}))
+                        .map(mapGroupId)
+                        .sort(sortByNumDependencies)}
                 /> :
                 <></>;
     return <div
         id={"legend"}
         className={"flex legend-right"}>
-
         {colorLegend}
     </div>
 }

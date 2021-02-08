@@ -394,14 +394,23 @@ export const getColorDataAccessor = (colorSelected: string) => {
 }
 
 //return all unique providers and the number of dependencies
-export const getProviders = (nodes: d3.HierarchyRectangularNode<unknown>[], groupId: string[]) => {
-    return (groupId: any, node: d3.HierarchyRectangularNode<unknown>) => {
-        //ask first if it does not exist
-        return {
-            ...groupId
-        }
+//fist create an object with the groupId as keys and value number
+//then map those to an array
+export const getProviders = (providers: any, node: d3.HierarchyRectangularNode<any>) => {
+    providers[node.data.groupId] = providers[node.data.groupId] + 1 || 1;
+    return {
+        ...providers
     };
 }
+
+export const mapGroupId = (provider: any): groupId => {
+    return {
+        name: provider[0],
+        dependencies: provider[1]
+    }
+}
+
+export const sortByNumDependencies = (a: any, b: any) => b.dependencies - a.dependencies;
 
 
 export const getArtifactsId = (nodes: d3.HierarchyRectangularNode<unknown>[]): string[] => {
@@ -413,7 +422,6 @@ export const getArtifactsId = (nodes: d3.HierarchyRectangularNode<unknown>[]): s
     //GET ALL THE CATEGORIES AND COUNTED ITEMS
     return nodes.reduce(countCategories, [])
 }
-
 //hightlight all the direct dependencies and all its transitive that are bloated
 export const debloatDirect = (children: artifact[]): artifact[] => {
     //get all the direct bloated
