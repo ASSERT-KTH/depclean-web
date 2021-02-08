@@ -68,6 +68,13 @@ export const getGeneralReport = (project: artifact) => {
             },
 
         },
+        totalDependencies: {
+            title: "Dependencies",
+            totalDependencies: {
+                name: "",
+                num: directUsed.length + inheritedUsed.length + transitiveUsed.length + directBloated.length + transitiveBloated.length + inheritedBloated.length
+            }
+        },
         size: {
             title: "Project size",
             totalSize: {

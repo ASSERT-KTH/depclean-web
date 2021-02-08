@@ -2,7 +2,7 @@
 import * as d3 from 'd3';
 // import { isConstructorDeclaration } from 'typescript';
 import { v4 as uuidv4 } from 'uuid';
-import { artifact, colorPallete } from 'src/interfaces/interfaces';
+import { artifact, colorPallete, groupId } from 'src/interfaces/interfaces';
 import { formatFileSize } from 'src/Components/tooltip';
 // import { getNodes } from 'src/utils/TreeToArray';
 //Creates a new type that includes depClean
@@ -393,8 +393,15 @@ export const getColorDataAccessor = (colorSelected: string) => {
     }
 }
 
-
-
+//return all unique providers and the number of dependencies
+export const getProviders = (nodes: d3.HierarchyRectangularNode<unknown>[], groupId: string[]) => {
+    return (groupId: any, node: d3.HierarchyRectangularNode<unknown>) => {
+        //ask first if it does not exist
+        return {
+            ...groupId
+        }
+    };
+}
 
 
 export const getArtifactsId = (nodes: d3.HierarchyRectangularNode<unknown>[]): string[] => {

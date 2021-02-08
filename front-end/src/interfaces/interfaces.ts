@@ -105,3 +105,8 @@ export interface project {
     depCleanReport: report,
     description: string,
 }
+
+export interface groupId {
+    name: string,
+    dependencies: number
+}
