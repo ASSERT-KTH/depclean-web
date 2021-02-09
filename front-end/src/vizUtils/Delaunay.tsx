@@ -11,16 +11,18 @@ interface delaunayProps {
     yAccessor(d: any): number,
     onEnter(d: any): void,
     onLeave(d: any): void,
+    hide?: boolean
 
 }
 
-export const DelaunayGrid = ({
+export const DelaunayGrid = React.memo(({
     data,
     dimensions,
     xAccessor,
     yAccessor,
     onEnter,
-    onLeave
+    onLeave,
+    hide = true
 }: React.PropsWithChildren<delaunayProps>) => {
 
     // Create a new Delaunay triangulation passing in our dataset, x accessor function, and y accessor function
@@ -45,7 +47,7 @@ export const DelaunayGrid = ({
                         key={uuidv4()}
                         d={voronoi.renderCell(i)}
                         fill="transparent"
-                        stroke="transparent"
+                        stroke={hide ? "transparent" : "red"}
                         onMouseEnter={() => mouseEnter(d)}
                         onMouseLeave={() => mouseLeave(d)}
                     />
@@ -54,4 +56,4 @@ export const DelaunayGrid = ({
 
         </g>
     )
-}
+})

@@ -8,7 +8,7 @@ interface LinkProps {
     colorAccessor: any
 }
 
-export const PartitionLinks = ({
+export const PartitionLinks = React.memo(({
     data,
     linkAccesor,
     classAccessor,
@@ -28,4 +28,4 @@ export const PartitionLinks = ({
 
         </g>
     )
-}
+})

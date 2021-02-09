@@ -32,7 +32,7 @@ interface HorizontalTreeProps {
     dimensions: dimension,
 }
 
-export const HorizontalPartitionTree = ({
+export const HorizontalPartitionTree = React.memo(({
     data,
     dimensions
 }: React.PropsWithChildren<HorizontalTreeProps>) => {
@@ -115,19 +115,18 @@ export const HorizontalPartitionTree = ({
 
                         <PartitionNode
                             data={nodes}
-                            onEnter={mouseEnter}
-                            onLeave={mouseLeave}
                             colorAccessor={color}
                             showTypes={colorSelected === "USAGE_RATIO"}
+                        // onEnter={mouseEnter}
+                        // onLeave={mouseLeave}
                         />
 
-                        {/* OMITTED LINKS */}
+
                         {viewOmitted ?
                             <Links
                                 data={ommitedLinks}
                                 linkAccesor={linkradial}
                                 classAccessor={radialClassAccessor}
-                                key={uuidv4()}
                             /> : <></>}
 
                         {ommitedLabels}
@@ -140,10 +139,11 @@ export const HorizontalPartitionTree = ({
                         yAccessor={midYAccessor}
                         onEnter={mouseEnter}
                         onLeave={mouseLeave}
+                        hide={true}
                     />
 
                 </svg>
             </div>
         </Col>
     )
-}
+})

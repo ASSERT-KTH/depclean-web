@@ -8,20 +8,19 @@ import { PartitionArea } from 'src/vizUtils/PartitionArea';
 
 interface paritionNodeProps {
     data: any[],
-    onEnter: any,
-    onLeave: any,
+    onEnter?: any,
+    onLeave?: any,
     colorAccessor: any,
     showTypes?: boolean
 }
 
-export const PartitionNode = ({
+export const PartitionNode = React.memo(({
     data,
     onEnter,
     onLeave,
     colorAccessor,
     showTypes = true
 }: React.PropsWithChildren<paritionNodeProps>) => {
-
 
     const nodes = data.map((node) => (
         <g transform={"translate(" + yAccessor(node) + "," + xAccessor(node) + ")"} key={uuidv4()}>
@@ -35,10 +34,17 @@ export const PartitionNode = ({
                 width={hAccessor(node)}
                 height={wAccessor(node)}
                 fill={colorAccessor(node)}
-                onMouseEnter={() => onEnter(node)}
-                onMouseLeave={() => onLeave(node)}
+            // onMouseEnter={() => onEnter(node)}
+            // onMouseLeave={() => onLeave(node)}
             />
-            {!showTypes ? <></> : <PartitionArea node={node} />}
+            {!showTypes ? <></> :
+                <PartitionArea
+                    types={node.data.allTypes}
+                    usedTypes={node.data.usedTypes}
+                    height={node.h}
+                    width={node.w}
+                    yDisplacement={yDisplacedAccessor(node)}
+                />}
         </g>
     ))
 
@@ -46,4 +52,4 @@ export const PartitionNode = ({
     return <>
         {nodes}
     </>
-}
+})

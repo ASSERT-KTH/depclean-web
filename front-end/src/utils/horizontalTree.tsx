@@ -2,6 +2,7 @@
 import React from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import * as d3 from 'd3';
+import { valueAccessor } from 'src/accessors/squareAccessors';
 
 export const parseOmitedLinks = (data: any) => {
     return data.map((d: any) => <text
@@ -119,3 +120,28 @@ export const mapToPartition = ((usedTypes: string[]) => {
     })
 })
 
+
+export const getTreeMap = (types: string[], usedTypes: string[], height: number, width: number) => {
+
+    const allTypes = types
+        .map(mapToPartition(usedTypes));
+    //first get the hierarchy
+    const data = d3.hierarchy({
+        name: "root",
+        children: allTypes
+    })
+        .sum(valueAccessor)
+        .sort((a: any, b: any) => a.value - b.value)
+    //we can sort it if needed
+    //get the partition tree
+    const treeMap = d3.treemap()
+        .tile(d3.treemapBinary)
+        .size([height, width])
+        .round(true)
+        .padding(1)
+
+    //get all the nodes descendants
+    return treeMap(data)
+        .descendants()
+        .slice(1)
+}
