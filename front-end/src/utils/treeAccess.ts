@@ -412,7 +412,6 @@ export const mapGroupId = (provider: any): groupId => {
 
 export const sortByNumDependencies = (a: any, b: any) => b.dependencies - a.dependencies;
 
-
 export const getArtifactsId = (nodes: d3.HierarchyRectangularNode<unknown>[]): string[] => {
     //CREATE THE OBJECT
     const countCategories = (categoryArr: any, node: any) => {

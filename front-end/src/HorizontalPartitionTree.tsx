@@ -13,6 +13,7 @@ import {
     filterOmmitedandTest, addNewSize,
 
 } from "src/utils/horizontalTree";
+import { sizeAccesorMin } from 'src/accessors/treeAccessors'
 import {
     linkAccesor, linksClassAccessor,
     radialClassAccessor, linkXaccessor,
@@ -65,9 +66,8 @@ export const HorizontalPartitionTree = ({
     //hide the tooltip on mouse leave
     const mouseLeave = () => setTpOpacity(0);
 
-
     //must have hierarchy data and make the sum of the size
-    const partitionData = getSizeHierarchy(data);
+    const partitionData = getSizeHierarchy(data, sizeAccesorMin);
     //get the partition  tree
     const treeSize: number[] = [
         dimensions.boundedHeight - dimensions.marginTop - dimensions.marginBottom,
@@ -92,12 +92,9 @@ export const HorizontalPartitionTree = ({
     const linkradial = d3.linkVertical()
         .x(linkXaccessor)
         .y(linkYaccessor);
-
     //GRAPH LINKS LABLES 
     const ommitedLinks = viewOmitted ? getOmmitedLinks(partitionData.descendants()) : <></>;
     const ommitedLabels = viewOmitted ? parseOmitedLinks(ommitedLinks) : <></>
-
-
 
     return (
         <Col span="20" >
@@ -121,6 +118,7 @@ export const HorizontalPartitionTree = ({
                             onEnter={mouseEnter}
                             onLeave={mouseLeave}
                             colorAccessor={color}
+                            showTypes={colorSelected === "USAGE_RATIO"}
                         />
 
                         {/* OMITTED LINKS */}

@@ -4,23 +4,28 @@ import { classAccessor, hAccessor, wAccessor, yDisplacedAccessor } from 'src/acc
 import {
     xAccessor, yAccessor
 } from 'src/accessors/squareAccessors';
+import { PartitionArea } from 'src/vizUtils/PartitionArea';
+
 interface paritionNodeProps {
     data: any[],
     onEnter: any,
     onLeave: any,
-    colorAccessor: any
+    colorAccessor: any,
+    showTypes?: boolean
 }
 
 export const PartitionNode = ({
     data,
     onEnter,
     onLeave,
-    colorAccessor
+    colorAccessor,
+    showTypes = true
 }: React.PropsWithChildren<paritionNodeProps>) => {
 
 
     const nodes = data.map((node) => (
         <g transform={"translate(" + yAccessor(node) + "," + xAccessor(node) + ")"} key={uuidv4()}>
+
             <rect
                 className={classAccessor(node)}
                 key={uuidv4()}
@@ -33,6 +38,7 @@ export const PartitionNode = ({
                 onMouseEnter={() => onEnter(node)}
                 onMouseLeave={() => onLeave(node)}
             />
+            {!showTypes ? <></> : <PartitionArea node={node} />}
         </g>
     ))
 

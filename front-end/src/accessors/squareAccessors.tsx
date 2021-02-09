@@ -11,3 +11,6 @@ export const tittleAccessor = (d: any) => d.data.parent !== null ? d.data.parent
 const depthAccessor = (d: any) => d.depth;
 const color = d3.scaleOrdinal(d3.schemeCategory10);
 export const colorAccessor = (d: any) => color(depthAccessor(d));
+
+//Partition value accessor
+export const valueAccessor = (d: any) => d.value;

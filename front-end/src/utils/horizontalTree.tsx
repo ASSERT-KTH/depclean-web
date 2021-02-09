@@ -2,7 +2,6 @@
 import React from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import * as d3 from 'd3';
-import { sizeAccesorMin } from 'src/accessors/treeAccessors'
 
 export const parseOmitedLinks = (data: any) => {
     return data.map((d: any) => <text
@@ -61,9 +60,9 @@ export const getParitionTree = (size: number[], padding: number) => {
 }
 
 //Sum the data and sort 
-export const getSizeHierarchy = (data: any) => {
+export const getSizeHierarchy = (data: any, accessor: any) => {
     return data
-        .sum(sizeAccesorMin)
+        .sum(accessor)
     // .sort((a: any, b: any) => a.height - b.height || a.value - b.value)
 }
 
@@ -109,4 +108,14 @@ export const addPadding = (padding: number) => {
         return node;
     }
 }
+//gets a type with string and returns an object with the name:string and value:1
+export const mapToPartition = ((usedTypes: string[]) => {
+    return ((type: string) => {
+        return {
+            name: type,
+            used: usedTypes.includes(type),
+            value: 1
+        }
+    })
+})
 

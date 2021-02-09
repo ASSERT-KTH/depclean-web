@@ -24,10 +24,10 @@ export const Legend = () => {
                 <LegendGroup
                     colorPallete={getCGenerator(colorSelected, nodes)}
                     rectSize={10}
-                    groupIds={Object.entries(nodes
-                        .reduce(getProviders, {}))
-                        .map(mapGroupId)
-                        .sort(sortByNumDependencies)}
+                    groupIds={Object.entries(nodes //reduce the nodes to an object with the number of times a groupId repeats
+                        .reduce(getProviders, {})) //transform it into an array
+                        .map(mapGroupId) //map it to resestructure the info into an array with objects
+                        .sort(sortByNumDependencies)} //sort it from highest to lowest
                 /> :
                 <></>;
     return <div
