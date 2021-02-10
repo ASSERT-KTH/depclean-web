@@ -49,7 +49,6 @@ export const HorizontalPartitionTree = React.memo(({
     const [toolTipPos, setToolTipPos] = useState({ x: 0, y: 0 });
     const [tpOpacity, setTpOpacity] = useState(0)
 
-
     const mouseEnter = (d: any) => {
         setToolTipValue(
             <div>

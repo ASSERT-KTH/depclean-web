@@ -7,7 +7,7 @@ import {
 // import { fetchFromFile } from './utils/dataRetrieve';
 import { artifact, AppState } from 'src/interfaces/interfaces';
 import * as d3 from 'd3';
-import { data } from 'src/utils/dataDummy';
+import { flink as data } from 'src/utils/dataDummy';
 
 interface AppStateContextProps {
     state: AppState,
