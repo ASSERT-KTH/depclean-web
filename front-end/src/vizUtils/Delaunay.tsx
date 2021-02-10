@@ -15,7 +15,7 @@ interface delaunayProps {
 
 }
 
-export const DelaunayGrid = React.memo(({
+export const DelaunayGrid = ({
     data,
     dimensions,
     xAccessor,
@@ -24,7 +24,7 @@ export const DelaunayGrid = React.memo(({
     onLeave,
     hide = true
 }: React.PropsWithChildren<delaunayProps>) => {
-
+    console.log("render DELAUNAY")
     // Create a new Delaunay triangulation passing in our dataset, x accessor function, and y accessor function
     const delaunay = Delaunay.from(data, (d: any) => yAccessor(d), (d: any) => xAccessor(d))
 
@@ -56,4 +56,4 @@ export const DelaunayGrid = React.memo(({
 
         </g>
     )
-})
+}

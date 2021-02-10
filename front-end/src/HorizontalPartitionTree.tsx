@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState, useMemo } from 'react';
 import { Col } from 'antd';
 import * as d3 from 'd3';
 import { v4 as uuidv4 } from 'uuid';
@@ -24,76 +24,83 @@ import { dimension } from 'src/interfaces/interfaces';
 import { parseOmitedLinks, getOmmitedLinks } from "src/utils/horizontalTree";
 import { DelaunayGrid } from 'src/vizUtils/Delaunay';
 import { midXAccessor, midYAccessor } from 'src/accessors/treeAccessors';
-// import { useAppState } from "./AppStateContext";
+import { PartitionAreaNode } from 'src/PartitionAreaNode';
 
 
 interface HorizontalTreeProps {
-    data: d3.HierarchyNode<object[]>,
     dimensions: dimension,
 }
 
-export const HorizontalPartitionTree = React.memo(({
-    data,
+export const HorizontalPartitionTree = ({
     dimensions
 }: React.PropsWithChildren<HorizontalTreeProps>) => {
     //get the main state
     const { state } = useAppState();
-    //Get all the nodes
-    const {
-        colorSelected,
-        viewLinks,
-        viewOmitted
-    } = state;
+    const { colorSelected, viewLinks, viewOmitted, filtered } = state;
 
     const [toolTipValue, setToolTipValue] = useState(<div></div>);
     const [toolTipPos, setToolTipPos] = useState({ x: 0, y: 0 });
-    const [tpOpacity, setTpOpacity] = useState(0)
+    const [tpOpacity, setOpacity] = useState(0)
 
-    const mouseEnter = (d: any) => {
-        setToolTipValue(
-            <div>
-                <div className="toolTip-tittle">{d.data.artifactId}</div>
-                <div className="toolTip-sub">{d.data.version}</div>
-                <div className="toolTip-sub">{d.data.groupId}</div>
-                <div className="toolTip-sub">Scope: {d.data.scope}</div>
-                <div className="toolTip-sub">Usage ratio: {d.data.usageRatio === 0 ? 0 : d3.format(".5f")(d.data.usageRatio)}%</div>
-                <div className="toolTip-sub">Size: <span className="toolTip-value">{formatFileSize(d.data.size, 2)}</span></div>
-            </div>)
-        setToolTipPos({ x: dimensions.marginLeft + (d.y0 + d.h), y: d.x0 + d.y + dimensions.marginTop + (d.w / 2) })
-        setTpOpacity(1);
-    }
+    const mouseEnter = useCallback(
+        (d: any) => {
+            setToolTipValue(
+                <div>
+                    <div className="toolTip-tittle">{d.data.artifactId}</div>
+                    <div className="toolTip-sub">{d.data.version}</div>
+                    <div className="toolTip-sub">{d.data.groupId}</div>
+                    <div className="toolTip-sub">Scope: {d.data.scope}</div>
+                    <div className="toolTip-sub">Usage ratio: {d.data.usageRatio === 0 ? 0 : d3.format(".5f")(d.data.usageRatio)}%</div>
+                    <div className="toolTip-sub">Size: <span className="toolTip-value">{formatFileSize(d.data.size, 2)}</span></div>
+                </div>)
+            setToolTipPos({ x: dimensions.marginLeft + (d.y0 + d.h), y: d.x0 + d.y + dimensions.marginTop + (d.w / 2) })
+            setOpacity(1);
+        },
+        [dimensions.marginLeft, dimensions.marginTop]
+    )
     //hide the tooltip on mouse leave
-    const mouseLeave = () => setTpOpacity(0);
+    const mouseLeave = useCallback(
+        () => setOpacity(0), []
+    );
 
-    //must have hierarchy data and make the sum of the size
-    const partitionData = getSizeHierarchy(data, sizeAccesorMin);
-    //get the partition  tree
-    const treeSize: number[] = [
-        dimensions.boundedHeight - dimensions.marginTop - dimensions.marginBottom,
-        dimensions.boundedWidth * 1
-    ]
-    const partitionTree = getParitionTree(treeSize, 1)
-    //GET ALL THE NODES WITH A TREE STRUCTURE
-    //filter the nodes that are ommitted and whose type are test
-    const heightPercent = 0.8;
-    const nodes = partitionTree(partitionData)
-        .descendants()
-        .filter(filterOmmitedandTest)
-        .map(addNewSize(heightPercent, 80, dimensions.boundedHeight))
+    const nodes = useMemo(
+        () => {
+            //must have hierarchy data and make the sum of the size
+            const partitionData = getSizeHierarchy(filtered, sizeAccesorMin);
+            //get the partition  tree
+            const treeSize: number[] = [
+                dimensions.boundedHeight - dimensions.marginTop - dimensions.marginBottom,
+                dimensions.boundedWidth * 1
+            ]
+            const partitionTree = getParitionTree(treeSize, 1)
+            //GET ALL THE NODES WITH A TREE STRUCTURE
+            //filter the nodes that are ommitted and whose type are test
+            const heightPercent = 0.8;
+            return partitionTree(partitionData)
+                .descendants()
+                .filter(filterOmmitedandTest)
+                .map(addNewSize(heightPercent, 80, dimensions.boundedHeight))
+
+        }
+        , [dimensions, filtered])
 
     // const getIds = getArtifactsId(nodes)
-    const colorDataAccessor: (d: any) => string = getColorDataAccessor(colorSelected)
-    const colorGenerator: any = getCGenerator(colorSelected, nodes);
-    const color: any = (d: any) => colorGenerator(colorDataAccessor(d));
+    const color = useMemo(
+        () => {
+            const colorDataAccessor: (d: any) => string = getColorDataAccessor(colorSelected)
+            const colorGenerator: any = getCGenerator(colorSelected, nodes);
+            return (d: any) => colorGenerator(colorDataAccessor(d));
+        }, [colorSelected, nodes]
+    )
 
-    const linkColorGenerator: any = getLinkColorGenerator(colorSelected)
+    // const linkColorGenerator: any = getLinkColorGenerator(colorSelected)
 
-    const linkradial = d3.linkVertical()
-        .x(linkXaccessor)
-        .y(linkYaccessor);
+    // const linkradial = d3.linkVertical()
+    //     .x(linkXaccessor)
+    //     .y(linkYaccessor);
     //GRAPH LINKS LABLES 
-    const ommitedLinks = viewOmitted ? getOmmitedLinks(partitionData.descendants()) : <></>;
-    const ommitedLabels = viewOmitted ? parseOmitedLinks(ommitedLinks) : <></>
+    // const ommitedLinks = viewOmitted ? getOmmitedLinks(partitionData.descendants()) : <></>;
+    // const ommitedLabels = viewOmitted ? parseOmitedLinks(ommitedLinks) : <></>
 
     return (
         <Col span="20" >
@@ -104,21 +111,27 @@ export const HorizontalPartitionTree = React.memo(({
                         transform={"translate(" + dimensions.marginLeft + "," + dimensions.marginTop + ")"}
                         key={uuidv4()}>
 
-                        {!viewLinks ? <></> :
+                        {/* {!viewLinks ? <></> :
                             <PartitionLinks
                                 data={nodes.slice(1)}
                                 linkAccesor={linkAccesor(heightPercent)}
                                 classAccessor={linksClassAccessor}
                                 colorAccessor={linkColorGenerator}
-                            />}
+                            />} */}
 
                         <PartitionNode
                             data={nodes}
                             colorAccessor={color}
-                            showTypes={colorSelected === "USAGE_RATIO"}
                         // onEnter={mouseEnter}
                         // onLeave={mouseLeave}
                         />
+                        {/* {colorSelected === "USAGE_RATIO" ?
+                            <PartitionAreaNode
+                                data={nodes}
+                                colorAccessor={color}
+                            /> : <></>
+                        }
+
 
 
                         {viewOmitted ?
@@ -128,21 +141,21 @@ export const HorizontalPartitionTree = React.memo(({
                                 classAccessor={radialClassAccessor}
                             /> : <></>}
 
-                        {ommitedLabels}
+                        {ommitedLabels} */}
                     </g>
 
-                    <DelaunayGrid
+                    {/* <DelaunayGrid
                         data={nodes}
                         dimensions={dimensions}
                         xAccessor={midXAccessor}
                         yAccessor={midYAccessor}
                         onEnter={mouseEnter}
                         onLeave={mouseLeave}
-                        hide={true}
-                    />
+                        hide={false}
+                    /> */}
 
                 </svg>
             </div>
         </Col>
     )
-})
+}

@@ -110,3 +110,59 @@ export interface groupId {
     name: string,
     dependencies: number
 }
+
+export type Action =
+    | {
+        type: "SELECT_DEPENDENCY"
+        payload: string[]
+    }
+    | {
+        type: "SELECT_BLOAT"
+        payload: string[]
+    }
+    | {
+        type: "SELECT_VIEW"
+        payload: string[]
+    }
+    | {
+        type: "SELECT_SCOPE"
+        payload: string[]
+    }
+    | {
+        type: "SELECT_COLOR"
+        payload: "NONE" | "DEPENDENCY_TYPE" | "USAGE_RATIO" | "GROUP_ID",
+    }
+    | {
+        type: "LOAD_LOCAL_FILE"
+        payload: any
+    }
+    | {
+        type: "VIEW_DEPENDENCY_LIST"
+        payload: boolean
+    }
+    | {
+        type: "RESET_FILTERS"
+        payload: null
+    }
+    | {
+        type: "VIEW_OMITTED"
+        payload: boolean
+    }
+    | {
+        type: "VIEW_LINKS"
+        payload: boolean
+    }
+    | {
+        type: "DEBLOAT_PROJECT"
+        payload: number
+    }
+    | {
+        type: "HIDE_MENU"
+        payload: boolean
+    } | {
+        type: "FILTER_USED_DEPENDENCIES"
+        payload: string[]
+    } | {
+        type: "FILTER_BLOATED_DEPENDENCIES"
+        payload: string[]
+    }

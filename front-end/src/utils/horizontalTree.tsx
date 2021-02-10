@@ -67,10 +67,10 @@ export const getSizeHierarchy = (data: any, accessor: any) => {
     // .sort((a: any, b: any) => a.height - b.height || a.value - b.value)
 }
 
-export const recordHeightWidth = (node: any) => {
+// export const recordHeightWidth = (node: any) => {
 
-    return node;
-}
+//     return node;
+// }
 
 //filter ommited nodes and test
 export const filterOmmitedandTest = (node: any) => node.data.type !== "omitted" && node.data.type !== "test";

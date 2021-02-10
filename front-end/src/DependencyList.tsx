@@ -3,6 +3,7 @@ import { Tree, Button } from 'antd';
 import { useAppState } from "./AppStateContext";
 import { formatTree, reduceChildren, filterDeleted, mapKey } from "./utils/treeAccess";
 import { PlusOutlined, MinusOutlined } from '@ant-design/icons'
+import { useAppState as useAppMenuState } from "src/AppMenuStateContext";
 
 interface dependencyList {
     height: number
@@ -10,9 +11,12 @@ interface dependencyList {
 
 export const DependencyList = ({ height }: React.PropsWithChildren<dependencyList>) => {
     //get the main state
-    const { state, dispatch } = useAppState();
-    //Get all the nodes
-    const { filteredProject, viewDependencyList } = state;
+    const { state } = useAppState();
+    const { filteredProject } = state;
+
+    const { menuState, menuDispatch } = useAppMenuState();
+    const { viewDependencyList } = menuState;
+
     const treeData = formatTree([filteredProject]);
     const selectedKeys = treeData[0].children
         .reduce(reduceChildren, [])
@@ -20,9 +24,8 @@ export const DependencyList = ({ height }: React.PropsWithChildren<dependencyLis
         .map(mapKey)
 
     const handleClick = () => {
-        dispatch({ type: "VIEW_DEPENDENCY_LIST", payload: !viewDependencyList });
+        menuDispatch({ type: "VIEW_DEPENDENCY_LIST", payload: !viewDependencyList });
     }
-
 
 
     return (

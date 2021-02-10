@@ -7,7 +7,7 @@ interface LinkProps {
     classAccessor(d: any): string,
 }
 
-export const Links = React.memo(({
+export const Links = ({
     data,
     linkAccesor,
     classAccessor
@@ -25,4 +25,4 @@ export const Links = React.memo(({
 
         </g>
     )
-})
+}

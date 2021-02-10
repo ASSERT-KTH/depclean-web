@@ -5,7 +5,8 @@ import { bloated, used, colorOptions, omitted, link } from 'src/Components/homeV
 import { CategoryCheckbox } from './CategoryCheckbox';
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 import { CategoryRadialBox } from './CategoryRadialBox';
-import { useAppState } from "./AppStateContext";
+import { useAppState } from "src/AppStateContext";
+import { useAppState as useMenuAppState } from "src/AppMenuStateContext";
 import { v4 as uuidv4 } from 'uuid';
 
 const { Sider } = Layout;
@@ -14,6 +15,7 @@ const { Sider } = Layout;
 export const SideMenu = () => {
     //get the main state
     const { state, dispatch } = useAppState();
+    const { menuState } = useMenuAppState();
     //Get all the nodes
     const {
         filteredDependencies,
@@ -21,9 +23,9 @@ export const SideMenu = () => {
         filteredBloated,
         // textDisplay,
         viewOmitted,
-        hideMenu,
         viewLinks
     } = state;
+    const { viewFilter } = menuState;
 
     const location = useLocation()
 
@@ -34,7 +36,7 @@ export const SideMenu = () => {
         className={"sideMenu"}
         trigger={null}
         width={200}
-        collapsed={hideMenu}
+        collapsed={viewFilter}
     >
         {/* <CategoryCheckbox
             key={uuidv4()}

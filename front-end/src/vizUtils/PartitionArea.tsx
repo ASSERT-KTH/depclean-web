@@ -1,9 +1,8 @@
 import React, { useMemo } from 'react';
-import { mapToPartition, getTreeMap } from "src/utils/horizontalTree";
+import { getTreeMap } from "src/utils/horizontalTree";
 import {
-    xAccessor, yAccessor, valueAccessor, wAccessor, hAccessor
+    xAccessor, yAccessor, wAccessor, hAccessor
 } from 'src/accessors/squareAccessors';
-import * as d3 from 'd3';
 import { v4 as uuidv4 } from 'uuid';
 import { ratioColor } from 'src/utils/treeAccess';
 //import { yDisplacedAccessor } from 'src/accessors/partitionNodeAccessor'
