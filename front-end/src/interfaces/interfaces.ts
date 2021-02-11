@@ -70,11 +70,9 @@ export interface AppState {
     colorSelected: "NONE" | "DEPENDENCY_TYPE" | "USAGE_RATIO" | "GROUP_ID",
     textDisplay: string[],
     filteredScope: string[],
-    viewDependencyList: boolean,
     viewOmitted: boolean
     debloatNum: number
     messageState: "ORIGINAL" | "DEBLOAT_DIRECT" | "DEBLOAT_ALL",
-    hideMenu: boolean,
     viewLinks: boolean
 }
 
@@ -137,10 +135,6 @@ export type Action =
         payload: any
     }
     | {
-        type: "VIEW_DEPENDENCY_LIST"
-        payload: boolean
-    }
-    | {
         type: "RESET_FILTERS"
         payload: null
     }
@@ -157,9 +151,6 @@ export type Action =
         payload: number
     }
     | {
-        type: "HIDE_MENU"
-        payload: boolean
-    } | {
         type: "FILTER_USED_DEPENDENCIES"
         payload: string[]
     } | {

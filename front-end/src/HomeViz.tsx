@@ -7,6 +7,7 @@ import { DependencyList } from './DependencyList';
 import { dimension } from 'src/interfaces/interfaces';
 import { Legend } from 'src/Legend';
 import { FilterButton } from 'src/FilterButton';
+import { AppToolTipStateProvider } from 'src/AppToolTipStateContext';
 
 export const HomeViz = () => {
     const [size, setSize] = useState({
@@ -47,7 +48,9 @@ export const HomeViz = () => {
             <Row className="vizContainer" id="DependencyTree" key={uuidv4()}>
                 <FilterButton />
                 <Legend />
-                <HorizontalPartitionTree dimensions={dimensions} />
+                <AppToolTipStateProvider>
+                    <HorizontalPartitionTree dimensions={dimensions} />
+                </AppToolTipStateProvider>
                 <DependencyList height={dimensions.boundedHeight - 60} />
             </Row>
         </div>

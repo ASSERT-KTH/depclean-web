@@ -38,14 +38,12 @@ const appData: AppState = {
     filteredScope: scopeCheckGroup,
 
     colorSelected: "NONE",
-    viewDependencyList: false,
     viewOmitted: false,
     viewLinks: true,
 
     debloatNum: 0,
     textDisplay: viewText,
     messageState: "ORIGINAL",
-    hideMenu: true,
 }
 
 
@@ -147,12 +145,7 @@ const appStateReducer = (state: AppState, action: Action): AppState => {
                 filtered: newNodes,
             }
         }
-        case "VIEW_DEPENDENCY_LIST": {
-            return {
-                ...state,
-                viewDependencyList: action.payload,
-            }
-        }
+
         case "RESET_FILTERS": {
             return {
                 ...state,
@@ -213,12 +206,7 @@ const appStateReducer = (state: AppState, action: Action): AppState => {
             }
         }
 
-        //HIDE OR SHOW THE MENU
-        case 'HIDE_MENU':
-            return {
-                ...state,
-                hideMenu: action.payload
-            }
+
         default: {
             console.log("DEFAULT")
             return state

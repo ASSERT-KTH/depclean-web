@@ -160,8 +160,8 @@ export const HorizontalTree = ({
                             dimensions={dimensions}
                             xAccessor={xAccessor}
                             yAccessor={yAccessor}
-                            onEnter={mouseEnter}
-                            onLeave={mouseLeave}
+                        // onEnter={mouseEnter}
+                        // onLeave={mouseLeave}
                         />
 
                     </g>

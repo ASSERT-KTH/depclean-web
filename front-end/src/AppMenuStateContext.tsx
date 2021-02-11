@@ -1,4 +1,4 @@
-import React, { createContext, useReducer, useContext, useState } from "react";
+import React, { createContext, useReducer, useContext } from "react";
 
 interface AppState {
     viewFilter: boolean,
