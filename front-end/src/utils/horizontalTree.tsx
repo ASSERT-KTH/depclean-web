@@ -3,6 +3,8 @@ import React from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import * as d3 from 'd3';
 import { valueAccessor } from 'src/accessors/squareAccessors';
+import { dimension } from 'src/interfaces/interfaces';
+import { getColorDataAccessor, getCGenerator } from 'src/utils/treeAccess';
 
 export const parseOmitedLinks = (data: any) => {
     return data.map((d: any) => <text
@@ -144,4 +146,26 @@ export const getTreeMap = (types: string[], usedTypes: string[], height: number,
     return treeMap(data)
         .descendants()
         .slice(1)
+}
+
+
+export const getNodesFromParitionTree = (dimensions: dimension, sizeAccesorMin: any, data: any, heightPercent: number) => {
+    const partitionData = data.sum(sizeAccesorMin)
+    //get the partition  tree
+    const treeSize: number[] = [
+        dimensions.boundedHeight - dimensions.marginTop - dimensions.marginBottom,
+        dimensions.boundedWidth * 1
+    ]
+    const partitionTree = getParitionTree(treeSize, 1)
+    //GET ALL THE NODES WITH A TREE STRUCTURE
+    return partitionTree(partitionData)
+        .descendants()
+        .filter(filterOmmitedandTest)
+        .map(addNewSize(heightPercent, 80, dimensions.boundedHeight))
+}
+
+export const getColor = (colorSelected: "NONE" | "DEPENDENCY_TYPE" | "USAGE_RATIO" | "GROUP_ID", nodes: any[]) => {
+    const colorDataAccessor: (d: any) => string = getColorDataAccessor(colorSelected)
+    const colorGenerator: any = getCGenerator(colorSelected, nodes);
+    return (d: any) => colorGenerator(colorDataAccessor(d));
 }

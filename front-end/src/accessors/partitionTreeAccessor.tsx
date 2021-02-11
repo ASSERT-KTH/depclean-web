@@ -62,3 +62,7 @@ export const radialClassAccessor = () => "treeLink treeLink-ommited"
 
 export const linkXaccessor = (d: any) => d.y;
 export const linkYaccessor = (d: any) => d.x;
+
+export const linkradial = d3.linkVertical()
+    .x(linkXaccessor)
+    .y(linkYaccessor);
