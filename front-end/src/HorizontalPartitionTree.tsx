@@ -29,7 +29,7 @@ const heightPercent = 0.8;
 export const HorizontalPartitionTree = ({
     dimensions
 }: React.PropsWithChildren<HorizontalTreeProps>) => {
-    console.log("RENDER HORIZONTAL TREE")
+
     //get the main state
     const { state } = useAppState();
     const { colorSelected, filtered, viewLinks, viewOmitted } = state;

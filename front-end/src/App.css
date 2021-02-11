@@ -843,7 +843,13 @@ line.Axis__line {
     z-index: 10;
     background: rgba(255,255,255,0.7);
 }
-
+#legend .tittle{
+  display:block;
+  width: 100%;
+}
+.color-legend{
+  width:100%;
+}
 .dashed{
   background: #fff;
   color: rgba(0, 0, 0, 0.85);

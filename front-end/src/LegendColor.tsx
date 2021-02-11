@@ -2,14 +2,15 @@ import React from 'react';
 import { legendColorInterface, colorPallete } from 'src/interfaces/interfaces';
 import { v4 as uuidv4 } from 'uuid';
 
+const rectSize: number = 10;
 
 export const LegendColor = ({
-    pallete
+    pallete,
+    tittle
 }: React.PropsWithChildren<legendColorInterface>) => {
 
-    const rectSize: number = 10;
-
     return <>
+        <span className="tittle"> {tittle}</span>
         {pallete.map((color: colorPallete) => {
             return <div
                 key={uuidv4()}

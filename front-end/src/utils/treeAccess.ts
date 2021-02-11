@@ -273,26 +273,22 @@ export const dependencytypeColor = (type: string) => {
 
 export const ratioColor: colorPallete[] = [
     {
-        tittle: "0%",
+        tittle: "Bloated",
         color: "#F05D00"
     },
     {
-        tittle: "100%",
+        tittle: "Used",
         color: "#006AD2"
     }
 ]
-const usageRagioColor = (nodes: any) => {
-    // const data: any = nodes.slice(1);
+const usageRagioColor = () => {
     const max: any = 1;//d3.max(data, (node: any) => node.data.usageRatio)
-
     return (val: number) => {
-
         switch (val) {
             case -1:
                 return ratioColor[1].color;
             case undefined:
                 return "grey";
-
             default:
                 const col = d3.scaleOrdinal()
                     .domain([0, max])
@@ -300,7 +296,6 @@ const usageRagioColor = (nodes: any) => {
                 return col(val.toString());
         }
     }
-
 }
 
 export const getUniqueArray = (data: any) => {
@@ -330,7 +325,7 @@ export const getCGenerator = (colorSelected: string, nodes: any) => {
         case "DEPENDENCY_TYPE":
             return dependencytypeColor;
         case "USAGE_RATIO":
-            return usageRagioColor(nodes);
+            return usageRagioColor();
         case "GROUP_ID":
             return groupIDColor(nodes);
         default:

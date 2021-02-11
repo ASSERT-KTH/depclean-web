@@ -16,7 +16,7 @@ export const PartitionNode = ({
     onLeave,
     colorAccessor,
 }: React.PropsWithChildren<paritionNodeProps>) => {
-    console.log("render patition node")
+
     return <>
         {data.map((node) => (
             <g transform={"translate(" + yAccessor(node) + "," + xAccessor(node) + ")"} key={uuidv4()}>

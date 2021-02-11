@@ -83,7 +83,8 @@ export interface colorPallete {
 
 
 export interface legendColorInterface {
-    pallete: colorPallete[]
+    pallete: colorPallete[],
+    tittle?: string
 }
 
 export interface report {

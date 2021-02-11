@@ -2,7 +2,6 @@ import React from 'react';
 import { useAppState } from "src/AppStateContext";
 import { dependencyPallete, ratioColor, getCGenerator, sortByNumDependencies, getProviders, mapGroupId } from "src/utils/treeAccess";
 import { LegendColor } from "src/LegendColor";
-import { LegendRatio } from 'src/LegendRatio';
 import { LegendGroup } from 'src/LegendGroup';
 import { filterOmmitedandTest, filterDeleted } from 'src/utils/horizontalTree';
 
@@ -17,9 +16,9 @@ export const Legend = () => {
         : null;
 
     const colorLegend = colorSelected === "DEPENDENCY_TYPE" ?
-        <LegendColor pallete={dependencyPallete} /> :
+        <LegendColor pallete={dependencyPallete} tittle="Dependencies" /> :
         colorSelected === "USAGE_RATIO" ?
-            <LegendRatio pallete={ratioColor} /> :
+            <LegendColor pallete={ratioColor} tittle="Types" /> :
             colorSelected === "GROUP_ID" ?
                 <LegendGroup
                     colorPallete={getCGenerator(colorSelected, nodes)}

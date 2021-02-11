@@ -22,11 +22,8 @@ export const PartitionArea = React.memo(({
     width,
     yDisplacement
 }: React.PropsWithChildren<PartitionAreaProps>) => {
-
-
     //get all the nodes descendants
     const treeNodes = useMemo(() => {
-        console.log("MEMO tree nodes")
         return getTreeMap(types, usedTypes, height, width)
     },
         [types, usedTypes, height, width]
