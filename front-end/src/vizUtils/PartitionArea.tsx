@@ -23,12 +23,13 @@ export const PartitionArea = React.memo(({
     yDisplacement
 }: React.PropsWithChildren<PartitionAreaProps>) => {
     //get all the nodes descendants
+
     const treeNodes = useMemo(() => {
         return getTreeMap(types, usedTypes, height, width)
     },
         [types, usedTypes, height, width]
     );
-
+    // console.log(treeNodes)
     const rendernodes = treeNodes.map((node: any) =>
         <rect
             // className={classAccessor(node)}

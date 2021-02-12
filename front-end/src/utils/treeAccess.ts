@@ -198,22 +198,17 @@ export const filterDeleted = (deleted: boolean) => {
 export const mapKey = (d: any) => d.key;
 
 //DIFFERENT COLOR GENERATORS
-const noColor = () => {
-    // // const data: any = nodes;
-    // const extent: any = d3.extent(data, (node: any) => node.depth);
-    // const colorGenerator = d3.scaleOrdinal()
-    //     .domain(extent)
-    //     .range(["#64C19A", "#2F4858"]);
-    // return (val: number) => colorGenerator(val.toString());
-    return "#64C19A"
-}
+const noColor = () => "#64C19A";
+
+const transparentColor = () => "#f0f6ee";
+
 const noLinkColor = (d: any) => "#eef3f6";
 
 const linkBloatedColor = (d: any) => {
     return d.data.status === "bloated" ? "#FFD8D8" : "#eef3f6"
 };
 
-export const getLinkColorGenerator = (colorSelected: "NONE" | "DEPENDENCY_TYPE" | "USAGE_RATIO" | "GROUP_ID") => {
+export const getLinkColorGenerator = (colorSelected: "NONE" | "DEPENDENCY_TYPE" | "USAGE_RATIO" | "GROUP_ID" | "TRANSPARENT") => {
     switch (colorSelected) {
         case "DEPENDENCY_TYPE":
             return linkBloatedColor;
@@ -274,11 +269,11 @@ export const dependencytypeColor = (type: string) => {
 export const ratioColor: colorPallete[] = [
     {
         tittle: "Bloated",
-        color: "#F05D00"
+        color: "#CED8CC"
     },
     {
         tittle: "Used",
-        color: "#006AD2"
+        color: "#0081FF"
     }
 ]
 const usageRagioColor = () => {
@@ -328,6 +323,8 @@ export const getCGenerator = (colorSelected: string, nodes: any) => {
             return usageRagioColor();
         case "GROUP_ID":
             return groupIDColor(nodes);
+        case "TRANSPARENT":
+            return transparentColor;
         default:
             return noColor;
     }

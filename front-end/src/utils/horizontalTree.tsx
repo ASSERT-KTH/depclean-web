@@ -122,11 +122,14 @@ export const mapToPartition = ((usedTypes: string[]) => {
     })
 })
 
+const sortByUsed = (a: any, b: any) => a.used === b.used ? 0 : a.used ? 1 : -1;
+
 
 export const getTreeMap = (types: string[], usedTypes: string[], height: number, width: number) => {
 
     const allTypes = types
-        .map(mapToPartition(usedTypes));
+        .map(mapToPartition(usedTypes))
+        .sort(sortByUsed)
     //first get the hierarchy
     const data = d3.hierarchy({
         name: "root",
@@ -141,11 +144,12 @@ export const getTreeMap = (types: string[], usedTypes: string[], height: number,
         .size([height, width])
         .round(true)
         .padding(1)
-
+    // console.log("in get map tree")
     //get all the nodes descendants
     return treeMap(data)
         .descendants()
         .slice(1)
+
 }
 
 
@@ -164,7 +168,7 @@ export const getNodesFromParitionTree = (dimensions: dimension, sizeAccesorMin: 
         .map(addNewSize(heightPercent, 80, dimensions.boundedHeight))
 }
 
-export const getColor = (colorSelected: "NONE" | "DEPENDENCY_TYPE" | "USAGE_RATIO" | "GROUP_ID", nodes: any[]) => {
+export const getColor = (colorSelected: "NONE" | "DEPENDENCY_TYPE" | "USAGE_RATIO" | "GROUP_ID" | "TRANSPARENT", nodes: any[]) => {
     const colorDataAccessor: (d: any) => string = getColorDataAccessor(colorSelected)
     const colorGenerator: any = getCGenerator(colorSelected, nodes);
     return (d: any) => colorGenerator(colorDataAccessor(d));

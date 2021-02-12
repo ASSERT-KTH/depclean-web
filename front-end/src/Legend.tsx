@@ -8,30 +8,29 @@ import { filterOmmitedandTest, filterDeleted } from 'src/utils/horizontalTree';
 export const Legend = () => {
     //get the main state
     const { state } = useAppState();
-    //Get all the nodes
     const { colorSelected, filtered } = state;
-    const nodes = colorSelected === "GROUP_ID" ? filtered.descendants()
-        .filter(filterOmmitedandTest)
-        .filter(filterDeleted)
+
+    const nodes = colorSelected === "GROUP_ID" ?
+        filtered.descendants()
+            .filter(filterOmmitedandTest)
+            .filter(filterDeleted)
         : null;
 
-    const colorLegend = colorSelected === "DEPENDENCY_TYPE" ?
-        <LegendColor pallete={dependencyPallete} tittle="Dependencies" /> :
-        colorSelected === "USAGE_RATIO" ?
-            <LegendColor pallete={ratioColor} tittle="Types" /> :
-            colorSelected === "GROUP_ID" ?
-                <LegendGroup
-                    colorPallete={getCGenerator(colorSelected, nodes)}
-                    rectSize={10}
-                    groupIds={Object.entries(nodes //reduce the nodes to an object with the number of times a groupId repeats
-                        .reduce(getProviders, {})) //transform it into an array
-                        .map(mapGroupId) //map it to resestructure the info into an array with objects
-                        .sort(sortByNumDependencies)} //sort it from highest to lowest
-                /> :
-                <></>;
-    return <div
-        id={"legend"}
-        className={"flex legend-right"}>
-        {colorLegend}
+    return <div id={"legend"} className={"flex legend-right"}>
+        {colorSelected === "DEPENDENCY_TYPE" ?
+            <LegendColor pallete={dependencyPallete} tittle="Dependencies" /> :
+            colorSelected === "USAGE_RATIO" ?
+                <LegendColor pallete={ratioColor} tittle="Types" /> :
+                colorSelected === "GROUP_ID" ?
+                    <LegendGroup
+                        colorPallete={getCGenerator(colorSelected, nodes)}
+                        rectSize={10}
+                        groupIds={Object.entries(nodes //reduce the nodes to an object with the number of times a groupId repeats
+                            .reduce(getProviders, {})) //transform it into an array
+                            .map(mapGroupId) //map it to resestructure the info into an array with objects
+                            .sort(sortByNumDependencies)} //sort it from highest to lowest
+                    /> :
+                    <></>
+        }
     </div>
 }

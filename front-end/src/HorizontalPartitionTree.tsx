@@ -62,7 +62,7 @@ export const HorizontalPartitionTree = ({
 
                         <PartitionNode
                             data={nodes}
-                            colorAccessor={color}
+                            colorAccessor={colorSelected === "USAGE_RATIO" ? getColor("TRANSPARENT", nodes) : color}
                         />
                         {colorSelected === "USAGE_RATIO" ?
                             <PartitionAreaNode
