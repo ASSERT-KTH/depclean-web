@@ -7,7 +7,7 @@ import { PartitionNode } from 'src/vizUtils/ParitionNode';
 import { PartitionLinks } from 'src/vizUtils/PartitionLinks';
 import { Links } from 'src/vizUtils/Links';
 import { getLinkColorGenerator } from 'src/utils/treeAccess';
-import { getColor, getNodesFromParitionTree } from "src/utils/horizontalTree";
+import { getColor, getNodesFromParitionTree, filterDeleted, filterVisible } from "src/utils/horizontalTree";
 import { sizeAccesorMin } from 'src/accessors/treeAccessors'
 import {
     linkAccesor, linksClassAccessor,
@@ -66,7 +66,9 @@ export const HorizontalPartitionTree = ({
                         />
                         {colorSelected === "USAGE_RATIO" ?
                             <PartitionAreaNode
-                                data={nodes}
+                                data={nodes
+                                    .filter(filterDeleted)
+                                    .filter(filterVisible)}
                                 colorAccessor={color}
                             /> : <></>
                         }

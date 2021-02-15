@@ -57,6 +57,7 @@ export const MainInfo = () => {
     const onChange = (value: number) => {
         dispatch({ type: "DEBLOAT_PROJECT", payload: value })
         dispatch({ type: "SELECT_BLOAT", payload: filteredBloated });
+        dispatch({ type: "FILTER_ALL", payload: null });
     };
 
 

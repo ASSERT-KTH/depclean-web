@@ -158,3 +158,7 @@ export type Action =
         type: "FILTER_BLOATED_DEPENDENCIES"
         payload: string[]
     }
+    | {
+        type: "FILTER_ALL"
+        payload: null
+    }

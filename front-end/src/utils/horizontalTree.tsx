@@ -79,6 +79,7 @@ export const filterOmmitedandTest = (node: any) => node.data.type !== "omitted" 
 
 export const filterDeleted = (node: any) => node.data.deleted === false;
 
+export const filterVisible = (node: any) => node.data.visible === true;
 
 //adds padding to the Partition nodes in betweeen
 export const addNewSize = (hightPercent: number, width: number, height: number) => {

@@ -157,6 +157,17 @@ const appStateReducer = (state: AppState, action: Action): AppState => {
                 debloatNum: 0,
             }
         }
+
+        case "FILTER_ALL": {
+            const filteredProject: artifact = cloneProject(state.filteredProject);
+            filteredProject.children = filterArifactByType(state.filteredProject.children, state.filteredScope, state.filteredDependencies, "used");
+            filteredProject.children = filterArifactByType(state.filteredProject.children, state.filteredScope, state.filteredBloated, "bloated");
+            return {
+                ...state,
+                filteredProject: filteredProject,
+                filtered: getTreeHierarchy(filteredProject, childrenAccessor)
+            }
+        }
         case "VIEW_OMITTED": {
             return {
                 ...state,
