@@ -20,7 +20,7 @@
   background-color: #F1F3F5;
 }
 .sideMenu .ant-layout-sider-children{
-  padding: 230px 0 0 30px;
+  padding: 212px 0 0 30px;
   display: flex;
     flex-direction: column;
 }
@@ -172,6 +172,13 @@
   /* background-color:#64C19A; */
   /* border-color: transparent; */
   z-index: 100;
+}
+
+.button-basic{
+  font-size: 16px;
+  font-weight: 400;
+  width:140px;
+  margin-bottom: 30px;
 }
 
 .wrapper{

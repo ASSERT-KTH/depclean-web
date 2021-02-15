@@ -10,7 +10,7 @@ import { getLinkColorGenerator } from 'src/utils/treeAccess';
 import { getColor, getNodesFromParitionTree, filterDeleted, filterVisible } from "src/utils/horizontalTree";
 import { sizeAccesorMin } from 'src/accessors/treeAccessors'
 import {
-    linkAccesor, linksClassAccessor,
+    linkStraightAccesor, linksClassAccessor,
     radialClassAccessor, linkradial
 } from 'src/accessors/partitionTreeAccessor';
 import { dimension } from 'src/interfaces/interfaces';
@@ -55,7 +55,7 @@ export const HorizontalPartitionTree = ({
                         {!viewLinks ? <></> :
                             <PartitionLinks
                                 data={nodes.slice(1)}
-                                linkAccesor={linkAccesor(heightPercent)}
+                                linkAccesor={linkStraightAccesor(heightPercent)}
                                 classAccessor={linksClassAccessor}
                                 colorAccessor={getLinkColorGenerator(colorSelected)}
                             />}

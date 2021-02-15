@@ -8,12 +8,14 @@ export const FilterButton = () => {
     const { menuState, menuDispatch } = useAppState();
     const { viewFilter } = menuState;
 
-    return (
-        <Button
+    return <>
+        {viewFilter ? <Button
             className="filterButton"
             type={"dashed"}
             onClick={() => menuDispatch({ type: "VIEW_FILTER", payload: !viewFilter })}>
             <FilterOutlined rotate={viewFilter ? 90 : 0} />
-            Filter
-        </Button>)
+            View Filter
+        </Button> : <></>}
+    </>
+
 }
