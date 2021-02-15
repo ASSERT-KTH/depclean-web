@@ -4,7 +4,7 @@ import { Message } from 'src/Message';
 import { useAppState } from "./AppStateContext";
 import { truncateString } from "src/utils/stringManipulation";
 import { ExclamationCircleOutlined } from '@ant-design/icons';
-import { getNodesWithDepCategory } from "./utils/treeAccess";
+import { filterTypeAndDeleted, mapNodeWithDepCategory } from "./utils/treeAccess";
 import { Chart } from 'src/Chart';
 import * as d3 from 'd3';
 import { dimension } from 'src/interfaces/interfaces'
@@ -14,10 +14,14 @@ export const MainInfo = () => {
     const { state, dispatch } = useAppState();
     //Get all the nodes
     const { debloatNum, filteredBloated, filtered } = state;
-    const nodesFiltered = filtered.descendants().filter((d: any) => d.data.type !== "omitted" && d.data.type !== "test" && d.data.deleted === false)
 
     //all nodes without the parent, ommited 
-    const nodesDep = getNodesWithDepCategory(nodesFiltered.splice(1));
+    const nodesDep = filtered
+        .descendants()
+        .filter(filterTypeAndDeleted)
+        .map(mapNodeWithDepCategory)
+
+    // const nodesDep = getNodesWithDepCategory(nodesFiltered);
     const colorUsage = d3.interpolate("red", "blue")
     //GET THE INFORMATIN
     const tittle = truncateString(state.project.artifactId, 35);

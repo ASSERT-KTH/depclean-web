@@ -656,7 +656,7 @@ line.Axis__line {
 /* TREE MAP */
 .square_treemap {
   stroke: white;
-  opacity: 0.4;
+  opacity: 1;
 }
 
 .text-message{

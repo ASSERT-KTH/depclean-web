@@ -29,7 +29,11 @@ export const chart = (array: any[], category: string, xScale: d3.ScaleLinear<num
             }
         })
         .sort((a: any, b: any) => {
-            return a.data.category.localeCompare(b.data.category)
+            const aData = a.data.category.split("-");
+            const bData = b.data.category.split("-");
+            const aName = aData[1] + "-" + aData[0];
+            const bName = bData[1] + "-" + bData[0];
+            return bName.localeCompare(aName)
         })
         .map((d: any, i: number) => {
             d.index = i;

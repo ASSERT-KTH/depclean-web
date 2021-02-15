@@ -8,10 +8,16 @@ import { formatFileSize } from 'src/Components/tooltip';
 //Creates a new type that includes depClean
 export const getNodesWithDepCategory = (nodes: any): object[] => {
     return nodes.map((d: any) => {
+        console.log(d.data.type, d.data.status)
         d.data.dependencyUsage = d.data.type + "-" + d.data.status;
         return d;
     })
 }
+export const mapNodeWithDepCategory = (d: any) => {
+    d.data.dependencyUsage = d.data.type + "-" + d.data.status;
+    return d;
+}
+export const filterTypeAndDeleted = (d: any) => d.data.type !== "omitted" && d.data.type !== "parent" && d.data.type !== "test" && d.data.deleted === false;
 
 //return the basic root info
 export const getRootInfo = (root: any): object[] => {
@@ -237,11 +243,11 @@ export const dependencyPallete: colorPallete[] = [
     },
     {
         tittle: "inherited-used",
-        color: "#F3EED9"
+        color: "#E7EFFF"
     },
     {
         tittle: "inherited-bloated",
-        color: "#FFE5DD"
+        color: "#F9B0A5"
     }
 ]
 //returns a color depending on the artifact type
@@ -254,13 +260,13 @@ export const dependencytypeColor = (type: string) => {
         case "transitive-used":
             return "#9ACAFF";
         case "inherited-used":
-            return "#F3EED9";
+            return "#E7EFFF";
         case "direct-bloated":
             return "#F8514A";
         case "transitive-bloated":
             return "#F05D00";
         case "inherited-bloated":
-            return "#FFE5DD";
+            return "#F9B0A5";
         default:
             return "#000000";
     }

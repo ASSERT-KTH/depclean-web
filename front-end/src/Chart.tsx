@@ -66,7 +66,7 @@ export const Chart = ({
     // const indexAccessor = (d: any) => d.index;
     // const colorInterpolator = d3.interpolate("red", "blue")
 
-    const indexAccesor = (d: any) => d.data.categorys;
+    const indexAccesor = (d: any) => d.data.category;
     const colorAccessor = (d: any) => dependencytypeColor(indexAccesor(d))
     //LEGEND DATA
     // const initialPos = [chartSize + dimensions.marginLeft + 10, dimensions.marginTop]
