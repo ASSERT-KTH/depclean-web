@@ -67,6 +67,7 @@ export const Message = () => {
                 dataInfo={totalSize}
                 theme="dependencies"
             />
+            <div className="sw"></div>
             <DataGroup
                 key={uuidv4()}
                 tittle={generalReport.dependencies.title}
