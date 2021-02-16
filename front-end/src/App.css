@@ -1,3 +1,7 @@
+.sw{
+  width:50px
+}
+
 .App {
   text-align: center; 
 }
@@ -16,10 +20,11 @@
   background-color: #F1F3F5;
 }
 .sideMenu .ant-layout-sider-children{
-  padding: 230px 0 0 30px;
+  padding: 212px 0 0 30px;
   display: flex;
     flex-direction: column;
 }
+
 
 .ant-checkbox-wrapper + .ant-checkbox-wrapper {
   margin-left: 0px;
@@ -167,6 +172,13 @@
   /* background-color:#64C19A; */
   /* border-color: transparent; */
   z-index: 100;
+}
+
+.button-basic{
+  font-size: 16px;
+  font-weight: 400;
+  width:140px;
+  margin-bottom: 30px;
 }
 
 .wrapper{
@@ -656,7 +668,7 @@ line.Axis__line {
 /* TREE MAP */
 .square_treemap {
   stroke: white;
-  opacity: 0.4;
+  opacity: 1;
 }
 
 .text-message{
@@ -843,7 +855,13 @@ line.Axis__line {
     z-index: 10;
     background: rgba(255,255,255,0.7);
 }
-
+#legend .tittle{
+  display:block;
+  width: 100%;
+}
+.color-legend{
+  width:100%;
+}
 .dashed{
   background: #fff;
   color: rgba(0, 0, 0, 0.85);
@@ -893,5 +911,5 @@ line.Axis__line {
   right: 10px;
   flex-direction: row;
   flex-wrap: wrap;
-  width: 190px;
+  width: 160px;
 }

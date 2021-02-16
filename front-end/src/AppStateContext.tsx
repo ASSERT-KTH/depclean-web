@@ -1,80 +1,22 @@
-import React, { createContext, useReducer, useContext } from "react";
+import React, { createContext, useReducer, useContext, useState } from "react";
 import {
     filterArtifacts, getTreeHierarchy, cloneProject,
     highlightBloat, debloatDirect, debloatAll,
     filterArifactByType
 } from "./utils/treeAccess";
 // import { fetchFromFile } from './utils/dataRetrieve';
-import { artifact, AppState } from 'src/interfaces/interfaces';
+import { artifact, AppState, Action } from 'src/interfaces/interfaces';
 import * as d3 from 'd3';
-import { data } from 'src/utils/dataDummy';
+import { flink as data } from 'src/utils/dataDummy';
+import { childrenAccessor } from 'src/accessors/treeAccessors';
 
 interface AppStateContextProps {
     state: AppState,
     dispatch: React.Dispatch<Action>,
+    viewMenu: boolean
+    setViewMenu: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-type Action =
-    | {
-        type: "SELECT_DEPENDENCY"
-        payload: string[]
-    }
-    | {
-        type: "SELECT_BLOAT"
-        payload: string[]
-    }
-    | {
-        type: "SELECT_VIEW"
-        payload: string[]
-    }
-    | {
-        type: "SELECT_SCOPE"
-        payload: string[]
-    }
-    | {
-        type: "SELECT_COLOR"
-        payload: "NONE" | "DEPENDENCY_TYPE" | "USAGE_RATIO" | "GROUP_ID",
-    }
-    | {
-        type: "LOAD_LOCAL_FILE"
-        payload: any
-    }
-    | {
-        type: "VIEW_DEPENDENCY_LIST"
-        payload: boolean
-    }
-    | {
-        type: "RESET_FILTERS"
-        payload: null
-    }
-    | {
-        type: "VIEW_OMITTED"
-        payload: boolean
-    }
-    | {
-        type: "VIEW_LINKS"
-        payload: boolean
-    }
-    | {
-        type: "DEBLOAT_PROJECT"
-        payload: number
-    }
-    | {
-        type: "HIDE_MENU"
-        payload: boolean
-    } | {
-        type: "FILTER_USED_DEPENDENCIES"
-        payload: string[]
-    } | {
-        type: "FILTER_BLOATED_DEPENDENCIES"
-        payload: string[]
-    }
-
-
-
-
-//accessor to get the data
-const childrenAccessor = (d: any) => d.children;
 //Data state for all the application
 const dependCheckGroup: string[] = ["direct", "transitive", "inherited"];
 const bloatedCheckGroup: string[] = ["direct", "transitive", "inherited"];//"direct", "transitive", "inherited"
@@ -83,6 +25,7 @@ const viewText: string[] = ["groupid", "artifactid", "version"];
 const nodes = d3.hierarchy(data, childrenAccessor);
 const scopeCheckGroup: string[] = ["compile", "test", "provided", "runtime", "system"]
 
+//APP INITIAL STATE
 const appData: AppState = {
 
     project: data, //the original data only changes when you load a new project
@@ -95,14 +38,12 @@ const appData: AppState = {
     filteredScope: scopeCheckGroup,
 
     colorSelected: "NONE",
-    viewDependencyList: false,
     viewOmitted: false,
     viewLinks: true,
 
     debloatNum: 0,
     textDisplay: viewText,
     messageState: "ORIGINAL",
-    hideMenu: true,
 }
 
 
@@ -204,12 +145,7 @@ const appStateReducer = (state: AppState, action: Action): AppState => {
                 filtered: newNodes,
             }
         }
-        case "VIEW_DEPENDENCY_LIST": {
-            return {
-                ...state,
-                viewDependencyList: action.payload,
-            }
-        }
+
         case "RESET_FILTERS": {
             return {
                 ...state,
@@ -219,6 +155,17 @@ const appStateReducer = (state: AppState, action: Action): AppState => {
                 filteredScope: scopeCheckGroup,
                 viewOmitted: true,
                 debloatNum: 0,
+            }
+        }
+
+        case "FILTER_ALL": {
+            const filteredProject: artifact = cloneProject(state.filteredProject);
+            filteredProject.children = filterArifactByType(state.filteredProject.children, state.filteredScope, state.filteredDependencies, "used");
+            filteredProject.children = filterArifactByType(state.filteredProject.children, state.filteredScope, state.filteredBloated, "bloated");
+            return {
+                ...state,
+                filteredProject: filteredProject,
+                filtered: getTreeHierarchy(filteredProject, childrenAccessor)
             }
         }
         case "VIEW_OMITTED": {
@@ -231,6 +178,12 @@ const appStateReducer = (state: AppState, action: Action): AppState => {
             return {
                 ...state,
                 viewLinks: action.payload
+            }
+        }
+        case "SET_MESSAGE": {
+            return {
+                ...state,
+                messageState: action.payload
             }
         }
         case "DEBLOAT_PROJECT": {
@@ -270,12 +223,7 @@ const appStateReducer = (state: AppState, action: Action): AppState => {
             }
         }
 
-        //HIDE OR SHOW THE MENU
-        case 'HIDE_MENU':
-            return {
-                ...state,
-                hideMenu: action.payload
-            }
+
         default: {
             console.log("DEFAULT")
             return state
@@ -297,8 +245,9 @@ export const useAppState = () => {
 
 export const AppStateProvider = ({ children }: React.PropsWithChildren<{}>) => {
     const [state, dispatch] = useReducer(appStateReducer, appData)
+    const [viewMenu, setViewMenu] = useState(false);
     return (
-        <AppStateContext.Provider value={{ state, dispatch }}>
+        <AppStateContext.Provider value={{ state, dispatch, viewMenu, setViewMenu }}>
             {children}
         </AppStateContext.Provider>
     )

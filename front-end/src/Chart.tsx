@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import * as d3 from 'd3';
-import { chart } from './utils/CountCategories';
 import { Squares } from './vizUtils/Squares';
 // import { Legend } from './vizUtils/Legend';
 import { v4 as uuidv4 } from 'uuid';
@@ -8,8 +7,20 @@ import { Tooltip } from './vizUtils/tooltip';
 import { AxisHorizontal } from 'src/vizUtils/AxisHorizontal';
 import { AxisVertical } from 'src/vizUtils/AxisVertical';
 import { dimension } from 'src/interfaces/interfaces'
-import { dependencytypeColor } from 'src/utils/treeAccess';
 
+import {
+    nodevValueAccessor,
+    formatTick,
+    yAccessor,
+    posAccessor,
+    wAccessor,
+    nameAccessor,
+    valueAccesor,
+    getValueAccessor,
+    colorAccessor,
+    chart
+
+} from 'src/Components/chart';
 
 interface ChartProps {
     nodes: any[],
@@ -17,7 +28,7 @@ interface ChartProps {
     category: string
     labelX?: string,
     labelY?: string,
-    colorInterpolator: any,
+    colorInterpolator?: any,
     numTicks: number,
     tooltipPos?: "TOP" | "LEFT" | "BOTTOM" | "RIGHT"
 }
@@ -50,24 +61,13 @@ export const Chart = ({
         .domain([0, 100])
         .range([0, chartDimensions.boundedWidth])
         .nice()
+
     //Calculate all chart 
     const chartData = chart(nodes, category, chartXScale);
-    const total = d3.sum(chartData, (d: any) => d.value)
+    const total = d3.sum(chartData, nodevValueAccessor)
 
-    //DATA ACCESSORS
-    const formatTick = (d: any) => d + "%";
-    const yAccessor = (d: any) => 0;
-    const posAccessor = (d: any) => d.x0;
-    const wAccessor = (d: any) => d.x1;
     const hAccessor = (d: any) => chartHeight;
-    const nameAccessor = (d: any) => d.data.category;
-    const valueAccesor = (d: any) => "(" + d.value + ")";
-    const valueAccessor = (d: any) => d3.format(".2f")((d.value / total) * 100) + "%";
-    // const indexAccessor = (d: any) => d.index;
-    // const colorInterpolator = d3.interpolate("red", "blue")
-
-    const indexAccesor = (d: any) => d.data.categorys;
-    const colorAccessor = (d: any) => dependencytypeColor(indexAccesor(d))
+    const valueAccessor = getValueAccessor(total);
     //LEGEND DATA
     // const initialPos = [chartSize + dimensions.marginLeft + 10, dimensions.marginTop]
 

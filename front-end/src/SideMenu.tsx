@@ -1,12 +1,15 @@
 import React from 'react';
 import { Layout, Divider, Checkbox } from 'antd';
 import { useLocation } from 'react-router-dom';
+import { Button } from 'antd';
 import { bloated, used, colorOptions, omitted, link } from 'src/Components/homeViz';
 import { CategoryCheckbox } from './CategoryCheckbox';
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 import { CategoryRadialBox } from './CategoryRadialBox';
-import { useAppState } from "./AppStateContext";
+import { useAppState } from "src/AppStateContext";
+import { useAppState as useMenuAppState } from "src/AppMenuStateContext";
 import { v4 as uuidv4 } from 'uuid';
+import { FilterOutlined } from '@ant-design/icons';
 
 const { Sider } = Layout;
 // import { bloated, bloated, colorOptions, scope, omitted } from 'src/Components/homeViz';
@@ -14,6 +17,7 @@ const { Sider } = Layout;
 export const SideMenu = () => {
     //get the main state
     const { state, dispatch } = useAppState();
+    const { menuState, menuDispatch } = useMenuAppState();
     //Get all the nodes
     const {
         filteredDependencies,
@@ -21,9 +25,9 @@ export const SideMenu = () => {
         filteredBloated,
         // textDisplay,
         viewOmitted,
-        hideMenu,
         viewLinks
     } = state;
+    const { viewFilter } = menuState;
 
     const location = useLocation()
 
@@ -34,8 +38,15 @@ export const SideMenu = () => {
         className={"sideMenu"}
         trigger={null}
         width={200}
-        collapsed={hideMenu}
+        collapsed={viewFilter}
     >
+        <Button
+            className="button-basic"
+            type={"dashed"}
+            onClick={() => menuDispatch({ type: "VIEW_FILTER", payload: !viewFilter })}>
+            <FilterOutlined rotate={viewFilter ? 90 : 0} />
+            Close Filter
+        </Button>
         {/* <CategoryCheckbox
             key={uuidv4()}
             tittle={bloated.tittle}

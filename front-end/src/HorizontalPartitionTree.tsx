@@ -1,108 +1,52 @@
-import React, { useState } from 'react';
+import React, { useMemo } from 'react';
 import { Col } from 'antd';
-import * as d3 from 'd3';
 import { v4 as uuidv4 } from 'uuid';
-import { Tooltip } from './vizUtils/tooltip';
+import { ToolTipContainer } from 'src/ToolTipContainer';
+import { dimension } from 'src/interfaces/interfaces';
 import { useAppState } from "src/AppStateContext";
+
+import { getLinkColorGenerator, getColor } from 'src/utils/treeAccess';
+import { getNodesFromParitionTree, filterDeleted, filterVisible } from "src/utils/horizontalTree";
+import { sizeAccesorMin, midXAccessor, midYAccessor } from 'src/accessors/treeAccessors'
+import {
+    linkStraightAccesor, linksClassAccessor,
+    radialClassAccessor, linkradial
+} from 'src/accessors/partitionTreeAccessor';
+import { getOmmitedLinks } from "src/utils/horizontalTree";
+
+import { Links } from 'src/vizUtils/Links';
 import { PartitionNode } from 'src/vizUtils/ParitionNode';
 import { PartitionLinks } from 'src/vizUtils/PartitionLinks';
-import { Links } from './vizUtils/Links';
-import { getColorDataAccessor, getCGenerator, getLinkColorGenerator } from 'src/utils/treeAccess';
-import {
-    getParitionTree, getSizeHierarchy,
-    filterOmmitedandTest, addNewSize,
-
-} from "src/utils/horizontalTree";
-import {
-    linkAccesor, linksClassAccessor,
-    radialClassAccessor, linkXaccessor,
-    linkYaccessor,
-} from 'src/accessors/partitionTreeAccessor';
-import { formatFileSize } from 'src/Components/tooltip';
-import { dimension } from 'src/interfaces/interfaces';
-import { parseOmitedLinks, getOmmitedLinks } from "src/utils/horizontalTree";
 import { DelaunayGrid } from 'src/vizUtils/Delaunay';
-import { midXAccessor, midYAccessor } from 'src/accessors/treeAccessors';
-// import { useAppState } from "./AppStateContext";
+import { PartitionAreaNode } from 'src/PartitionAreaNode';
+import { OmmitedLabels } from 'src/vizUtils/Labels';
 
+const heightPercent = 0.8;
 
 interface HorizontalTreeProps {
-    data: d3.HierarchyNode<object[]>,
     dimensions: dimension,
 }
 
 export const HorizontalPartitionTree = ({
-    data,
     dimensions
 }: React.PropsWithChildren<HorizontalTreeProps>) => {
+
     //get the main state
     const { state } = useAppState();
-    //Get all the nodes
-    const {
-        colorSelected,
-        viewLinks,
-        viewOmitted
-    } = state;
-
-    const [toolTipValue, setToolTipValue] = useState(<div></div>);
-    const [toolTipPos, setToolTipPos] = useState({ x: 0, y: 0 });
-    const [tpOpacity, setTpOpacity] = useState(0)
-
-
-    const mouseEnter = (d: any) => {
-        setToolTipValue(
-            <div>
-                <div className="toolTip-tittle">{d.data.artifactId}</div>
-                <div className="toolTip-sub">{d.data.version}</div>
-                <div className="toolTip-sub">{d.data.groupId}</div>
-                <div className="toolTip-sub">Scope: {d.data.scope}</div>
-                <div className="toolTip-sub">Usage ratio: {d.data.usageRatio === 0 ? 0 : d3.format(".5f")(d.data.usageRatio)}%</div>
-                <div className="toolTip-sub">Size: <span className="toolTip-value">{formatFileSize(d.data.size, 2)}</span></div>
-            </div>)
-        setToolTipPos({ x: dimensions.marginLeft + (d.y0 + d.h), y: d.x0 + d.y + dimensions.marginTop + (d.w / 2) })
-        setTpOpacity(1);
-    }
-    //hide the tooltip on mouse leave
-    const mouseLeave = () => setTpOpacity(0);
-
-
-    //must have hierarchy data and make the sum of the size
-    const partitionData = getSizeHierarchy(data);
-    //get the partition  tree
-    const treeSize: number[] = [
-        dimensions.boundedHeight - dimensions.marginTop - dimensions.marginBottom,
-        dimensions.boundedWidth * 1
-    ]
-    const partitionTree = getParitionTree(treeSize, 1)
-    //GET ALL THE NODES WITH A TREE STRUCTURE
-    //filter the nodes that are ommitted and whose type are test
-    const heightPercent = 0.8;
-    const nodes = partitionTree(partitionData)
-        .descendants()
-        .filter(filterOmmitedandTest)
-        .map(addNewSize(heightPercent, 80, dimensions.boundedHeight))
-
-    // const getIds = getArtifactsId(nodes)
-    const colorDataAccessor: (d: any) => string = getColorDataAccessor(colorSelected)
-    const colorGenerator: any = getCGenerator(colorSelected, nodes);
-    const color: any = (d: any) => colorGenerator(colorDataAccessor(d));
-
-    const linkColorGenerator: any = getLinkColorGenerator(colorSelected)
-
-    const linkradial = d3.linkVertical()
-        .x(linkXaccessor)
-        .y(linkYaccessor);
-
-    //GRAPH LINKS LABLES 
-    const ommitedLinks = viewOmitted ? getOmmitedLinks(partitionData.descendants()) : <></>;
-    const ommitedLabels = viewOmitted ? parseOmitedLinks(ommitedLinks) : <></>
-
-
+    const { colorSelected, filtered, viewLinks, viewOmitted } = state;
+    //get the nodes witht the tree structure
+    const nodes = useMemo(() => getNodesFromParitionTree(dimensions, sizeAccesorMin, filtered, heightPercent)
+        , [dimensions, filtered])
+    //get the correct color generator
+    const color = useMemo(() => getColor(colorSelected, nodes)
+        , [colorSelected, nodes])
+    // GRAPH LINKS LABLES 
+    const ommitedLinks = viewOmitted ? getOmmitedLinks(filtered) : <></>;
 
     return (
         <Col span="20" >
             <div className="wrapper">
-                <Tooltip value={toolTipValue} position={toolTipPos} opacity={tpOpacity} display={"LEFT"} />
+                <ToolTipContainer />
                 <svg width={dimensions.boundedWidth} height={dimensions.boundedHeight} key={uuidv4()} >
                     <g className="bounds"
                         transform={"translate(" + dimensions.marginLeft + "," + dimensions.marginTop + ")"}
@@ -111,28 +55,32 @@ export const HorizontalPartitionTree = ({
                         {!viewLinks ? <></> :
                             <PartitionLinks
                                 data={nodes.slice(1)}
-                                linkAccesor={linkAccesor(heightPercent)}
+                                linkAccesor={linkStraightAccesor(heightPercent)}
                                 classAccessor={linksClassAccessor}
-                                colorAccessor={linkColorGenerator}
+                                colorAccessor={getLinkColorGenerator(colorSelected)}
                             />}
 
                         <PartitionNode
                             data={nodes}
-                            onEnter={mouseEnter}
-                            onLeave={mouseLeave}
-                            colorAccessor={color}
+                            colorAccessor={colorSelected === "USAGE_RATIO" ? getColor("TRANSPARENT", nodes) : color}
                         />
+                        {colorSelected === "USAGE_RATIO" ?
+                            <PartitionAreaNode
+                                data={nodes
+                                    .filter(filterDeleted)
+                                    .filter(filterVisible)}
+                                colorAccessor={color}
+                            /> : <></>
+                        }
 
-                        {/* OMITTED LINKS */}
                         {viewOmitted ?
                             <Links
                                 data={ommitedLinks}
                                 linkAccesor={linkradial}
                                 classAccessor={radialClassAccessor}
-                                key={uuidv4()}
                             /> : <></>}
 
-                        {ommitedLabels}
+                        {viewOmitted ? <OmmitedLabels data={ommitedLinks} /> : <></>}
                     </g>
 
                     <DelaunayGrid
@@ -140,10 +88,8 @@ export const HorizontalPartitionTree = ({
                         dimensions={dimensions}
                         xAccessor={midXAccessor}
                         yAccessor={midYAccessor}
-                        onEnter={mouseEnter}
-                        onLeave={mouseLeave}
+                        hide={true}
                     />
-
                 </svg>
             </div>
         </Col>

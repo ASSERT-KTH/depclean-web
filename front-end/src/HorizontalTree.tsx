@@ -7,7 +7,7 @@ import { Nodes } from './vizUtils/Nodes';
 import { Tooltip } from './vizUtils/tooltip';
 import { DelaunayGrid } from 'src/vizUtils/Delaunay';
 import { useAppState } from "./AppStateContext";
-import { parseOmitedLinks, getOmmitedLinks } from "src/utils/horizontalTree";
+import { getOmmitedLinks } from "src/utils/horizontalTree";
 
 interface dimension {
     width: number,
@@ -105,7 +105,16 @@ export const HorizontalTree = ({
     //GET ALL THE NODES WITH A TREE STRUCTURE
     const treeNodes = tree(data).descendants();
     const ommitedLinks = viewOmitted ? getOmmitedLinks(treeNodes) : <React.Fragment />;
-    const ommitedLabels = viewOmitted ? parseOmitedLinks(ommitedLinks) : <React.Fragment />
+    const ommitedLabels = viewOmitted ?
+        ommitedLinks.map((d: any) => <text
+            key={uuidv4()}
+            x={d.target.y + (d.source.y - d.target.y) / 2}
+            y={d.target.x + (d.source.x - d.target.x) / 2}
+            textAnchor="middle"
+            className="omitted-label"
+        >
+            {d.version}
+        </text>) : <></>
     const omittedLinksLines = viewOmitted ?
         <Links
             data={ommitedLinks}
@@ -160,8 +169,8 @@ export const HorizontalTree = ({
                             dimensions={dimensions}
                             xAccessor={xAccessor}
                             yAccessor={yAccessor}
-                            onEnter={mouseEnter}
-                            onLeave={mouseLeave}
+                        // onEnter={mouseEnter}
+                        // onLeave={mouseLeave}
                         />
 
                     </g>

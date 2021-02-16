@@ -3,6 +3,7 @@ import React from 'react';
 import { useAppState } from "./AppStateContext"
 import { getGeneralReport, getDeletedDirectReport, getAllDeletedReport, filterEmpty } from 'src/utils/message';
 import { DataGroup } from 'src/DataGroup';
+import { v4 as uuidv4 } from 'uuid';
 // import { ArrowRightOutlined } from '@ant-design/icons';
 
 export const Message = () => {
@@ -21,15 +22,17 @@ export const Message = () => {
             <></>;
 
     const message = messageState === "ORIGINAL" ? <></> :
-        <div className={"flex flex-wrap pull-left"}>
+        <div className={"flex flex-wrap pull-left"} key={uuidv4()}>
             {/* <div className="flex text-message">
                 <div>If you<br></br>delete<ArrowRightOutlined /></div>
             </div> */}
             <DataGroup
+                key={uuidv4()}
                 tittle={bloatMessage.deleted.title}
                 dataInfo={[bloatMessage.deleted.direct, bloatMessage.deleted.transitive]}
                 theme="bloated" />
             <DataGroup
+                key={uuidv4()}
                 tittle="Size"
                 dataInfo={[bloatMessage.deleted.size.totalSize]}
                 theme="bloated" />
@@ -48,26 +51,35 @@ export const Message = () => {
     const bloated = [generalReport.bloated.direct, generalReport.bloated.inherited, generalReport.bloated.transitive]
         .filter(filterEmpty);
     const totalSize = [generalReport.size.totalSize];
+    const totalDependencies = generalReport.totalDependencies;
 
     return (
-        <div className="flex flex-wrap margin-buttom-20 ">
-
+        <div className="flex flex-wrap margin-buttom-20 " key={uuidv4()}>
             <DataGroup
+                key={uuidv4()}
+                tittle={totalDependencies.title}
+                dataInfo={[totalDependencies.totalDependencies]}
+                theme="dependencies"
+            />
+            <DataGroup
+                key={uuidv4()}
+                tittle={generalReport.size.title}
+                dataInfo={totalSize}
+                theme="dependencies"
+            />
+            <div className="sw"></div>
+            <DataGroup
+                key={uuidv4()}
                 tittle={generalReport.dependencies.title}
                 dataInfo={dependencies}
                 theme="dependencies"
             />
             <DataGroup
+                key={uuidv4()}
                 tittle={generalReport.bloated.title}
                 dataInfo={bloated}
                 theme="bloated"
             />
-            <DataGroup
-                tittle={generalReport.size.title}
-                dataInfo={totalSize}
-                theme="dependencies"
-            />
-
             {message}
         </div>
     )

@@ -49,6 +49,35 @@ export const linkAccesor = (heightPercent: number) => {
     }
 };
 
+export const linkStraightAccesor = (heightPercent: number) => {
+
+    const padding = 2;
+    const extraLine: number = 10;
+
+    return (d: any) => {
+
+        const parentCenterPoint = d.parent.x0 + d.parent.y + d.parent.w / 2;
+        // console.log(d)
+        const fatherHeight: number = d.w > 5 ? 5 : d.w / 2;
+        const parentCenter: [number, number] = [d.parent.y0 + d.parent.h + padding, parentCenterPoint];
+
+        const point1: [number, number] = parentCenter;
+        const point2: [number, number] = [d.y0 - padding, d.x0 + d.y];
+        const point3: [number, number] = [d.y0 - padding, d.x0 + d.y + d.w];
+        const point4: [number, number] = parentCenter;
+
+        return `M ${point1[0]} ${point1[1] - fatherHeight}
+        L ${point1[0] + extraLine} ${point1[1] - fatherHeight} 
+        L ${point2[0] - extraLine} ${point2[1]}
+        L ${point2[0]} ${point2[1]} 
+        L ${point3[0]} ${point3[1]} 
+        L ${point3[0] - extraLine} ${point3[1]} 
+        L ${point4[0] + extraLine} ${point4[1] + fatherHeight} 
+        L ${point4[0]} ${point4[1] + fatherHeight} 
+        L ${point1[0]} ${point1[1] - fatherHeight} `;
+    }
+};
+
 //
 export const linksClassAccessor = (d: any) => {
     return "treeLink " +
@@ -62,3 +91,7 @@ export const radialClassAccessor = () => "treeLink treeLink-ommited"
 
 export const linkXaccessor = (d: any) => d.y;
 export const linkYaccessor = (d: any) => d.x;
+
+export const linkradial = d3.linkVertical()
+    .x(linkXaccessor)
+    .y(linkYaccessor);

@@ -5,7 +5,6 @@ import { Project } from "./Project";
 import { v4 as uuidv4 } from 'uuid';
 
 export const Gallery = () => {
-    const gallery: object[] = galleryData.children;
 
     return (
         <div className="site-layout-content" id="gallery">
@@ -19,7 +18,7 @@ export const Gallery = () => {
                     </div>
                 </Col>
             </Row>
-            {gallery.map((d: any) => {
+            {galleryData.children.map((d: any) => {
                 return <Project data={d} key={uuidv4()} />
             })}
         </div>

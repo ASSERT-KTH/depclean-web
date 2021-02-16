@@ -1,3 +1,4 @@
+import { dimension } from "src/interfaces/interfaces"
 
 
 
@@ -30,14 +31,6 @@ export const colorOptions = {
     ]
 }
 
-// const view = {
-//     tittle: "Label",
-//     children: [
-//         { label: "GroupId", value: "direct", checked: true, disabled: false },
-//         { label: "ArtifactId", value: "omitted", checked: true, disabled: false },
-//         { label: "Version", value: "transitive", checked: true, disabled: false }
-//     ]
-// }
 
 export const scope = {
     tittle: "Scope",
@@ -59,4 +52,17 @@ export const link = {
     children: [
         { label: "Links", value: "links", checked: true, disabled: false },
     ]
+}
+
+export const getInitialSize = (width: number, height: number): dimension => {
+    return {
+        width: width,
+        height: height,
+        marginTop: 90,
+        marginRight: 50,
+        marginBottom: 50,
+        marginLeft: 50,
+        boundedHeight: height - 250,
+        boundedWidth: width - (width * 0.0416666667) - (width * 0.0833333333),
+    }
 }

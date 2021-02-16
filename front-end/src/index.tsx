@@ -2,13 +2,16 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
-import reportWebVitals from './reportWebVitals';
-import { AppStateProvider } from './AppStateContext';
+import reportWebVitals from 'src/reportWebVitals';
+import { AppStateProvider } from 'src/AppStateContext';
+import { AppMenuStateProvider } from "src/AppMenuStateContext";
 
 ReactDOM.render(
   // <React.StrictMode>
   <AppStateProvider>
-    <App />
+    <AppMenuStateProvider>
+      <App />
+    </AppMenuStateProvider>
   </AppStateProvider>,
   // </React.StrictMode>,
   document.getElementById('root')

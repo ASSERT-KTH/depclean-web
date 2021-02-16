@@ -67,14 +67,12 @@ export interface AppState {
     filtered: any,
     filteredDependencies: string[],
     filteredBloated: string[],
-    colorSelected: "NONE" | "DEPENDENCY_TYPE" | "USAGE_RATIO" | "GROUP_ID",
+    colorSelected: "NONE" | "DEPENDENCY_TYPE" | "USAGE_RATIO" | "GROUP_ID" | "TRANSPARENT",
     textDisplay: string[],
     filteredScope: string[],
-    viewDependencyList: boolean,
     viewOmitted: boolean
     debloatNum: number
     messageState: "ORIGINAL" | "DEBLOAT_DIRECT" | "DEBLOAT_ALL",
-    hideMenu: boolean,
     viewLinks: boolean
 }
 
@@ -85,7 +83,8 @@ export interface colorPallete {
 
 
 export interface legendColorInterface {
-    pallete: colorPallete[]
+    pallete: colorPallete[],
+    tittle?: string
 }
 
 export interface report {
@@ -105,3 +104,65 @@ export interface project {
     depCleanReport: report,
     description: string,
 }
+
+export interface groupId {
+    name: string,
+    dependencies: number
+}
+
+export type Action =
+    | {
+        type: "SELECT_DEPENDENCY"
+        payload: string[]
+    }
+    | {
+        type: "SELECT_BLOAT"
+        payload: string[]
+    }
+    | {
+        type: "SELECT_VIEW"
+        payload: string[]
+    }
+    | {
+        type: "SELECT_SCOPE"
+        payload: string[]
+    }
+    | {
+        type: "SELECT_COLOR"
+        payload: "NONE" | "DEPENDENCY_TYPE" | "USAGE_RATIO" | "GROUP_ID",
+    }
+    | {
+        type: "LOAD_LOCAL_FILE"
+        payload: any
+    }
+    | {
+        type: "RESET_FILTERS"
+        payload: null
+    }
+    | {
+        type: "VIEW_OMITTED"
+        payload: boolean
+    }
+    | {
+        type: "VIEW_LINKS"
+        payload: boolean
+    }
+    | {
+        type: "DEBLOAT_PROJECT"
+        payload: number
+    }
+    | {
+        type: "FILTER_USED_DEPENDENCIES"
+        payload: string[]
+    } | {
+        type: "FILTER_BLOATED_DEPENDENCIES"
+        payload: string[]
+    }
+    | {
+        type: "FILTER_ALL"
+        payload: null
+    }
+    | {
+        type: "SET_MESSAGE"
+        payload: "ORIGINAL" | "DEBLOAT_DIRECT" | "DEBLOAT_ALL"
+    }

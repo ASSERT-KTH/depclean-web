@@ -22,7 +22,6 @@ const { Content } = Layout;
 
 function App() {
 
-
   return (
     <Router>
 
@@ -41,9 +40,6 @@ function App() {
 
         </Content>
         <SideMenu />
-        {/* <Footer>
-        </Footer> */}
-
 
       </Layout>
     </Router>
