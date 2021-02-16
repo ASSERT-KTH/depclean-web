@@ -32,6 +32,7 @@ export const Project = ({ data }: React.PropsWithChildren<projectProps>) => {
                 //
                 dispatch({ type: "SELECT_BLOAT", payload: filteredBloated });
                 //navigate to the view page
+                dispatch({ type: "SET_MESSAGE", payload: "ORIGINAL" });
 
                 history.push("/result");
             })

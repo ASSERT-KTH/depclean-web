@@ -6,6 +6,7 @@ import { InboxOutlined } from '@ant-design/icons';
 import Dropzone from 'react-dropzone';
 import { artifact, artifactResume } from 'src/interfaces/interfaces'
 import { Project } from 'src/Components/ScanProject';
+import { useAppState } from "src/AppStateContext";
 
 interface packageI {
     packages: artifact | undefined
@@ -13,6 +14,9 @@ interface packageI {
 }
 
 export const Scan = () => {
+
+    const { dispatch } = useAppState();
+
     const [size, setSize] = useState({
         width: window.innerWidth,
         height: window.innerHeight
@@ -42,7 +46,11 @@ export const Scan = () => {
                 // eslint-disable-next-line no-throw-literal
                 if (projectIsValid(project) === false) throw "Invalid Json format";
                 const report = getReport(project);
+
+                dispatch({ type: "SET_MESSAGE", payload: "ORIGINAL" });
                 //set the packages and the report
+                //navigate to the view page
+
                 setPackages({
                     ...packages,
                     packages: project,

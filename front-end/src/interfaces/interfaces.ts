@@ -162,3 +162,7 @@ export type Action =
         type: "FILTER_ALL"
         payload: null
     }
+    | {
+        type: "SET_MESSAGE"
+        payload: "ORIGINAL" | "DEBLOAT_DIRECT" | "DEBLOAT_ALL"
+    }

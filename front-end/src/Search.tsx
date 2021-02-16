@@ -50,6 +50,8 @@ export const Search = () => {
                 //
                 dispatch({ type: "SELECT_BLOAT", payload: filteredBloated });
                 //navigate to the view page
+                //navigate to the view page
+                dispatch({ type: "SET_MESSAGE", payload: "ORIGINAL" });
 
                 history.push("/result");
             })

@@ -180,6 +180,12 @@ const appStateReducer = (state: AppState, action: Action): AppState => {
                 viewLinks: action.payload
             }
         }
+        case "SET_MESSAGE": {
+            return {
+                ...state,
+                messageState: action.payload
+            }
+        }
         case "DEBLOAT_PROJECT": {
 
             let messageState: "ORIGINAL" | "DEBLOAT_DIRECT" | "DEBLOAT_ALL" = "ORIGINAL";
