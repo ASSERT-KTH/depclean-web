@@ -55,7 +55,6 @@ export const Project = ({ data }: React.PropsWithChildren<projectProps>) => {
                             <span>{data.version}</span>
                         </div>
                         <p>{data.description}</p>
-                        {/* <a href={data.gitURL} target="_blank">Git</a> */}
                     </div>
                     <div className="flex description">
                         <Dependencies dataUsed={data.normalReport} dataBloated={data.depCleanReport} key={uuidv4()} />

@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Row, Col, message, Button } from 'antd';
+import { Row, message } from 'antd';
 import { v4 as uuidv4 } from 'uuid';
 import { createProject, projectIsValid, getReport } from 'src/utils/dataRetrieve';
-import { InboxOutlined } from '@ant-design/icons';
-import Dropzone from 'react-dropzone';
 import { artifact, artifactResume } from 'src/interfaces/interfaces'
 import { Project } from 'src/Components/ScanProject';
 import { useAppState } from "src/AppStateContext";
+import { PackageLoader } from 'src/PackageLoader';
 
 interface packageI {
     packages: artifact | undefined
@@ -16,13 +15,12 @@ interface packageI {
 export const Scan = () => {
 
     const { dispatch } = useAppState();
+    const [packages, setPackages] = useState<packageI>({ packages: undefined, resume: undefined })
 
     const [size, setSize] = useState({
         width: window.innerWidth,
         height: window.innerHeight
     });
-
-    const [packages, setPackages] = useState<packageI>({ packages: undefined, resume: undefined })
 
     //UPADTE THE SIZE OF THEC OMPONENT
     useEffect(() => {
@@ -74,80 +72,17 @@ export const Scan = () => {
         message.error(`Could not parse the depclean POM.json file`);
     }
 
-    //
-    const packageLoader =
-        <Col span={12} >
-            <div>
-                <Dropzone
-                    className="scan__dropzone"
-                    onDropAccepted={handleDropAccepted}
-                    onDropRejected={handleDropRejected}
-                    multiple={false}
-                    accept="application/json"
-                // onDrop={(acceptedFiles: any) => console.log(acceptedFiles)}
-                >
-                    {({ getRootProps, getInputProps }: any) => (
-                        <section className="">
-                            <div {...getRootProps()} className="dropzone flex flex-list flex-center">
-                                <input {...getInputProps()} />
-                                <InboxOutlined className="icon-large" />
-                                <p>Drag 'n' drop a file here </p>
-                                <p>OR</p>
-                                <Button type="primary" className="button btn-green" size={'large'}>
-                                    click to upload file
-                        </Button>
-
-                            </div>
-                        </section>
-                    )}
-                </Dropzone>
-            </div>
-        </Col>;
-
-
-    // const loadAgain = packages.packages !== undefined ?
-    //     <Col span={10}>
-    //         <p style={{ textAlign: "center" }}>OR</p>
-    //         <Dropzone
-    //             className=""
-    //             onDropAccepted={handleDropAccepted}
-    //             onDropRejected={handleDropRejected}
-    //             multiple={false}
-    //             accept="application/json"
-    //         >
-    //             {({ getRootProps, getInputProps }: any) => (
-    //                 <section className="">
-    //                     <div {...getRootProps()} className="flex flex-list flex-center">
-    //                         <input {...getInputProps()} />
-    //                         <Button type="primary" className="button btn-green" size={'large'}>
-    //                             click to upload file
-    //             </Button>
-    //                     </div>
-    //                 </section>
-    //             )}
-    //         </Dropzone>
-    //     </Col>
-    //     : <></>;
-
-    //dipslay when there is a project uploded
-    const project = packages.resume !== undefined ?
-        <Project data={packages.resume} /> : <></>;
-
-    //select what to display if packages are undefined or not
-    const content = packages.packages === undefined ?
-        packageLoader : project;
-
-
-
     return (
         <Row id="search"
             key={uuidv4()}
             style={{ width: size.width, height: size.height, backgroundColor: "white" }}
             justify="center"
-            align="middle"
-        >
-            {content}
-            {/* {loadAgain} */}
+            align="middle">
+
+            {packages.packages === undefined ?
+                <PackageLoader handleDropAccepted={handleDropAccepted} handleDropRejected={handleDropRejected} /> :
+                packages.resume !== undefined ?
+                    <Project data={packages.resume} /> : <></>}
         </Row>
     )
 }
