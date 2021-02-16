@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { dimension } from 'src/interfaces/interfaces';
 import { useToolTipAppState } from 'src/AppToolTipStateContext';
 import { formatFileSize } from 'src/Components/tooltip';
-import * as d3 from 'd3';
+import { format } from 'd3';
 
 interface delaunayProps {
     data: any,
@@ -25,7 +25,6 @@ export const DelaunayGrid = ({
 
     const { toolTipDispatch } = useToolTipAppState();
 
-
     // Turn our delaunay triangulation into a voronoi diagram
     const voronoi = useMemo(
         () => {
@@ -39,8 +38,6 @@ export const DelaunayGrid = ({
         }, [data, dimensions.boundedHeight, dimensions.boundedWidth, xAccessor, yAccessor]
     )
 
-    // const mouseEnter = (d: any) => { if (d.data.visible) onEnter(d) }
-    // const mouseLeave = (d: any) => { if (d.data.visible) onLeave(d) }
     const mouseEnter = useCallback(
         (d: any) => {
             if (d.data.visible) {
@@ -50,7 +47,7 @@ export const DelaunayGrid = ({
                         <div className="toolTip-sub">{d.data.version}</div>
                         <div className="toolTip-sub">{d.data.groupId}</div>
                         <div className="toolTip-sub">Scope: {d.data.scope}</div>
-                        <div className="toolTip-sub">Usage ratio: {d.data.usageRatio === 0 ? 0 : d3.format(".5f")(d.data.usageRatio)}%</div>
+                        <div className="toolTip-sub">Usage ratio: {d.data.usageRatio === 0 ? 0 : format(".5f")(d.data.usageRatio)}%</div>
                         <div className="toolTip-sub">Size: <span className="toolTip-value">{formatFileSize(d.data.size, 2)}</span></div>
                     </div>
                 })
