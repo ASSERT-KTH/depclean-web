@@ -13,28 +13,39 @@ import { useHistory } from 'react-router-dom';
 import { StatusMessage } from 'src/Components/ScanStatusMessage';
 
 export const Search = () => {
+
     let history = useHistory();
     const { dispatch, state } = useAppState();
     const { filteredBloated } = state;
-    const [size, setSize] = useState({
-        width: window.innerWidth,
-        height: window.innerHeight
-    });
 
     const [user, setUser] = useState("skyscreamer")
     const [project, setProject] = useState("JSONassert")
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(false);
+    const [size, setSize] = useState({
+        width: window.innerWidth,
+        height: window.innerHeight
+    });
+
+    useEffect(() => {
+        function handleResize() {
+            setSize({
+                width: window.innerWidth,
+                height: window.innerHeight
+            })
+        }
+        window.addEventListener('resize', handleResize)
+    })
 
     const onChangeSearch = debounce((text: string) => {
         const reg = /\s+/g;
         setUser(text.replace(reg, ''));
-    }, 500);
+    }, 900);
 
     const onChangeProject = debounce((text: string) => {
         const reg = /\s+/g;
         setProject(text.replace(reg, ''));
-    }, 500);
+    }, 900);
 
     const onClick = () => {
         setLoading(true);
@@ -80,15 +91,7 @@ export const Search = () => {
     //not found then it should send an error
 
 
-    useEffect(() => {
-        function handleResize() {
-            setSize({
-                width: window.innerWidth,
-                height: window.innerHeight
-            })
-        }
-        window.addEventListener('resize', handleResize)
-    })
+
     const messages = ["Depcleaning project, it can take up to 2 minutes", "Checking project in Git hub", "Downloading project from Github", "Installing DepClean", "Running Depclean"]
     const userInfo = user === "" ? <span className="unHighlight">{"<user>"}</span> : <span className="color-green">{user}</span>
     const projectInfo = project === "" ? <span className="unHighlight">{"<project>"}</span> : <span className="color-green">{project}</span>
