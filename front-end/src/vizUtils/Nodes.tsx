@@ -45,14 +45,6 @@ export const Nodes = ({
     }
 
 
-
-    const mouseEnter = (d: any) => {
-        // if (d.data.visible) onEnter(d) 
-    }
-    const mouseLeave = (d: any) => {
-        // if (d.data.visible) onLeave() 
-    }
-
     const shapeAccessor = (d: any) => {
         const type = d.data.type;
         // console.log(d.data.scope)
@@ -61,8 +53,7 @@ export const Nodes = ({
                 key={uuidv4()}
                 className={classAccessor(d)}
                 r={size * 6}
-                onMouseEnter={() => mouseEnter(d)}
-                onMouseLeave={() => mouseLeave(d)}
+
                 fill={color(d)}
 
             />;
@@ -72,8 +63,7 @@ export const Nodes = ({
                 key={uuidv4()}
                 className={classAccessor(d)}
                 r={sizeScalar(d.data.size)}
-                onMouseEnter={() => mouseEnter(d)}
-                onMouseLeave={() => mouseLeave(d)}
+
                 fill={color(d)}
 
             />
@@ -87,8 +77,7 @@ export const Nodes = ({
                 y={-size / 2}
                 width={size}
                 height={size}
-                onMouseEnter={() => mouseEnter(d)}
-                onMouseLeave={() => mouseLeave(d)}
+
                 fill={color(d)}
             />
 
@@ -102,8 +91,7 @@ export const Nodes = ({
                 y={-size}
                 width={size}
                 height={size}
-                onMouseEnter={() => mouseEnter(d)}
-                onMouseLeave={() => mouseLeave(d)}
+
                 fill={color(d)}
 
             />
@@ -114,8 +102,7 @@ export const Nodes = ({
             key={uuidv4()}
             className={classAccessor(d)}
             r={sizeScalar(d.data.size)}
-            onMouseEnter={() => mouseEnter(d)}
-            onMouseLeave={() => mouseLeave(d)}
+
         />
     }
 

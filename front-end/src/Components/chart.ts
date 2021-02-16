@@ -20,11 +20,9 @@ export const getValueAccessor = (total: number) => {
 export const indexAccesor = (d: any) => d.data.category;
 export const colorAccessor = (d: any) => dependencytypeColor(indexAccesor(d))
 
-
-export const chart = (array: any[], category: string, xScale: d3.ScaleLinear<number, number, never>) => {
-
-    //CREATE THE OBJECT
-    const countCategories = (categoryMap: any, node: any) => {
+//CREATE THE OBJECT
+const countCategories = (category: string) => {
+    return (categoryMap: any, node: any) => {
         const gId = node.data[category];
         const count: number = categoryMap[gId] || 0;
         return {
@@ -32,56 +30,73 @@ export const chart = (array: any[], category: string, xScale: d3.ScaleLinear<num
             [gId]: count + 1,
         }
     }
+}
+
+const mapCategories = (categories: any) => {
+    return (key: any) => {
+        return {
+            data: {
+                category: key,
+                items: categories[key]
+            },
+            index: 0,
+            value: categories[key],
+            x0: 0,
+            x1: 0
+        }
+
+    }
+}
+
+const addIndex = (d: any, i: number) => {
+    d.index = i;
+    return d;
+}
+
+const sortCategories = (a: any, b: any) => {
+    const aData = a.data.category.split("-");
+    const bData = b.data.category.split("-");
+    const aName = aData[1] + "-" + aData[0];
+    const bName = bData[1] + "-" + bData[0];
+    return bName.localeCompare(aName)
+}
+
+const itemsAccessor = (d: any) => d.data.items
+
+const reduceObject = (objectMap: any, node: any) => {
+    const counter = objectMap.value + node.value
+    return {
+        ...objectMap,
+        data: {
+            category: "others",
+            items: counter
+        },
+        index: 0,
+        value: counter,
+        x0: 0,
+        x1: 0
+    }
+}
+
+export const chart = (array: any[], category: string, xScale: d3.ScaleLinear<number, number, never>) => {
+
     //GET ALL THE CATEGORIES AND COUNTED ITEMS
-    const categories = array.reduce(countCategories, {})
+    const categories = array.reduce(countCategories(category), {})
 
     //TRANSFORM IT TO AN ARRAY OF OBJECTS
     let va = Object.keys(categories)
-        .map((key: any) => {
-            return {
-                data: {
-                    category: key,
-                    items: categories[key]
-                },
-                index: 0,
-                value: categories[key],
-                x0: 0,
-                x1: 0
-            }
-        })
-        .sort((a: any, b: any) => {
-            const aData = a.data.category.split("-");
-            const bData = b.data.category.split("-");
-            const aName = aData[1] + "-" + aData[0];
-            const bName = bData[1] + "-" + bData[0];
-            return bName.localeCompare(aName)
-        })
-        .map((d: any, i: number) => {
-            d.index = i;
-            return d;
-        })
+        .map(mapCategories(categories))
+        .sort(sortCategories)
+        .map(addIndex)
 
     //get the total of items
-    const chartTotal: number = d3.sum(va, (d: any) => d.data.items);
+    const chartTotal: number = d3.sum(va, itemsAccessor);
 
     if (va.length > 10) {
         va.sort((a: any, b: any) => b.value - a.value)
         let newArr = va.slice(0, 9);
         const newObj = va.slice(9, va.length)
-            .reduce((objectMap: any, node: any) => {
-                const counter = objectMap.value + node.value
-                return {
-                    ...objectMap,
-                    data: {
-                        category: "others",
-                        items: counter
-                    },
-                    index: 0,
-                    value: counter,
-                    x0: 0,
-                    x1: 0
-                }
-            })
+            .reduce(reduceObject)
         va = [...newArr, newObj];
     }
     //calculate the position of the objects
