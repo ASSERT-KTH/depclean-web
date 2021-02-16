@@ -2,29 +2,30 @@ import React, { useMemo } from 'react';
 import { Col } from 'antd';
 import { v4 as uuidv4 } from 'uuid';
 import { ToolTipContainer } from 'src/ToolTipContainer';
+import { dimension } from 'src/interfaces/interfaces';
 import { useAppState } from "src/AppStateContext";
-import { PartitionNode } from 'src/vizUtils/ParitionNode';
-import { PartitionLinks } from 'src/vizUtils/PartitionLinks';
-import { Links } from 'src/vizUtils/Links';
-import { getLinkColorGenerator } from 'src/utils/treeAccess';
-import { getColor, getNodesFromParitionTree, filterDeleted, filterVisible } from "src/utils/horizontalTree";
-import { sizeAccesorMin } from 'src/accessors/treeAccessors'
+
+import { getLinkColorGenerator, getColor } from 'src/utils/treeAccess';
+import { getNodesFromParitionTree, filterDeleted, filterVisible } from "src/utils/horizontalTree";
+import { sizeAccesorMin, midXAccessor, midYAccessor } from 'src/accessors/treeAccessors'
 import {
     linkStraightAccesor, linksClassAccessor,
     radialClassAccessor, linkradial
 } from 'src/accessors/partitionTreeAccessor';
-import { dimension } from 'src/interfaces/interfaces';
-import { parseOmitedLinks, getOmmitedLinks } from "src/utils/horizontalTree";
-import { DelaunayGrid } from 'src/vizUtils/Delaunay';
-import { midXAccessor, midYAccessor } from 'src/accessors/treeAccessors';
-import { PartitionAreaNode } from 'src/PartitionAreaNode';
+import { getOmmitedLinks } from "src/utils/horizontalTree";
 
+import { Links } from 'src/vizUtils/Links';
+import { PartitionNode } from 'src/vizUtils/ParitionNode';
+import { PartitionLinks } from 'src/vizUtils/PartitionLinks';
+import { DelaunayGrid } from 'src/vizUtils/Delaunay';
+import { PartitionAreaNode } from 'src/PartitionAreaNode';
+import { OmmitedLabels } from 'src/vizUtils/Labels';
+
+const heightPercent = 0.8;
 
 interface HorizontalTreeProps {
     dimensions: dimension,
 }
-
-const heightPercent = 0.8;
 
 export const HorizontalPartitionTree = ({
     dimensions
@@ -40,8 +41,7 @@ export const HorizontalPartitionTree = ({
     const color = useMemo(() => getColor(colorSelected, nodes)
         , [colorSelected, nodes])
     // GRAPH LINKS LABLES 
-    const ommitedLinks = viewOmitted ? getOmmitedLinks(filtered.sum(sizeAccesorMin).descendants()) : <></>;
-    const ommitedLabels = viewOmitted ? parseOmitedLinks(ommitedLinks) : <></>
+    const ommitedLinks = viewOmitted ? getOmmitedLinks(filtered) : <></>;
 
     return (
         <Col span="20" >
@@ -80,7 +80,7 @@ export const HorizontalPartitionTree = ({
                                 classAccessor={radialClassAccessor}
                             /> : <></>}
 
-                        {ommitedLabels}
+                        {viewOmitted ? <OmmitedLabels data={ommitedLinks} /> : <></>}
                     </g>
 
                     <DelaunayGrid

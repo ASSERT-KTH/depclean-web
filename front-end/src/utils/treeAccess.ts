@@ -337,6 +337,12 @@ export const getLinkColorGenerator = (colorSelected: "NONE" | "DEPENDENCY_TYPE" 
     }
 }
 
+export const getColor = (colorSelected: "NONE" | "DEPENDENCY_TYPE" | "USAGE_RATIO" | "GROUP_ID" | "TRANSPARENT", nodes: any[]) => {
+    const colorDataAccessor: (d: any) => string = getColorDataAccessor(colorSelected)
+    const colorGenerator: any = getCGenerator(colorSelected, nodes);
+    return (d: any) => colorGenerator(colorDataAccessor(d));
+}
+
 //PALLETES
 
 export const dependencyPallete: colorPallete[] = [

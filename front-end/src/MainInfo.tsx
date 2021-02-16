@@ -30,7 +30,6 @@ export const MainInfo = () => {
         dispatch({ type: "FILTER_ALL", payload: null });
     };
 
-
     return (
         <Col span={22} offset={1}>
             <div className="flex flex-enter margin-20 " >
