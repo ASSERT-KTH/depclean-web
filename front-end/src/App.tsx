@@ -40,9 +40,6 @@ function App() {
 
         </Content>
         <SideMenu />
-        {/* <Footer>
-        </Footer> */}
-
 
       </Layout>
     </Router>
