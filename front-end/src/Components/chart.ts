@@ -1,4 +1,25 @@
+import { dependencytypeColor } from 'src/utils/treeAccess';
 import * as d3 from 'd3';
+
+export const nodevValueAccessor = (d: any) => d.value;
+
+//DATA ACCESSORS
+export const formatTick = (d: any) => d + "%";
+export const yAccessor = (d: any) => 0;
+export const posAccessor = (d: any) => d.x0;
+export const wAccessor = (d: any) => d.x1;
+
+export const nameAccessor = (d: any) => d.data.category;
+export const valueAccesor = (d: any) => "(" + d.value + ")";
+export const getValueAccessor = (total: number) => {
+    return (d: any) => d3.format(".2f")((d.value / total) * 100) + "%";
+}
+// export const indexAccessor = (d: any) => d.index;
+// export const colorInterpolator = d3.interpolate("red", "blue")
+
+export const indexAccesor = (d: any) => d.data.category;
+export const colorAccessor = (d: any) => dependencytypeColor(indexAccesor(d))
+
 
 export const chart = (array: any[], category: string, xScale: d3.ScaleLinear<number, number, never>) => {
 
