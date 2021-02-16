@@ -17,7 +17,7 @@ interface ChartProps {
     category: string
     labelX?: string,
     labelY?: string,
-    colorInterpolator: any,
+    colorInterpolator?: any,
     numTicks: number,
     tooltipPos?: "TOP" | "LEFT" | "BOTTOM" | "RIGHT"
 }
@@ -50,6 +50,7 @@ export const Chart = ({
         .domain([0, 100])
         .range([0, chartDimensions.boundedWidth])
         .nice()
+
     //Calculate all chart 
     const chartData = chart(nodes, category, chartXScale);
     const total = d3.sum(chartData, (d: any) => d.value)

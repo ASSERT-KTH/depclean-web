@@ -8,6 +8,7 @@ import { dimension } from 'src/interfaces/interfaces';
 import { Legend } from 'src/Legend';
 import { FilterButton } from 'src/FilterButton';
 import { AppToolTipStateProvider } from 'src/AppToolTipStateContext';
+import { getInitialSize } from 'src/Components/homeViz';
 
 export const HomeViz = () => {
     const [size, setSize] = useState({
@@ -28,16 +29,7 @@ export const HomeViz = () => {
     //DATA FOR TREE
     const dimensions: dimension = useMemo(
         () => {
-            return {
-                width: size.width,
-                height: size.height,
-                marginTop: 90,
-                marginRight: 50,
-                marginBottom: 50,
-                marginLeft: 50,
-                boundedHeight: size.height - 250,
-                boundedWidth: size.width - (size.width * 0.0416666667) - (size.width * 0.0833333333),
-            }
+            return getInitialSize(size.width, size.width);
         }, [size])
 
     return (

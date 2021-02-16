@@ -6,13 +6,11 @@ import { truncateString } from "src/utils/stringManipulation";
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 import { filterTypeAndDeleted, mapNodeWithDepCategory } from "./utils/treeAccess";
 import { Chart } from 'src/Chart';
-import * as d3 from 'd3';
-import { dimension } from 'src/interfaces/interfaces'
+import { marks, dimensions } from 'src/Components/mainInfo';
 
 export const MainInfo = () => {
     //get the main state
     const { state, dispatch } = useAppState();
-    //Get all the nodes
     const { debloatNum, filteredBloated, filtered } = state;
 
     //all nodes without the parent, ommited 
@@ -21,41 +19,9 @@ export const MainInfo = () => {
         .filter(filterTypeAndDeleted)
         .map(mapNodeWithDepCategory)
 
-    // const nodesDep = getNodesWithDepCategory(nodesFiltered);
-    const colorUsage = d3.interpolate("red", "blue")
     //GET THE INFORMATIN
     const tittle = truncateString(state.project.artifactId, 35);
     const version = state.project.version;
-
-    const marginRight = 0;
-    const marginLeft = 20;
-    const marginTop = 15;
-    const marginBottom = 15;
-    const width = 400;
-    const height = 70;
-
-    const dimensions: dimension = {
-        width: width,
-        height: height,
-        marginTop: marginTop,
-        marginRight: marginRight,
-        marginBottom: marginBottom,
-        marginLeft: marginLeft,
-        boundedHeight: height - marginTop + marginBottom,
-        boundedWidth: width - marginRight - marginLeft,
-    };
-
-    const marks = {
-        0: 'None',
-        50: 'Direct',
-        100: {
-            style: {
-                color: "hsla(119,38,56,1)",
-                fontWeight: 600,
-            },
-            label: "All",
-        },
-    };
 
     //on change slider debloat project and select debloat
     const onChange = (value: number) => {
@@ -80,7 +46,6 @@ export const MainInfo = () => {
                         dimensions={dimensions}
                         category={"dependencyUsage"}
                         labelY={"Artifacts"}
-                        colorInterpolator={colorUsage}
                         numTicks={3}
                         tooltipPos={"BOTTOM"}
                     />
