@@ -3,7 +3,7 @@ import { Tabs, Col } from 'antd';
 import { TreeMap } from './TreeMap';
 import { useAppState } from "./AppStateContext";
 import { Chart } from './Chart';
-import { getRootInfo, getNodesWithDepCategory } from "./utils/treeAccess";
+import { getRootInfo, mapNodeWithDepCategory, filterUnkown, filterOmittedTest } from "./utils/treeAccess";
 import * as d3 from 'd3';
 const { TabPane } = Tabs;
 
@@ -11,16 +11,22 @@ export const DependenceProvency = () => {
 
     //get the main state
     const { state } = useAppState();
-    //Get all the nodes
     const { filtered } = state;
+    //get all the inforation
     const rootInfo: any[] = getRootInfo(filtered);
 
     const dName: string = `Dependency Usage tree (${rootInfo[0].num})`;
     const gName: string = `Group Id (${rootInfo[1].num})`;
     const sName: string = `Size ${rootInfo[2].num}Mb`;
-    const nodesFiltered = filtered.descendants().filter((d: any) => d.data.type !== "omitted" && d.data.type !== "test")
 
-    const nodesDep = getNodesWithDepCategory(nodesFiltered.splice(1)).filter((d: any) => d.type !== "unknown" && d.status !== "unkown");
+    const nodesDep = filtered
+        .descendants()
+        .filter(filterOmittedTest)
+        .splice(1)
+        .map(mapNodeWithDepCategory)
+        .filter(filterUnkown);
+
+    // const nodesDep = getNodesWithDepCategory(nodesFiltered.splice(1)).filter((d: any) => d.type !== "unknown" && d.status !== "unkown");
     const colorUsage = d3.interpolate("red", "blue")
     const colorGroupId = d3.scaleOrdinal(d3.schemeCategory10);
 

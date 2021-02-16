@@ -14,7 +14,6 @@ export const PartitionAreaNode = ({
     colorAccessor
 }: React.PropsWithChildren<partitionAreaNodeProps>) => {
 
-    console.log("render partition area node")
     return <g >
         {data.map((node: any) => {
             return <g transform={"translate(" + yAccessor(node) + "," + xAccessor(node) + ")"} key={uuidv4()}>
