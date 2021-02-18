@@ -84,7 +84,7 @@ export const HorizontalPartitionTree = ({
                     </g>
 
                     <DelaunayGrid
-                        data={nodes}
+                        data={nodes.filter(filterDeleted)}
                         dimensions={dimensions}
                         xAccessor={midXAccessor}
                         yAccessor={midYAccessor}
