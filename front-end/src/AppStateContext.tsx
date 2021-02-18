@@ -5,46 +5,10 @@ import {
     filterArifactByType
 } from "./utils/treeAccess";
 // import { fetchFromFile } from './utils/dataRetrieve';
-import { artifact, AppState, Action } from 'src/interfaces/interfaces';
-import * as d3 from 'd3';
-import { flink as data } from 'src/utils/dataDummy';
+import { artifact, AppState, Action, AppStateContextProps } from 'src/interfaces/interfaces';
+import { hierarchy } from 'd3';
 import { childrenAccessor } from 'src/accessors/treeAccessors';
-
-interface AppStateContextProps {
-    state: AppState,
-    dispatch: React.Dispatch<Action>,
-    viewMenu: boolean
-    setViewMenu: React.Dispatch<React.SetStateAction<boolean>>
-}
-
-//Data state for all the application
-const dependCheckGroup: string[] = ["direct", "transitive", "inherited"];
-const bloatedCheckGroup: string[] = ["direct", "transitive", "inherited"];//"direct", "transitive", "inherited"
-
-const viewText: string[] = ["groupid", "artifactid", "version"];
-const nodes = d3.hierarchy(data, childrenAccessor);
-const scopeCheckGroup: string[] = ["compile", "test", "provided", "runtime", "system"]
-
-//APP INITIAL STATE
-const appData: AppState = {
-
-    project: data, //the original data only changes when you load a new project
-    nodes: nodes, //all the nodes of the filtered project
-    filteredProject: cloneProject(data),// is a copy of the projec which will be modified
-    filtered: nodes,
-
-    filteredDependencies: dependCheckGroup,
-    filteredBloated: bloatedCheckGroup,
-    filteredScope: scopeCheckGroup,
-
-    colorSelected: "NONE",
-    viewOmitted: false,
-    viewLinks: true,
-
-    debloatNum: 0,
-    textDisplay: viewText,
-    messageState: "ORIGINAL",
-}
+import { dependCheckGroup, bloatedCheckGroup, scopeCheckGroup, appData } from 'src/Components/appStateContext';
 
 
 //REDUCER
@@ -134,7 +98,7 @@ const appStateReducer = (state: AppState, action: Action): AppState => {
         case "LOAD_LOCAL_FILE": {
             // state.project = action.payload;
             // state.filteredProject = cloneProject(action.payload);
-            const newNodes = d3.hierarchy(action.payload, childrenAccessor);
+            const newNodes = hierarchy(action.payload, childrenAccessor);
             // state.nodes = newNodes;
             // state.filtered = newNodes;
             return {
