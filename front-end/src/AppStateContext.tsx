@@ -3,7 +3,7 @@ import {
     filterArtifacts, getTreeHierarchy, cloneProject,
     highlightBloat, debloatDirect, debloatAll,
     filterArifactByType
-} from "./utils/treeAccess";
+} from "src/utils/treeAccess";
 // import { fetchFromFile } from './utils/dataRetrieve';
 import { artifact, AppState, Action, AppStateContextProps } from 'src/interfaces/interfaces';
 import { hierarchy } from 'd3';
