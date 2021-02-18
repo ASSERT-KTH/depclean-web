@@ -40,9 +40,7 @@ export const filterUnkown = (d: any) => (d: any) => d.type !== "unknown" && d.st
 export const filterOmittedTest = (d: any) => d.data.type !== "omitted" && d.data.type !== "test"
 
 //filter all nodes that are deleted either true or false
-export const filterDeleted = (deleted: boolean) => {
-    return (d: any) => d.deleted === deleted;
-}
+export const filterDeleted = (deleted: boolean) => (d: any) => d.deleted === deleted;
 
 export const filterArifactByType = (data: artifact[], scopeType: string[], filter: string[], type: "used" | "bloated") => {
     const unFiltered = data.map((node: artifact) => {
@@ -424,6 +422,10 @@ const usageRagioColor = () => {
 const groupIDColor = (data: any) => {
     //get array with unique d.data.groupId
     const groupIds = getUniqueArray(data);
+    //import the levenshtein library
+    //create the main keys key = {name:string, elements:groupId[]}, where they name is the most commmon element between them
+    //get the colors from keys
+    //return a function that gets a string, then ask for the key and according to the key returns a color
 
     //make the calculus according to that
     const total: any = groupIds.length - 1;

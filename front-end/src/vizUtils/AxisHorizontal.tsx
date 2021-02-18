@@ -1,15 +1,7 @@
 import React from 'react';
 import { v4 as uuidv4 } from 'uuid';
-interface dimension {
-    width: number,
-    height: number,
-    marginTop: number,
-    marginRight: number,
-    marginBottom: number,
-    marginLeft: number,
-    boundedHeight: number,
-    boundedWidth: number,
-}
+import { dimension } from 'src/interfaces/interfaces';
+
 
 interface axisHorizontalProps {
     dimensions: dimension,
