@@ -1,5 +1,5 @@
 import { dependencytypeColor } from 'src/utils/treeAccess';
-import * as d3 from 'd3';
+import { sum, format } from 'd3';
 
 export const nodevValueAccessor = (d: any) => d.value;
 
@@ -12,7 +12,7 @@ export const wAccessor = (d: any) => d.x1;
 export const nameAccessor = (d: any) => d.data.category;
 export const valueAccesor = (d: any) => "(" + d.value + ")";
 export const getValueAccessor = (total: number) => {
-    return (d: any) => d3.format(".2f")((d.value / total) * 100) + "%";
+    return (d: any) => format(".2f")((d.value / total) * 100) + "%";
 }
 // export const indexAccessor = (d: any) => d.index;
 // export const colorInterpolator = d3.interpolate("red", "blue")
@@ -90,7 +90,7 @@ export const chart = (array: any[], category: string, xScale: d3.ScaleLinear<num
         .map(addIndex)
 
     //get the total of items
-    const chartTotal: number = d3.sum(va, itemsAccessor);
+    const chartTotal: number = sum(va, itemsAccessor);
 
     if (va.length > 10) {
         va.sort((a: any, b: any) => b.value - a.value)

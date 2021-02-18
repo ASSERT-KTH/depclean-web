@@ -4,7 +4,7 @@ import { TreeMap } from './TreeMap';
 import { useAppState } from "./AppStateContext";
 import { Chart } from './Chart';
 import { getRootInfo, mapNodeWithDepCategory, filterUnkown, filterOmittedTest } from "./utils/treeAccess";
-import * as d3 from 'd3';
+import { interpolate, scaleOrdinal, schemeCategory10 } from 'd3';
 const { TabPane } = Tabs;
 
 export const DependenceProvency = () => {
@@ -27,8 +27,8 @@ export const DependenceProvency = () => {
         .filter(filterUnkown);
 
     // const nodesDep = getNodesWithDepCategory(nodesFiltered.splice(1)).filter((d: any) => d.type !== "unknown" && d.status !== "unkown");
-    const colorUsage = d3.interpolate("red", "blue")
-    const colorGroupId = d3.scaleOrdinal(d3.schemeCategory10);
+    const colorUsage = interpolate("red", "blue")
+    const colorGroupId = scaleOrdinal(schemeCategory10);
 
     const [dimensions, setDimensions] = useState({
         width: window.innerWidth,

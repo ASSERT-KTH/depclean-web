@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import * as d3 from 'd3';
+import { treemap, treemapBinary, scaleOrdinal, schemeCategory10, format } from 'd3';
 import { Squares } from './vizUtils/Squares';
 import { v4 as uuidv4 } from 'uuid';
 import { Tooltip } from './vizUtils/tooltip';
@@ -33,18 +33,18 @@ export const TreeMap = ({ data, dimensions }: React.PropsWithChildren<treeMapPro
     //treemapSliceDice
 
     const treeViz = useRef(null);
-    const treemap = d3.treemap()
-        .tile(d3.treemapBinary)
+    const treemapD3 = treemap()
+        .tile(treemapBinary)
         .size([dimensions.boundedWidth, dimensions.boundedHeight])
         .padding(10)
 
-    const nodes = treemap(data).descendants();
+    const nodes = treemapD3(data).descendants();
 
     const mouseEnter = (d: any) => {
         setToolTipValue(
             <div>
                 <div className="toolTip-tittle">{d.data.artifactId}</div>
-                <div className="toolTip-sub"><span className="toolTip-value">{d3.format(".2f")(d.value) + "Mb"}</span></div>
+                <div className="toolTip-sub"><span className="toolTip-value">{format(".2f")(d.value) + "Mb"}</span></div>
             </div>
         )
         setToolTipPos({ x: d.x0 + ((d.x1 - d.x0) / 2), y: d.y0 + dimensions.marginTop })
@@ -63,7 +63,7 @@ export const TreeMap = ({ data, dimensions }: React.PropsWithChildren<treeMapPro
     const nameAccessor = (d: any) => d.data.parent;
     const tittleAccessor = (d: any) => d.data.parent !== null ? d.data.parent : d.data.artifactId;
     const depthAccessor = (d: any) => d.depth;
-    const color = d3.scaleOrdinal(d3.schemeCategory10);
+    const color = scaleOrdinal(schemeCategory10);
 
     const colorAccessor = (d: any) => color(depthAccessor(d));
 

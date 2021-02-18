@@ -1,4 +1,3 @@
-// import * as d3 from 'd3';
 import { formatFileSize } from 'src/Components/tooltip';
 import { artifact } from 'src/interfaces/interfaces';
 

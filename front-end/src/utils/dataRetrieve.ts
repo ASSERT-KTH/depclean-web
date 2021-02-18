@@ -1,5 +1,5 @@
 import { sampleJson } from './sampleJason';
-import * as d3 from 'd3';
+import { json } from 'd3';
 import { artifact, reportI, artifactResume } from 'src/interfaces/interfaces'
 import { getAllTransitive } from 'src/utils/message';
 
@@ -59,7 +59,7 @@ export const createProject = (data: any): artifact => {
 //give the proper format to the json 
 export async function fetchFromFile(fileName: string) {
     const url = './files/' + fileName;
-    return await d3.json<ResponseData>(url);
+    return await json<ResponseData>(url);
 }
 
 //check if an artifact has all the valid structure

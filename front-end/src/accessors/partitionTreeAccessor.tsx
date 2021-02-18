@@ -1,10 +1,10 @@
-import * as d3 from 'd3';
+import { linkHorizontal, linkVertical } from 'd3';
 
 //ACCESSORS
 //Path to draw the links
 export const linkAccesor = (heightPercent: number) => {
 
-    const link = d3.linkHorizontal()
+    const link = linkHorizontal()
         .source((d: any) => d.source)
         .target((d: any) => d.target)
         .x((d: any) => d[0])
@@ -92,6 +92,6 @@ export const radialClassAccessor = () => "treeLink treeLink-ommited"
 export const linkXaccessor = (d: any) => d.y;
 export const linkYaccessor = (d: any) => d.x;
 
-export const linkradial = d3.linkVertical()
+export const linkradial = linkVertical()
     .x(linkXaccessor)
     .y(linkYaccessor);

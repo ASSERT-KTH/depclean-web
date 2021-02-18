@@ -1,5 +1,5 @@
 
-import * as d3 from 'd3';
+import { format, sum, hierarchy, scaleOrdinal, interpolateSpectral, schemeCategory10 } from 'd3';
 import { v4 as uuidv4 } from 'uuid';
 import { artifact, colorPallete, groupId } from 'src/interfaces/interfaces';
 import { formatFileSize } from 'src/Components/tooltip';
@@ -115,7 +115,7 @@ export const getRootInfo = (root: any): object[] => {
     });
     info.push({
         name: "size",
-        num: d3.format(".2f")(size)
+        num: format(".2f")(size)
     });
     return info;
 }
@@ -253,7 +253,7 @@ export const debloatAll = (data: artifact[], filterType: string[]): artifact[] =
 
 //get the toal size of a tree
 export const getTreeSize = (nodes: any) => {
-    const totalSize: number = d3.sum(nodes, (d: any) => d.data.size)
+    const totalSize: number = sum(nodes, (d: any) => d.data.size)
     return [{
         name: "",
         num: formatFileSize(totalSize, 2)
@@ -295,7 +295,7 @@ export const cloneProject = (project: artifact) => {
 }
 
 export const getTreeHierarchy = (data: artifact, accessor: any) => {
-    return d3.hierarchy(data, accessor);;
+    return hierarchy(data, accessor);;
 }
 
 //Gets a json and returns a node array formated for the ANT tree structure
@@ -404,7 +404,7 @@ export const ratioColor: colorPallete[] = [
     }
 ]
 const usageRagioColor = () => {
-    const max: any = 1;//d3.max(data, (node: any) => node.data.usageRatio)
+    const max: any = 1;//max(data, (node: any) => node.data.usageRatio)
     return (val: number) => {
         switch (val) {
             case -1:
@@ -412,7 +412,7 @@ const usageRagioColor = () => {
             case undefined:
                 return "grey";
             default:
-                const col = d3.scaleOrdinal()
+                const col = scaleOrdinal()
                     .domain([0, max])
                     .range([ratioColor[0].color, ratioColor[1].color]);
                 return col(val.toString());
@@ -428,9 +428,9 @@ const groupIDColor = (data: any) => {
     //make the calculus according to that
     const total: any = groupIds.length - 1;
     const colors = groupIds.map((d: string, i: number) => {
-        return d3.interpolateSpectral(i / total);
+        return interpolateSpectral(i / total);
     })
-    return d3.scaleOrdinal()
+    return scaleOrdinal()
         .domain(groupIds)
         .range(colors);
 }
@@ -457,17 +457,17 @@ export const getCGenerator = (colorSelected: string, nodes: any) => {
 export const getColorGenerator = (colorSelected: string, data: string[]) => {
     switch (colorSelected) {
         case "color-type":
-            return d3.scaleOrdinal(["#30611E", "#98BC8B", "#7EBEE9", "#EAD17A"]);
+            return scaleOrdinal(["#30611E", "#98BC8B", "#7EBEE9", "#EAD17A"]);
         case "color-artifact-id":
             const total = data.length;
             const colors = data.map((d: string, i: number) => {
-                return d3.interpolateSpectral(i / total);
+                return interpolateSpectral(i / total);
             })
-            return d3.scaleOrdinal()
+            return scaleOrdinal()
                 .domain(data)
                 .range(colors);
         default:
-            return d3.scaleOrdinal(d3.schemeCategory10);
+            return scaleOrdinal(schemeCategory10);
     }
 }
 

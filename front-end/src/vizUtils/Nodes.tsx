@@ -1,9 +1,8 @@
 import React from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { useAppState } from "src/AppStateContext";
-// import { getcolor } from 'src/utils/treeAccess'
 import { getColorGenerator, getColorDataAccessor, countCategories } from 'src/utils/treeAccess';
-// import * as d3 from 'd3';
+
 
 interface LinkProps {
     data: any[],
