@@ -18,7 +18,7 @@ export const HomeViz = () => {
     //modify size on resize
     useEffect(() => {
         function handleResize() {
-            setSize({
+            if (size.width !== window.innerWidth && size.height !== window.innerHeight) setSize({
                 width: window.innerWidth,
                 height: window.innerHeight
             })
@@ -28,10 +28,8 @@ export const HomeViz = () => {
 
     //DATA FOR TREE
     const dimensions: dimension = useMemo(
-        () => {
-            return getInitialSize(size.width, size.width);
-        }, [size])
-
+        () => getInitialSize(size.width, size.height), [size.width, size.height]
+    )
     return (
         <div>
             <Row id="MainInfo" className={"margin-buttom-20"} key={uuidv4()} >

@@ -35,8 +35,7 @@ export const HorizontalPartitionTree = ({
     const { state } = useAppState();
     const { colorSelected, filtered, viewLinks, viewOmitted } = state;
     //get the nodes witht the tree structure
-    const nodes = useMemo(() => getNodesFromParitionTree(dimensions, sizeAccesorMin, filtered, heightPercent)
-        , [dimensions, filtered])
+    const nodes = getNodesFromParitionTree(dimensions, sizeAccesorMin, filtered, heightPercent)
     //get the correct color generator
     const color = useMemo(() => getColor(colorSelected, nodes)
         , [colorSelected, nodes])
