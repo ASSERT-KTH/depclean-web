@@ -326,10 +326,16 @@ const linkBloatedColor = (d: any) => {
     return d.data.status === "bloated" ? "#FFD8D8" : "#eef3f6"
 };
 
+const linkUsageColor = (d: any) => {
+    return d.data.status === "bloated" ? "#FFD8D8" : "#E7EFFF"
+};
+
 export const getLinkColorGenerator = (colorSelected: "NONE" | "DEPENDENCY_TYPE" | "USAGE_RATIO" | "GROUP_ID" | "TRANSPARENT") => {
     switch (colorSelected) {
         case "DEPENDENCY_TYPE":
             return linkBloatedColor;
+        case "USAGE_RATIO":
+            return linkUsageColor;
         default:
             return noLinkColor;
     }
@@ -393,8 +399,8 @@ export const dependencytypeColor = (type: string) => {
 
 export const ratioColor: colorPallete[] = [
     {
-        tittle: "Bloated",
-        color: "#CED8CC"
+        tittle: "Unused",
+        color: "#F9B0A5"
     },
     {
         tittle: "Used",
@@ -416,6 +422,11 @@ const usageRagioColor = () => {
                 return col(val.toString());
         }
     }
+}
+
+const getMainGroupIds = (groupIds: string[]) => {
+    //goes through the array, and gets the main groupIds, returns an key array where key = {name:string, elements:groupId[]}, where they name is the most commmon element between them
+
 }
 
 
