@@ -166,3 +166,16 @@ export type Action =
         type: "SET_MESSAGE"
         payload: "ORIGINAL" | "DEBLOAT_DIRECT" | "DEBLOAT_ALL"
     }
+
+
+export interface AppStateContextProps {
+    state: AppState,
+    dispatch: React.Dispatch<Action>,
+    viewMenu: boolean
+    setViewMenu: React.Dispatch<React.SetStateAction<boolean>>
+}
+
+export interface providersKey {
+    name: string,
+    nodeNames: string[]
+}

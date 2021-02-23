@@ -1,8 +1,10 @@
 
-import * as d3 from 'd3';
+import { format, sum, hierarchy, scaleOrdinal, interpolateSpectral, schemeCategory10 } from 'd3';
 import { v4 as uuidv4 } from 'uuid';
 import { artifact, colorPallete, groupId } from 'src/interfaces/interfaces';
 import { formatFileSize } from 'src/Components/tooltip';
+import { providersKey } from 'src/interfaces/interfaces';
+import { getUniqueArray } from 'src/utils/stringManager';
 
 //ALL SORT
 //sort dependency higher to lower
@@ -40,9 +42,7 @@ export const filterUnkown = (d: any) => (d: any) => d.type !== "unknown" && d.st
 export const filterOmittedTest = (d: any) => d.data.type !== "omitted" && d.data.type !== "test"
 
 //filter all nodes that are deleted either true or false
-export const filterDeleted = (deleted: boolean) => {
-    return (d: any) => d.deleted === deleted;
-}
+export const filterDeleted = (deleted: boolean) => (d: any) => d.deleted === deleted;
 
 export const filterArifactByType = (data: artifact[], scopeType: string[], filter: string[], type: "used" | "bloated") => {
     const unFiltered = data.map((node: artifact) => {
@@ -82,10 +82,6 @@ export const countCategories = (categoryArr: any, node: any) => {
 }
 
 
-export const getUniqueArray = (data: any) => {
-    const groupId: string[] = data.map((d: any) => d.data.groupId);
-    return Array.from(new Set(groupId))
-}
 
 
 //return the basic root info
@@ -115,7 +111,7 @@ export const getRootInfo = (root: any): object[] => {
     });
     info.push({
         name: "size",
-        num: d3.format(".2f")(size)
+        num: format(".2f")(size)
     });
     return info;
 }
@@ -253,16 +249,12 @@ export const debloatAll = (data: artifact[], filterType: string[]): artifact[] =
 
 //get the toal size of a tree
 export const getTreeSize = (nodes: any) => {
-    const totalSize: number = d3.sum(nodes, (d: any) => d.data.size)
+    const totalSize: number = sum(nodes, (d: any) => d.data.size)
     return [{
         name: "",
         num: formatFileSize(totalSize, 2)
     }];
 }
-
-
-
-
 
 
 //get a depClean pom.XML and filter it according to the type array
@@ -295,7 +287,7 @@ export const cloneProject = (project: artifact) => {
 }
 
 export const getTreeHierarchy = (data: artifact, accessor: any) => {
-    return d3.hierarchy(data, accessor);;
+    return hierarchy(data, accessor);;
 }
 
 //Gets a json and returns a node array formated for the ANT tree structure
@@ -328,18 +320,24 @@ const linkBloatedColor = (d: any) => {
     return d.data.status === "bloated" ? "#FFD8D8" : "#eef3f6"
 };
 
+const linkUsageColor = (d: any) => {
+    return d.data.status === "bloated" ? "#FFD8D8" : "#E7EFFF"
+};
+
 export const getLinkColorGenerator = (colorSelected: "NONE" | "DEPENDENCY_TYPE" | "USAGE_RATIO" | "GROUP_ID" | "TRANSPARENT") => {
     switch (colorSelected) {
         case "DEPENDENCY_TYPE":
             return linkBloatedColor;
+        case "USAGE_RATIO":
+            return linkUsageColor;
         default:
             return noLinkColor;
     }
 }
 
-export const getColor = (colorSelected: "NONE" | "DEPENDENCY_TYPE" | "USAGE_RATIO" | "GROUP_ID" | "TRANSPARENT", nodes: any[]) => {
-    const colorDataAccessor: (d: any) => string = getColorDataAccessor(colorSelected)
-    const colorGenerator: any = getCGenerator(colorSelected, nodes);
+export const getColor = (colorSelected: "NONE" | "DEPENDENCY_TYPE" | "USAGE_RATIO" | "GROUP_ID" | "TRANSPARENT", providers: providersKey[]) => {
+    const colorDataAccessor: (d: any) => string = getColorDataAccessor(colorSelected, providers)
+    const colorGenerator: any = getCGenerator(colorSelected, providers);
     return (d: any) => colorGenerator(colorDataAccessor(d));
 }
 
@@ -395,8 +393,8 @@ export const dependencytypeColor = (type: string) => {
 
 export const ratioColor: colorPallete[] = [
     {
-        tittle: "Bloated",
-        color: "#CED8CC"
+        tittle: "Unused",
+        color: "#F9B0A5"
     },
     {
         tittle: "Used",
@@ -404,7 +402,7 @@ export const ratioColor: colorPallete[] = [
     }
 ]
 const usageRagioColor = () => {
-    const max: any = 1;//d3.max(data, (node: any) => node.data.usageRatio)
+    const max: any = 1;//max(data, (node: any) => node.data.usageRatio)
     return (val: number) => {
         switch (val) {
             case -1:
@@ -412,7 +410,7 @@ const usageRagioColor = () => {
             case undefined:
                 return "grey";
             default:
-                const col = d3.scaleOrdinal()
+                const col = scaleOrdinal()
                     .domain([0, max])
                     .range([ratioColor[0].color, ratioColor[1].color]);
                 return col(val.toString());
@@ -421,22 +419,22 @@ const usageRagioColor = () => {
 }
 
 
-const groupIDColor = (data: any) => {
+const groupIDColor = (providers: providersKey[]) => {
     //get array with unique d.data.groupId
-    const groupIds = getUniqueArray(data);
+    const groupIds = providers.map((provider: providersKey) => provider.name);
 
     //make the calculus according to that
     const total: any = groupIds.length - 1;
     const colors = groupIds.map((d: string, i: number) => {
-        return d3.interpolateSpectral(i / total);
+        return interpolateSpectral(i / total);
     })
-    return d3.scaleOrdinal()
+    return scaleOrdinal()
         .domain(groupIds)
         .range(colors);
 }
 
 //Returns an color generator according to the color selected
-export const getCGenerator = (colorSelected: string, nodes: any) => {
+export const getCGenerator = (colorSelected: string, providers: providersKey[]) => {
     switch (colorSelected) {
         case "NONE":
             return noColor;
@@ -445,7 +443,7 @@ export const getCGenerator = (colorSelected: string, nodes: any) => {
         case "USAGE_RATIO":
             return usageRagioColor();
         case "GROUP_ID":
-            return groupIDColor(nodes);
+            return groupIDColor(providers);
         case "TRANSPARENT":
             return transparentColor;
         default:
@@ -457,17 +455,17 @@ export const getCGenerator = (colorSelected: string, nodes: any) => {
 export const getColorGenerator = (colorSelected: string, data: string[]) => {
     switch (colorSelected) {
         case "color-type":
-            return d3.scaleOrdinal(["#30611E", "#98BC8B", "#7EBEE9", "#EAD17A"]);
+            return scaleOrdinal(["#30611E", "#98BC8B", "#7EBEE9", "#EAD17A"]);
         case "color-artifact-id":
             const total = data.length;
             const colors = data.map((d: string, i: number) => {
-                return d3.interpolateSpectral(i / total);
+                return interpolateSpectral(i / total);
             })
-            return d3.scaleOrdinal()
+            return scaleOrdinal()
                 .domain(data)
                 .range(colors);
         default:
-            return d3.scaleOrdinal(d3.schemeCategory10);
+            return scaleOrdinal(schemeCategory10);
     }
 }
 
@@ -490,7 +488,7 @@ export const getColorByType = (type: string) => {
 }
 
 //Returns an color data accessor according to the color selected
-export const getColorDataAccessor = (colorSelected: string) => {
+export const getColorDataAccessor = (colorSelected: string, providers: providersKey[]) => {
     switch (colorSelected) {
         case "NONE":
             return ((d: any): string => d.depth);
@@ -502,8 +500,15 @@ export const getColorDataAccessor = (colorSelected: string) => {
         case "USAGE_RATIO":
             return ((d: any): string => d.data.usageRatio);
         case "GROUP_ID":
-            return ((d: any): string => { return d.data.groupId });
+            return findProvider(providers);
         default:
             return ((d: any): string => d.data.type);
+    }
+}
+
+const findProvider = (providers: providersKey[]) => {
+    return (node: any) => {
+        const groupId = providers.find((provider: providersKey) => provider.nodeNames.includes(node.data.groupId))
+        return groupId !== undefined ? groupId.name : "none";
     }
 }

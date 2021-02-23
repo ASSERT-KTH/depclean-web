@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import * as d3 from 'd3';
+import { scaleLinear, sum } from 'd3';
 import { Squares } from './vizUtils/Squares';
 // import { Legend } from './vizUtils/Legend';
 import { v4 as uuidv4 } from 'uuid';
@@ -57,14 +57,14 @@ export const Chart = ({
 
     const toolTip: "TOP" | "LEFT" | "BOTTOM" | "RIGHT" = tooltipPos === undefined ? "TOP" : tooltipPos;
 
-    const chartXScale = d3.scaleLinear()
+    const chartXScale = scaleLinear()
         .domain([0, 100])
         .range([0, chartDimensions.boundedWidth])
         .nice()
 
     //Calculate all chart 
     const chartData = chart(nodes, category, chartXScale);
-    const total = d3.sum(chartData, nodevValueAccessor)
+    const total = sum(chartData, nodevValueAccessor)
 
     const hAccessor = (d: any) => chartHeight;
     const valueAccessor = getValueAccessor(total);

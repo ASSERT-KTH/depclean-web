@@ -1,5 +1,5 @@
 
-import * as d3 from 'd3';
+import { partition, hierarchy, treemap, treemapBinary } from 'd3';
 import { valueAccessor } from 'src/accessors/squareAccessors';
 import { dimension } from 'src/interfaces/interfaces';
 import { sizeAccesorMin } from 'src/accessors/treeAccessors'
@@ -38,7 +38,7 @@ export const getOmmitedLinks = (filtered: any) => {
 }
 
 export const getParitionTree = (size: number[], padding: number) => {
-    return d3.partition()
+    return partition()
         .size([size[0], size[1]])
         .round(true)
         .padding(padding) //modify this to give the proper dimensions
@@ -114,7 +114,7 @@ export const getTreeMap = (types: string[], usedTypes: string[], height: number,
         .map(mapToPartition(usedTypes))
         .sort(sortByUsed)
     //first get the hierarchy
-    const data = d3.hierarchy({
+    const data = hierarchy({
         name: "root",
         children: allTypes
     })
@@ -122,14 +122,14 @@ export const getTreeMap = (types: string[], usedTypes: string[], height: number,
         .sort((a: any, b: any) => a.value - b.value)
     //we can sort it if needed
     //get the partition tree
-    const treeMap = d3.treemap()
-        .tile(d3.treemapBinary)
+    const treeMapD3 = treemap()
+        .tile(treemapBinary)
         .size([height, width])
         .round(true)
         .padding(1)
     // console.log("in get map tree")
     //get all the nodes descendants
-    return treeMap(data)
+    return treeMapD3(data)
         .descendants()
         .slice(1)
 

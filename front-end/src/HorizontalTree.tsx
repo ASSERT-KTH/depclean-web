@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Col } from 'antd';
-import * as d3 from 'd3';
+import { format, linkVertical, tree, extent, scaleLinear } from 'd3';
 import { v4 as uuidv4 } from 'uuid';
 import { Links } from './vizUtils/Links';
 import { Nodes } from './vizUtils/Nodes';
@@ -47,7 +47,7 @@ export const HorizontalTree = ({
                 <div className="toolTip-sub">GroupId: {d.data.groupId}</div>
                 <div className="toolTip-sub">Version: {d.data.version}</div>
                 <div className="toolTip-sub">Scope: {d.data.scope}</div>
-                <div className="toolTip-sub">Size: <span className="toolTip-value">{d3.format(".4f")(d.data.size)}</span></div>
+                <div className="toolTip-sub">Size: <span className="toolTip-value">{format(".4f")(d.data.size)}</span></div>
             </div>)
         setToolTipPos({ x: d.y + dimensions.marginTop, y: d.x + dimensions.marginTop })
         setTpOpacity(1);
@@ -77,7 +77,7 @@ export const HorizontalTree = ({
             (d.data.deleted || d.parent.data.deleted ? " treeLink-deleted" : "")
     }
 
-    const linkradial = d3.linkVertical()
+    const linkradial = linkVertical()
         .x(function (d: any) { return d.y; })
         .y(function (d: any) { return d.x; });
 
@@ -94,7 +94,7 @@ export const HorizontalTree = ({
     // onLeave={ void}
 
     //CREATE the tree structure  and the hierarchy
-    const tree = d3.tree()
+    const treeStructure = tree()
         .nodeSize([30, 100])
         .separation((a, b) => a.depth)
         .size([dimensions.boundedHeight - dimensions.marginBottom - dimensions.marginTop, dimensions.boundedWidth - dimensions.marginBottom - dimensions.marginTop])
@@ -103,7 +103,7 @@ export const HorizontalTree = ({
     // .size([dimensions.boundedHeight, dimensions.boundedWidth])
 
     //GET ALL THE NODES WITH A TREE STRUCTURE
-    const treeNodes = tree(data).descendants();
+    const treeNodes = treeStructure(data).descendants();
     const ommitedLinks = viewOmitted ? getOmmitedLinks(treeNodes) : <React.Fragment />;
     const ommitedLabels = viewOmitted ?
         ommitedLinks.map((d: any) => <text
@@ -126,9 +126,9 @@ export const HorizontalTree = ({
     const nodes = treeNodes.filter((d: any) => d.data.type !== "omitted" && d.data.type !== "test");
 
     // const totalSize = d3.sum(nodes, (d: any) => d.data.size)
-    const sizeExtent = d3.extent(nodes, (d: any) => d.data.size)
+    const sizeExtent = extent(nodes, (d: any) => d.data.size)
     //transform circular pie to rectangular
-    const sizeScale = d3.scaleLinear()
+    const sizeScale = scaleLinear()
         .domain([sizeExtent[0], sizeExtent[1]])
         .range([6, 20])
 
