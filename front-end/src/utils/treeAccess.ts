@@ -4,7 +4,6 @@ import { v4 as uuidv4 } from 'uuid';
 import { artifact, colorPallete, groupId } from 'src/interfaces/interfaces';
 import { formatFileSize } from 'src/Components/tooltip';
 import { providersKey } from 'src/interfaces/interfaces';
-import { getUniqueArray } from 'src/utils/stringManager';
 
 //ALL SORT
 //sort dependency higher to lower
