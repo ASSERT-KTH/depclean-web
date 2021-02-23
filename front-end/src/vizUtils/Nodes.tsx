@@ -1,7 +1,7 @@
 import React from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import { useAppState } from "src/AppStateContext";
-import { getColorGenerator, getColorDataAccessor, countCategories } from 'src/utils/treeAccess';
+// import { useAppState } from "src/AppStateContext";
+// import { getColorGenerator, getColorDataAccessor, countCategories } from 'src/utils/treeAccess';
 
 
 interface LinkProps {
@@ -20,18 +20,18 @@ export const Nodes = ({
     sizeScalar
 }: React.PropsWithChildren<LinkProps>) => {
     //get the main state
-    const { state } = useAppState();
+    // const { state } = useAppState();
     //Get all the nodes
-    const {
-        colorSelected
-    } = state;
+    // const {
+    //     colorSelected
+    // } = state;
 
     // let colorGenerator: any = d3.scaleOrdinal(d3.schemeCategory10);
     // let colorAccessor = ((d: any) => { return d.data.type });
-    const getIds = data.reduce(countCategories, [])
-    const colorGenerator: d3.ScaleOrdinal<string, unknown, never> = getColorGenerator(colorSelected, getIds);
-    const colorDataAccessor: (d: any) => string = getColorDataAccessor(colorSelected)
-    const color: any = (d: any) => colorGenerator(colorDataAccessor(d));
+    // const getIds = data.reduce(countCategories, [])
+    // const colorGenerator: d3.ScaleOrdinal<string, unknown, never> = getColorGenerator(colorSelected, getIds);
+    // const colorDataAccessor: (d: any) => string = getColorDataAccessor(colorSelected)
+    const color: any = (d: any) => "red"//colorGenerator(colorDataAccessor(d));
 
 
     const classAccessor = (d: any) => {

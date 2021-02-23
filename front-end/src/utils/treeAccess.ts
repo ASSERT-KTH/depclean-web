@@ -3,6 +3,8 @@ import { format, sum, hierarchy, scaleOrdinal, interpolateSpectral, schemeCatego
 import { v4 as uuidv4 } from 'uuid';
 import { artifact, colorPallete, groupId } from 'src/interfaces/interfaces';
 import { formatFileSize } from 'src/Components/tooltip';
+import { providersKey } from 'src/interfaces/interfaces';
+import { getUniqueArray } from 'src/utils/stringManager';
 
 //ALL SORT
 //sort dependency higher to lower
@@ -80,10 +82,6 @@ export const countCategories = (categoryArr: any, node: any) => {
 }
 
 
-export const getUniqueArray = (data: any) => {
-    const groupId: string[] = data.map((d: any) => d.data.groupId);
-    return Array.from(new Set(groupId))
-}
 
 
 //return the basic root info
@@ -259,10 +257,6 @@ export const getTreeSize = (nodes: any) => {
 }
 
 
-
-
-
-
 //get a depClean pom.XML and filter it according to the type array
 //filter if they are bloated
 //if filterType includes the type of the artifact
@@ -341,9 +335,9 @@ export const getLinkColorGenerator = (colorSelected: "NONE" | "DEPENDENCY_TYPE" 
     }
 }
 
-export const getColor = (colorSelected: "NONE" | "DEPENDENCY_TYPE" | "USAGE_RATIO" | "GROUP_ID" | "TRANSPARENT", nodes: any[]) => {
-    const colorDataAccessor: (d: any) => string = getColorDataAccessor(colorSelected)
-    const colorGenerator: any = getCGenerator(colorSelected, nodes);
+export const getColor = (colorSelected: "NONE" | "DEPENDENCY_TYPE" | "USAGE_RATIO" | "GROUP_ID" | "TRANSPARENT", providers: providersKey[]) => {
+    const colorDataAccessor: (d: any) => string = getColorDataAccessor(colorSelected, providers)
+    const colorGenerator: any = getCGenerator(colorSelected, providers);
     return (d: any) => colorGenerator(colorDataAccessor(d));
 }
 
@@ -424,19 +418,10 @@ const usageRagioColor = () => {
     }
 }
 
-const getMainGroupIds = (groupIds: string[]) => {
-    //goes through the array, and gets the main groupIds, returns an key array where key = {name:string, elements:groupId[]}, where they name is the most commmon element between them
 
-}
-
-
-const groupIDColor = (data: any) => {
+const groupIDColor = (providers: providersKey[]) => {
     //get array with unique d.data.groupId
-    const groupIds = getUniqueArray(data);
-    //import the levenshtein library
-    //create the main keys key = {name:string, elements:groupId[]}, where they name is the most commmon element between them
-    //get the colors from keys
-    //return a function that gets a string, then ask for the key and according to the key returns a color
+    const groupIds = providers.map((provider: providersKey) => provider.name);
 
     //make the calculus according to that
     const total: any = groupIds.length - 1;
@@ -449,7 +434,7 @@ const groupIDColor = (data: any) => {
 }
 
 //Returns an color generator according to the color selected
-export const getCGenerator = (colorSelected: string, nodes: any) => {
+export const getCGenerator = (colorSelected: string, providers: providersKey[]) => {
     switch (colorSelected) {
         case "NONE":
             return noColor;
@@ -458,7 +443,7 @@ export const getCGenerator = (colorSelected: string, nodes: any) => {
         case "USAGE_RATIO":
             return usageRagioColor();
         case "GROUP_ID":
-            return groupIDColor(nodes);
+            return groupIDColor(providers);
         case "TRANSPARENT":
             return transparentColor;
         default:
@@ -503,7 +488,7 @@ export const getColorByType = (type: string) => {
 }
 
 //Returns an color data accessor according to the color selected
-export const getColorDataAccessor = (colorSelected: string) => {
+export const getColorDataAccessor = (colorSelected: string, providers: providersKey[]) => {
     switch (colorSelected) {
         case "NONE":
             return ((d: any): string => d.depth);
@@ -515,8 +500,15 @@ export const getColorDataAccessor = (colorSelected: string) => {
         case "USAGE_RATIO":
             return ((d: any): string => d.data.usageRatio);
         case "GROUP_ID":
-            return ((d: any): string => { return d.data.groupId });
+            return findProvider(providers);
         default:
             return ((d: any): string => d.data.type);
+    }
+}
+
+const findProvider = (providers: providersKey[]) => {
+    return (node: any) => {
+        const groupId = providers.find((provider: providersKey) => provider.nodeNames.includes(node.data.groupId))
+        return groupId !== undefined ? groupId.name : "none";
     }
 }

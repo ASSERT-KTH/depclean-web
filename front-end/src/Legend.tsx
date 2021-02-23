@@ -1,9 +1,11 @@
 import React from 'react';
 import { useAppState } from "src/AppStateContext";
-import { dependencyPallete, ratioColor, getCGenerator, sortByNumDependencies, getProviders, mapGroupId } from "src/utils/treeAccess";
+import { dependencyPallete, ratioColor, getCGenerator } from "src/utils/treeAccess";
 import { LegendColor } from "src/LegendColor";
 import { LegendGroup } from 'src/LegendGroup';
 import { filterOmmitedandTest, filterDeleted } from 'src/utils/horizontalTree';
+import { getMainGroupIds, getUniqueArray } from 'src/utils/stringManager';
+import { providersKey } from 'src/interfaces/interfaces';
 
 export const Legend = () => {
     //get the main state
@@ -16,6 +18,8 @@ export const Legend = () => {
             .filter(filterDeleted)
         : null;
 
+    const providers: providersKey[] = colorSelected === "GROUP_ID" ? getMainGroupIds(getUniqueArray(nodes)) : []
+
     return <div id={"legend"} className={"flex legend-right"}>
         {colorSelected === "DEPENDENCY_TYPE" ?
             <LegendColor pallete={dependencyPallete} tittle="Dependencies" /> :
@@ -23,12 +27,9 @@ export const Legend = () => {
                 <LegendColor pallete={ratioColor} tittle="Types" /> :
                 colorSelected === "GROUP_ID" ?
                     <LegendGroup
-                        colorPallete={getCGenerator(colorSelected, nodes)}
+                        colorPallete={getCGenerator(colorSelected, providers)}
                         rectSize={10}
-                        groupIds={Object.entries(nodes //reduce the nodes to an object with the number of times a groupId repeats
-                            .reduce(getProviders, {})) //transform it into an array
-                            .map(mapGroupId) //map it to resestructure the info into an array with objects
-                            .sort(sortByNumDependencies)} //sort it from highest to lowest
+                        groupIds={providers}
                     /> :
                     <></>
         }

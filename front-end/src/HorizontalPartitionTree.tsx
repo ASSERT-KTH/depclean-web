@@ -12,7 +12,9 @@ import {
     linkStraightAccesor, linksClassAccessor,
     radialClassAccessor, linkradial
 } from 'src/accessors/partitionTreeAccessor';
+import { getMainGroupIds, getUniqueArray } from 'src/utils/stringManager';
 import { getOmmitedLinks } from "src/utils/horizontalTree";
+import { providersKey } from 'src/interfaces/interfaces';
 
 import { Links } from 'src/vizUtils/Links';
 import { PartitionNode } from 'src/vizUtils/ParitionNode';
@@ -37,8 +39,12 @@ export const HorizontalPartitionTree = ({
     //get the nodes witht the tree structure
     const nodes = getNodesFromParitionTree(dimensions, sizeAccesorMin, filtered, heightPercent)
     //get the correct color generator
-    const color = useMemo(() => getColor(colorSelected, nodes)
-        , [colorSelected, nodes])
+    const providers: providersKey[] = useMemo(() => getMainGroupIds(getUniqueArray(nodes)), [nodes]);
+
+    const color = useMemo(() => getColor(colorSelected, providers)
+        , [colorSelected, providers])
+
+
     // GRAPH LINKS LABLES 
     const ommitedLinks = viewOmitted ? getOmmitedLinks(filtered) : <></>;
 

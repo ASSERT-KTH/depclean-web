@@ -174,3 +174,8 @@ export interface AppStateContextProps {
     viewMenu: boolean
     setViewMenu: React.Dispatch<React.SetStateAction<boolean>>
 }
+
+export interface providersKey {
+    name: string,
+    nodeNames: string[]
+}
