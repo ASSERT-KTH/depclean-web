@@ -67,7 +67,7 @@ export const Search = () => {
                 history.push("/result");
             })
             .catch((error) => {
-                message.error(`Could not Depclean this`);
+                message.error(`Could not DepClean this`);
                 setLoading(false);
                 setError(true);
                 if (error.response) {
@@ -92,13 +92,13 @@ export const Search = () => {
 
 
 
-    const messages = ["Depcleaning project, it can take up to 2 minutes", "Checking project in Git hub", "Downloading project from Github", "Installing DepClean", "Running Depclean"]
+    const messages = ["DepCleaning project, it can take up to 2 minutes", "Checking project in Git hub", "Downloading project from Github", "Installing DepClean", "Running Depclean"]
     const userInfo = user === "" ? <span className="unHighlight">{"<user>"}</span> : <span className="color-green">{user}</span>
     const projectInfo = project === "" ? <span className="unHighlight">{"<project>"}</span> : <span className="color-green">{project}</span>
     const statusMessage = loading || error ?
         <StatusMessage
             statusMessages={messages}
-            errorMessage={"Could not Depclean this project"}
+            errorMessage={"Could not DepClean this project"}
             status={(error === false) ? "loading" : "error"}
         /> : <></>;
 
@@ -142,7 +142,7 @@ export const Search = () => {
                                 disabled={user !== "" && project !== "" ? false : true}
                                 className="button btn-green mid-size margin-auto"
                                 icon={<SearchOutlined />} size="large">
-                                Depclean project
+                                DepClean project
                                 </Button>
                         </Row>
                     </Input.Group>
@@ -150,7 +150,7 @@ export const Search = () => {
                 <div className="spacer-h spacer-h-m"></div>
                 <div className="flex flex-center flex-justify-center">
                     <span className="text-center text-small"></span>
-                    <Link className="text-small link-green underline-text" to={"/scan"}>Scan a decpclean json file</Link>
+                    <Link className="text-small link-green underline-text" to={"/scan"}>Scan a DepClean json file</Link>
                 </div>
 
 

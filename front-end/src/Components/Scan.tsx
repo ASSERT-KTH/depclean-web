@@ -42,7 +42,7 @@ export const Scan = () => {
                 const project: artifact = createProject(json);
                 //check i f the project is valid
                 // eslint-disable-next-line no-throw-literal
-                if (projectIsValid(project) === false) throw "Invalid Json format";
+                if (projectIsValid(project) === false) throw "Invalid JSON format";
                 const report = getReport(project);
 
                 dispatch({ type: "SET_MESSAGE", payload: "ORIGINAL" });
