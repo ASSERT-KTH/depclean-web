@@ -25,7 +25,7 @@ function App() {
 
   return (
     <Router>
-      <HashRouter basename="/depclean-web">
+      <HashRouter basename="/">
 
         <MainMenu />
         <Layout className="layout">
