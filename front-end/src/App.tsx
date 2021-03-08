@@ -10,7 +10,8 @@ import { SideMenu } from 'src/SideMenu';
 import {
   BrowserRouter as Router,
   Route,
-  Switch
+  Switch,
+  HashRouter
 } from 'react-router-dom';
 
 
@@ -23,26 +24,28 @@ const { Content } = Layout;
 function App() {
 
   return (
-    <Router>
+    <HashRouter basename="/">
+      <Router>
 
-      <MainMenu />
-      <Layout className="layout">
+        <MainMenu />
+        <Layout className="layout">
 
-        <Content>
-          <Switch>
-            <Route exact path="/about" component={About} />
-            <Route exact path="/gallery" component={Gallery} />
-            <Route exact path="/result" component={HomeViz} />
-            <Route exact path="/search" component={Search} />
-            <Route exact path="/scan" component={Scan} />
-            <Route exact path="/" component={Search} />
-          </Switch>
+          <Content>
+            <Switch>
+              <Route exact path="/about" component={About} />
+              <Route exact path="/gallery" component={Gallery} />
+              <Route exact path="/result" component={HomeViz} />
+              <Route exact path="/search" component={Search} />
+              <Route exact path="/scan" component={Scan} />
+              <Route exact path="/" component={Search} />
+            </Switch>
 
-        </Content>
-        <SideMenu />
+          </Content>
+          <SideMenu />
 
-      </Layout>
-    </Router>
+        </Layout>
+      </Router>
+    </HashRouter>
   );
 }
 
