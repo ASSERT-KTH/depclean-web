@@ -24,7 +24,7 @@ const { Content } = Layout;
 function App() {
 
   return (
-    <HashRouter basename="/">
+    <HashRouter basename="/depclean-web">
       <Router>
 
         <MainMenu />
