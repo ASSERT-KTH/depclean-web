@@ -115,7 +115,7 @@ const appStateReducer = (state: AppState, action: Action): AppState => {
                 ...state,
                 filteredDependencies: dependCheckGroup,
                 filteredBloated: bloatedCheckGroup,
-                colorSelected: "NONE",
+                colorSelected: "DEPENDENCY_TYPE",
                 filteredScope: scopeCheckGroup,
                 viewOmitted: true,
                 debloatNum: 0,

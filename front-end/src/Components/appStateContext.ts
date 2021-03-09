@@ -24,7 +24,7 @@ export const appData: AppState = {
     filteredBloated: bloatedCheckGroup,
     filteredScope: scopeCheckGroup,
 
-    colorSelected: "NONE",
+    colorSelected: "DEPENDENCY_TYPE",
     viewOmitted: false,
     viewLinks: true,
 
