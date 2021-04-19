@@ -3,6 +3,7 @@ import { flink as data } from 'src/utils/dataDummy';
 import { childrenAccessor } from 'src/accessors/treeAccessors';
 import { cloneProject } from "src/utils/treeAccess";
 import { AppState } from 'src/interfaces/interfaces';
+import { filter } from 'lodash';
 
 //Data state for all the application
 export const dependCheckGroup: string[] = ["direct", "transitive", "inherited"];
@@ -31,4 +32,9 @@ export const appData: AppState = {
     debloatNum: 0,
     textDisplay: viewText,
     messageState: "ORIGINAL",
+}
+
+
+export const filterByArray = (boolArr: boolean[]) => {
+    return (el: string, i: number) => boolArr[i] === true;
 }

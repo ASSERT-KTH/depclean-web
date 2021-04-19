@@ -34,7 +34,7 @@ function App() {
             <Switch>
               <Route exact path="/about" component={About} />
               <Route exact path="/gallery" component={Gallery} />
-              <Route exact path="/result" component={HomeViz} />
+              <Route exact path="/result/:action/:id/:appState" component={HomeViz} />
               <Route exact path="/search" component={Search} />
               <Route exact path="/scan" component={Scan} />
               <Route exact path="/" component={Search} />

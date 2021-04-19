@@ -25,7 +25,7 @@ export const galleryData: gallery = {
             tittle: "Maven core",
             id: 1,
             version: "3.7.0-SNAPSHOT",
-            cleanURL: "maven-core.json",
+            cleanURL: "maven-core",
             gitURL: "https://github.com/apache/maven",
             img: "img.mavenCore.jpg",
             normalReport: {
@@ -44,7 +44,7 @@ export const galleryData: gallery = {
             tittle: "Flink core",
             id: 2,
             version: "1.12-SNAPSHOT",
-            cleanURL: "flink-core.json",
+            cleanURL: "flink-core",
             gitURL: "https://github.com/apache/flink",
             img: "img.flinkCore.jpg",
             normalReport: {
@@ -63,7 +63,7 @@ export const galleryData: gallery = {
             tittle: "Quarkus",
             id: 3,
             version: "999-SNAPSHOT",
-            cleanURL: "quarkus-core-runtime.json",
+            cleanURL: "quarkus-core-runtime",
             gitURL: "https://github.com/quarkusio/quarkus",
             img: "img.quarkus.png",
             normalReport: {

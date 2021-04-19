@@ -64,7 +64,7 @@ export const Search = () => {
                 //navigate to the view page
                 dispatch({ type: "SET_MESSAGE", payload: "ORIGINAL" });
 
-                history.push("/result");
+                history.push("/result/RD/lrd/01111111111");
             })
             .catch((error) => {
                 message.error(`Could not DepClean this`);

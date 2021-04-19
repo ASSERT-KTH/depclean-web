@@ -129,7 +129,7 @@ export type Action =
     }
     | {
         type: "SELECT_COLOR"
-        payload: "NONE" | "DEPENDENCY_TYPE" | "USAGE_RATIO" | "GROUP_ID",
+        payload: colortype,
     }
     | {
         type: "LOAD_LOCAL_FILE"
@@ -166,6 +166,10 @@ export type Action =
         type: "SET_MESSAGE"
         payload: "ORIGINAL" | "DEBLOAT_DIRECT" | "DEBLOAT_ALL"
     }
+    | {
+        type: "SET_MENU_STATE"
+        payload: newState
+    }
 
 
 export interface AppStateContextProps {
@@ -178,4 +182,29 @@ export interface AppStateContextProps {
 export interface providersKey {
     name: string,
     nodeNames: string[]
+}
+
+export interface ResultType {
+    id: string | undefined,
+    appState: string | undefined,
+    action: "LD" | "RD" | undefined
+}
+export type colortype = "NONE" | "DEPENDENCY_TYPE" | "USAGE_RATIO" | "GROUP_ID" | "TRANSPARENT";
+
+
+export type MenuStateI = [
+    0 | 50 | 100, //debloat state
+    boolean, //dep UD
+    boolean, //UT
+    boolean, //UI
+    boolean, //BD
+    boolean, //BT
+    boolean, //BI
+    boolean, //RL
+    boolean, //RO
+    colortype]//Color
+
+export interface newState {
+    artifact: artifact,
+    menuState: MenuStateI
 }

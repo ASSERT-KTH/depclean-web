@@ -101,6 +101,5 @@ export const SideMenu = () => {
         />
 
     </Sider>;
-
-    return location.pathname === "/result" ? lateralMenu : <></>;
+    return location.pathname.includes("result") ? lateralMenu : <></>;
 }
