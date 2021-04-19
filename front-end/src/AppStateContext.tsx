@@ -8,7 +8,7 @@ import {
 import { artifact, AppState, Action, AppStateContextProps, } from 'src/interfaces/interfaces';
 import { hierarchy } from 'd3';
 import { childrenAccessor } from 'src/accessors/treeAccessors';
-import { dependCheckGroup, bloatedCheckGroup, scopeCheckGroup, appData, filterByArray } from 'src/Components/appStateContext';
+import { dependCheckGroup, bloatedCheckGroup, scopeCheckGroup, appData, filterByArray, getMessageAndFiltered } from 'src/Components/appStateContext';
 
 
 //REDUCER
@@ -155,25 +155,9 @@ const appStateReducer = (state: AppState, action: Action): AppState => {
             let messageState: "ORIGINAL" | "DEBLOAT_DIRECT" | "DEBLOAT_ALL" = "ORIGINAL";
             const projectDebloated: artifact = cloneProject(state.project);
 
-            switch (action.payload) {
-                case 0:
-                    messageState = "ORIGINAL";
-                    projectDebloated.children = state.project.children;
-                    break;
-                case 50:
-                    messageState = "DEBLOAT_DIRECT";
-                    projectDebloated.children = debloatDirect(projectDebloated.children);
-                    // code block
-                    break;
-                case 100:
-                    messageState = "DEBLOAT_ALL";
-                    projectDebloated.children = debloatAll(projectDebloated.children, ["direct", "transitive"]);
-                    // code block
-                    break;
-                default:
-                    messageState = "ORIGINAL";
-                // code block
-            }
+            const { message, children } = getMessageAndFiltered(action.payload, projectDebloated)
+            messageState = message;
+            projectDebloated.children = children;
 
             const filteredDebloated = getTreeHierarchy(projectDebloated, childrenAccessor);
 
@@ -197,28 +181,12 @@ const appStateReducer = (state: AppState, action: Action): AppState => {
             const bloatedParam: boolean[] = [action.payload.menuState[4], action.payload.menuState[5], action.payload.menuState[6]]
             const newBloatedDep: string[] = bloatedCheckGroup.filter(filterByArray(bloatedParam))
             newFilteredProject.children = filterArifactByType(newFilteredProject.children, state.filteredScope, newBloatedDep, "bloated");
-            // console.log(dependCheckGroup)
-            let messageState: "ORIGINAL" | "DEBLOAT_DIRECT" | "DEBLOAT_ALL" = "ORIGINAL";
 
-            switch (action.payload.menuState[0]) {
-                case 0:
-                    messageState = "ORIGINAL";
-                    // newFilteredProject.children = newFilteredProject.children;
-                    break;
-                case 50:
-                    messageState = "DEBLOAT_DIRECT";
-                    newFilteredProject.children = debloatDirect(newFilteredProject.children);
-                    // code block
-                    break;
-                case 100:
-                    messageState = "DEBLOAT_ALL";
-                    newFilteredProject.children = debloatAll(newFilteredProject.children, ["direct", "transitive"]);
-                    // code block
-                    break;
-                default:
-                    messageState = "ORIGINAL";
-                // code block
-            }
+
+            let messageState: "ORIGINAL" | "DEBLOAT_DIRECT" | "DEBLOAT_ALL" = "ORIGINAL";
+            const { message, children } = getMessageAndFiltered(action.payload.menuState[0], newFilteredProject)
+            messageState = message;
+            newFilteredProject.children = children;
 
             const newNodes = hierarchy(newFilteredProject, childrenAccessor);
 

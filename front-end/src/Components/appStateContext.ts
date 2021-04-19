@@ -1,8 +1,8 @@
 import { hierarchy } from 'd3';
 import { flink as data } from 'src/utils/dataDummy';
 import { childrenAccessor } from 'src/accessors/treeAccessors';
-import { cloneProject } from "src/utils/treeAccess";
-import { AppState } from 'src/interfaces/interfaces';
+import { cloneProject, debloatAll, debloatDirect } from "src/utils/treeAccess";
+import { AppState, artifact } from 'src/interfaces/interfaces';
 import { filter } from 'lodash';
 
 //Data state for all the application
@@ -37,4 +37,35 @@ export const appData: AppState = {
 
 export const filterByArray = (boolArr: boolean[]) => {
     return (el: string, i: number) => boolArr[i] === true;
+}
+
+export const getMessageAndFiltered = (debState: number, project: artifact): { message: "ORIGINAL" | "DEBLOAT_DIRECT" | "DEBLOAT_ALL", children: artifact[] } => {
+    switch (debState) {
+        case 0:
+            return {
+                message: "ORIGINAL",
+                children: project.children,
+            }
+
+        case 50:
+            return {
+                message: "DEBLOAT_DIRECT",
+                children: debloatDirect(project.children),
+            }
+        // code block
+
+        case 100:
+            return {
+                message: "DEBLOAT_ALL",
+                children: debloatAll(project.children, ["direct", "transitive"]),
+            }
+        // code block
+
+        default:
+            return {
+                message: "ORIGINAL",
+                children: project.children,
+            }
+
+    }
 }
