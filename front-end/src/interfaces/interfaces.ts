@@ -67,12 +67,12 @@ export interface AppState {
     filtered: any,
     filteredDependencies: string[],
     filteredBloated: string[],
-    colorSelected: "NONE" | "DEPENDENCY_TYPE" | "USAGE_RATIO" | "GROUP_ID" | "TRANSPARENT",
+    colorSelected: colortype,
     textDisplay: string[],
     filteredScope: string[],
     viewOmitted: boolean
     debloatNum: number
-    messageState: "ORIGINAL" | "DEBLOAT_DIRECT" | "DEBLOAT_ALL",
+    messageState: messageType,
     viewLinks: boolean
 }
 
@@ -191,6 +191,7 @@ export interface ResultType {
 }
 export type colortype = "NONE" | "DEPENDENCY_TYPE" | "USAGE_RATIO" | "GROUP_ID" | "TRANSPARENT";
 
+export type messageType = "ORIGINAL" | "DEBLOAT_DIRECT" | "DEBLOAT_ALL";
 
 export type MenuStateI = [
     0 | 50 | 100, //debloat state

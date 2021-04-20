@@ -106,3 +106,16 @@ export const getColorValue = (val: number): colortype => {
             return "DEPENDENCY_TYPE"
     }
 }
+
+
+// export const getMenuState =()=>{
+//     // filteredDependencies: string[],
+//     // filteredBloated: string[],
+//     // colorSelected: "NONE" | "DEPENDENCY_TYPE" | "USAGE_RATIO" | "GROUP_ID" | "TRANSPARENT",
+//     // textDisplay: string[],
+//     // filteredScope: string[],
+//     // viewOmitted: boolean
+//     // debloatNum: number
+//     // messageState: "ORIGINAL" | "DEBLOAT_DIRECT" | "DEBLOAT_ALL",
+//     const debloatState = getMessageStateNumber(state)
+// }

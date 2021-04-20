@@ -6,7 +6,6 @@ import { v4 as uuidv4 } from 'uuid';
 import { DependencyList } from './DependencyList';
 import { dimension, ResultType } from 'src/interfaces/interfaces';
 import { Legend } from 'src/Legend';
-import { FilterButton } from 'src/FilterButton';
 import { AppToolTipStateProvider } from 'src/AppToolTipStateContext';
 import { getInitialSize, getDebloatValue, getBooleanValue, getColorValue } from 'src/Components/homeViz';
 import { useParams } from "react-router-dom";
@@ -14,6 +13,7 @@ import { fetchFromFile, createProject } from './utils/dataRetrieve';
 import { artifact, MenuStateI, newState } from 'src/interfaces/interfaces';
 import { useAppState } from './AppStateContext';
 import { useHistory } from 'react-router-dom';
+import { ButtonGroup } from './ButtonGroup';
 
 export const HomeViz = () => {
     const [loading, setLoading] = useState(false)
@@ -33,8 +33,8 @@ export const HomeViz = () => {
     })
 
     const { action, id, appState } = useParams<ResultType>();
-    const { dispatch, state } = useAppState();
-    const { filteredBloated } = state;
+    const { dispatch } = useAppState();
+
     let history = useHistory();
 
     useEffect(() => {
@@ -42,22 +42,12 @@ export const HomeViz = () => {
 
             await fetchFromFile(fileToLoad)
                 .then(dataProject => {
-
                     const project: artifact = createProject(dataProject);
                     upDateMenuState(project);
-                    //reset the filters first
-                    // dispatch({ type: "RESET_FILTERS", payload: null })
-                    // dispatch({ type: "LOAD_LOCAL_FILE", payload: project });
-                    //replace the current project for the new one
-                    //
-                    // dispatch({ type: "SELECT_BLOAT", payload: filteredBloated });
-                    //navigate to the view page
-                    // dispatch({ type: "SET_MESSAGE", payload: "ORIGINAL" });
-
                     setLoading(false);
                 })
                 .catch((err) => {
-                    history.push(`/result/LD/default/01111111111`);
+                    history.push(`/result/LD/default/0111111111`);
                 });
         }
 
@@ -72,19 +62,10 @@ export const HomeViz = () => {
                     menuState: menState
                 }
                 dispatch({ type: "SET_MENU_STATE", payload: newStateData })
-
-                // dispatch({ type: "RESET_FILTERS", payload: null })
-                // dispatch({ type: "SELECT_BLOAT", payload: filteredBloated });
-                // dispatch({ type: "SET_MESSAGE", payload: "ORIGINAL" });
-                // // dispatch({ type: "FILTER_ALL", payload: null });
-                // console.log("change State", menuState, getDebloatValue(menuState[0]))
-                // //check if it has the proper format
-                // //modify all menu stats
-                // //in error then leave normal format
-                // // console.log(String(appState).length)
             }
             catch (error) {
-                console.log("error with the menuState ")
+                console.log("error with the menuState ");
+                history.push(`/result/LD/default/011111111`);
             }
         }
 
@@ -93,6 +74,7 @@ export const HomeViz = () => {
             fetchData(id);
         }
 
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [action, id, appState])
 
     //INITIAL STATE 
@@ -119,7 +101,8 @@ export const HomeViz = () => {
                         <MainInfo />
                     </Row>
                     <Row className="vizContainer" id="DependencyTree" key={uuidv4()}>
-                        <FilterButton />
+
+                        <ButtonGroup />
                         <Legend />
                         <AppToolTipStateProvider>
                             <HorizontalPartitionTree dimensions={dimensions} />

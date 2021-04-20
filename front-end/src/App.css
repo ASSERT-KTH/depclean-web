@@ -165,12 +165,24 @@
 }
 
 .filterButton{
+  /* position: absolute; */
+  font-size: 16px;
+  font-weight: 400;
+  /* right: 70px; */
+  /* background-color:#64C19A; */
+  /* border-color: transparent; */
+  z-index: 100;
+}
+
+
+#ButtonGroup{
   position: absolute;
   font-size: 16px;
   font-weight: 400;
   right: 70px;
   /* background-color:#64C19A; */
   /* border-color: transparent; */
+  display:flex;
   z-index: 100;
 }
 
@@ -770,8 +782,13 @@ line.Axis__line {
 .margin-auto{
   margin:auto;
 }
-
-
+.invisibleDisplay{
+  display: none;
+}
+.space-w{
+  width:10px;
+  display: block;
+}
 .spacer-h{
   height:10px;
   display: block;

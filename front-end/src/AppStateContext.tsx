@@ -1,11 +1,11 @@
 import React, { createContext, useReducer, useContext, useState } from "react";
 import {
     filterArtifacts, getTreeHierarchy, cloneProject,
-    highlightBloat, debloatDirect, debloatAll,
+    highlightBloat,
     filterArifactByType
 } from "src/utils/treeAccess";
 // import { fetchFromFile } from './utils/dataRetrieve';
-import { artifact, AppState, Action, AppStateContextProps, } from 'src/interfaces/interfaces';
+import { artifact, AppState, Action, AppStateContextProps, messageType, } from 'src/interfaces/interfaces';
 import { hierarchy } from 'd3';
 import { childrenAccessor } from 'src/accessors/treeAccessors';
 import { dependCheckGroup, bloatedCheckGroup, scopeCheckGroup, appData, filterByArray, getMessageAndFiltered } from 'src/Components/appStateContext';
@@ -152,7 +152,7 @@ const appStateReducer = (state: AppState, action: Action): AppState => {
         }
         case "DEBLOAT_PROJECT": {
 
-            let messageState: "ORIGINAL" | "DEBLOAT_DIRECT" | "DEBLOAT_ALL" = "ORIGINAL";
+            let messageState: messageType = "ORIGINAL";
             const projectDebloated: artifact = cloneProject(state.project);
 
             const { message, children } = getMessageAndFiltered(action.payload, projectDebloated)
@@ -183,7 +183,7 @@ const appStateReducer = (state: AppState, action: Action): AppState => {
             newFilteredProject.children = filterArifactByType(newFilteredProject.children, state.filteredScope, newBloatedDep, "bloated");
 
 
-            let messageState: "ORIGINAL" | "DEBLOAT_DIRECT" | "DEBLOAT_ALL" = "ORIGINAL";
+            let messageState: messageType;
             const { message, children } = getMessageAndFiltered(action.payload.menuState[0], newFilteredProject)
             messageState = message;
             newFilteredProject.children = children;
@@ -223,7 +223,6 @@ const AppStateContext = createContext<AppStateContextProps>({} as AppStateContex
 export const useAppState = () => {
     return useContext(AppStateContext);
 }
-
 
 
 export const AppStateProvider = ({ children }: React.PropsWithChildren<{}>) => {
