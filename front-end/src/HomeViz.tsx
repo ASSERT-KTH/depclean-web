@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { MainInfo } from './MainInfo';
 import { Row } from 'antd';
 import { HorizontalPartitionTree } from './HorizontalPartitionTree';
@@ -16,6 +16,9 @@ import { useHistory } from 'react-router-dom';
 import { ButtonGroup } from './ButtonGroup';
 
 export const HomeViz = () => {
+
+    const componentRef = useRef<HTMLInputElement>(null);
+
     const [loading, setLoading] = useState(false)
     const [size, setSize] = useState({
         width: window.innerWidth,
@@ -31,6 +34,7 @@ export const HomeViz = () => {
         }
         window.addEventListener('resize', handleResize)
     })
+
 
     const { action, id, appState } = useParams<ResultType>();
     const { dispatch } = useAppState();
@@ -77,24 +81,13 @@ export const HomeViz = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [action, id, appState])
 
-    //INITIAL STATE 
-    //HOOK check the params, if they are different from the state, then update
-    //UPDATE: if the current search is the same then it should not refresh all
-    //STATE:
-    // 0,1,2 for debloat 
-    // 0,1 dependency direct, transitive, inherited
-    // 0,1 bloated direct, transitive, inherited
-    // 0,1 relations links,  omitted
-    //0,1,2,3 to select color
-    //EXAMPLE: 0111111111
-    //when there is a change in the filter the URL should be updated
 
     //DATA FOR TREE
     const dimensions: dimension = useMemo(
         () => getInitialSize(size.width, size.height), [size.width, size.height]
     )
     return (
-        <div>
+        <div ref={componentRef}>
             {loading === false ?
                 <>
                     <Row id="MainInfo" className={"margin-buttom-20"} key={uuidv4()} >
@@ -102,7 +95,7 @@ export const HomeViz = () => {
                     </Row>
                     <Row className="vizContainer" id="DependencyTree" key={uuidv4()}>
 
-                        <ButtonGroup />
+                        <ButtonGroup componentRef={componentRef} />
                         <Legend />
                         <AppToolTipStateProvider>
                             <HorizontalPartitionTree dimensions={dimensions} />

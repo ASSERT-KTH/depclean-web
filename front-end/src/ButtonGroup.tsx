@@ -8,8 +8,14 @@ import { useParams } from "react-router-dom";
 import { ResultType } from './interfaces/interfaces';
 import { getStateNumber } from './Components/appStateContext';
 import { useAppState } from './AppStateContext';
+import { exportComponentAsJPEG } from 'react-component-export-image';
 
-export const ButtonGroup = () => {
+
+interface bottomGroupI {
+    componentRef: React.RefObject<HTMLInputElement>
+}
+
+export const ButtonGroup = ({ componentRef }: React.PropsWithChildren<bottomGroupI>) => {
 
     const { id } = useParams<ResultType>();
     const { state } = useAppState();
@@ -20,6 +26,12 @@ export const ButtonGroup = () => {
         copy(`http://localhost:3000/depclean-web#/result/LD/${id}/${menuState}`);
         message.success(`The project URL has been copied to the clipboard`);
     }
+
+    const exportImage = () => {
+        exportComponentAsJPEG(componentRef, { fileName: "depClean" })
+        message.success(`Your visualization has been exported as an image`);
+    }
+
 
     return (
         <div id="ButtonGroup">
@@ -42,7 +54,7 @@ export const ButtonGroup = () => {
                     key={uuidv4()}
                     className="exportImage"
                     type={"dashed"}
-                // onClick={() => console.log(hola))}
+                    onClick={exportImage}
                 >
                     <ExportOutlined />
 
