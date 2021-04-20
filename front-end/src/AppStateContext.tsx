@@ -1,14 +1,14 @@
 import React, { createContext, useReducer, useContext, useState } from "react";
 import {
     filterArtifacts, getTreeHierarchy, cloneProject,
-    highlightBloat, debloatDirect, debloatAll,
+    highlightBloat,
     filterArifactByType
 } from "src/utils/treeAccess";
 // import { fetchFromFile } from './utils/dataRetrieve';
-import { artifact, AppState, Action, AppStateContextProps } from 'src/interfaces/interfaces';
+import { artifact, AppState, Action, AppStateContextProps, messageType, } from 'src/interfaces/interfaces';
 import { hierarchy } from 'd3';
 import { childrenAccessor } from 'src/accessors/treeAccessors';
-import { dependCheckGroup, bloatedCheckGroup, scopeCheckGroup, appData } from 'src/Components/appStateContext';
+import { dependCheckGroup, bloatedCheckGroup, scopeCheckGroup, appData, filterByArray, getMessageAndFiltered } from 'src/Components/appStateContext';
 
 
 //REDUCER
@@ -152,28 +152,12 @@ const appStateReducer = (state: AppState, action: Action): AppState => {
         }
         case "DEBLOAT_PROJECT": {
 
-            let messageState: "ORIGINAL" | "DEBLOAT_DIRECT" | "DEBLOAT_ALL" = "ORIGINAL";
+            let messageState: messageType = "ORIGINAL";
             const projectDebloated: artifact = cloneProject(state.project);
 
-            switch (action.payload) {
-                case 0:
-                    messageState = "ORIGINAL";
-                    projectDebloated.children = state.project.children;
-                    break;
-                case 50:
-                    messageState = "DEBLOAT_DIRECT";
-                    projectDebloated.children = debloatDirect(projectDebloated.children);
-                    // code block
-                    break;
-                case 100:
-                    messageState = "DEBLOAT_ALL";
-                    projectDebloated.children = debloatAll(projectDebloated.children, ["direct", "transitive"]);
-                    // code block
-                    break;
-                default:
-                    messageState = "ORIGINAL";
-                // code block
-            }
+            const { message, children } = getMessageAndFiltered(action.payload, projectDebloated)
+            messageState = message;
+            projectDebloated.children = children;
 
             const filteredDebloated = getTreeHierarchy(projectDebloated, childrenAccessor);
 
@@ -184,6 +168,41 @@ const appStateReducer = (state: AppState, action: Action): AppState => {
                 filteredProject: projectDebloated,
                 filtered: filteredDebloated,
                 messageState: messageState
+            }
+        }
+        case "SET_MENU_STATE": {
+            const newProject: artifact = action.payload.artifact;
+            const newFilteredProject: artifact = cloneProject(newProject);
+            //MODIFY USED DEPENDENCIES
+            const usedParam: boolean[] = [action.payload.menuState[1], action.payload.menuState[2], action.payload.menuState[3]]
+            const newUsedDep: string[] = dependCheckGroup.filter(filterByArray(usedParam))
+            newFilteredProject.children = filterArifactByType(newFilteredProject.children, state.filteredScope, newUsedDep, "used");
+            //MODIFY BLOATED DEPENDENCIES
+            const bloatedParam: boolean[] = [action.payload.menuState[4], action.payload.menuState[5], action.payload.menuState[6]]
+            const newBloatedDep: string[] = bloatedCheckGroup.filter(filterByArray(bloatedParam))
+            newFilteredProject.children = filterArifactByType(newFilteredProject.children, state.filteredScope, newBloatedDep, "bloated");
+
+
+            let messageState: messageType;
+            const { message, children } = getMessageAndFiltered(action.payload.menuState[0], newFilteredProject)
+            messageState = message;
+            newFilteredProject.children = children;
+
+            const newNodes = hierarchy(newFilteredProject, childrenAccessor);
+
+            return {
+                ...state,
+                project: newProject, //NEW PROJECT
+                filteredProject: newFilteredProject,//NEW PROJECT
+                filteredDependencies: newUsedDep,
+                filteredBloated: newBloatedDep,
+                viewLinks: action.payload.menuState[7],
+                viewOmitted: action.payload.menuState[8],
+                nodes: newNodes,
+                filtered: newNodes,
+                colorSelected: action.payload.menuState[9],
+                messageState: messageState,
+                debloatNum: action.payload.menuState[0],
             }
         }
 
@@ -204,7 +223,6 @@ const AppStateContext = createContext<AppStateContextProps>({} as AppStateContex
 export const useAppState = () => {
     return useContext(AppStateContext);
 }
-
 
 
 export const AppStateProvider = ({ children }: React.PropsWithChildren<{}>) => {

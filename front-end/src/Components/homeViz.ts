@@ -1,4 +1,4 @@
-import { dimension } from "src/interfaces/interfaces"
+import { dimension, colortype } from "src/interfaces/interfaces"
 
 
 
@@ -66,3 +66,56 @@ export const getInitialSize = (width: number, height: number): dimension => {
         boundedWidth: width - (width * 0.0416666667) - (width * 0.0833333333),
     }
 }
+
+export const getDebloatValue = (val: number): 0 | 50 | 100 => {
+    switch (val) {
+        case 0:
+            return 0;
+        case 1:
+            return 50;
+        case 2:
+            return 100;
+        default:
+            return 0
+    }
+
+}
+
+export const getBooleanValue = (val: number) => {
+    switch (val) {
+        case 0:
+            return false;
+        case 1:
+            return true;
+        default:
+            return false;
+    }
+}
+
+export const getColorValue = (val: number): colortype => {
+    switch (val) {
+        case 0:
+            return "NONE";
+        case 1:
+            return "DEPENDENCY_TYPE";
+        case 2:
+            return "USAGE_RATIO";
+        case 3:
+            return "GROUP_ID";
+        default:
+            return "DEPENDENCY_TYPE"
+    }
+}
+
+
+// export const getMenuState =()=>{
+//     // filteredDependencies: string[],
+//     // filteredBloated: string[],
+//     // colorSelected: "NONE" | "DEPENDENCY_TYPE" | "USAGE_RATIO" | "GROUP_ID" | "TRANSPARENT",
+//     // textDisplay: string[],
+//     // filteredScope: string[],
+//     // viewOmitted: boolean
+//     // debloatNum: number
+//     // messageState: "ORIGINAL" | "DEBLOAT_DIRECT" | "DEBLOAT_ALL",
+//     const debloatState = getMessageStateNumber(state)
+// }
