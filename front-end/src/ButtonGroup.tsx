@@ -1,5 +1,5 @@
 import { CopyOutlined, ExportOutlined } from '@ant-design/icons';
-import { Button, message } from 'antd';
+import { Button, message, Tooltip } from 'antd';
 import React from 'react';
 import { FilterButton } from 'src/FilterButton';
 import { v4 as uuidv4 } from 'uuid';
@@ -25,31 +25,29 @@ export const ButtonGroup = () => {
         <div id="ButtonGroup">
             <FilterButton />
             <div className="space-w" key={uuidv4()} />
-            <Button
-                key={uuidv4()}
-                className="copyButton"
-                type={"dashed"}
-                onClick={copyURL}
-            >
-                <CopyOutlined />
-            </Button>
+            <Tooltip placement="top" title={"Copy Project's URL"}>
+                <Button
+                    key={uuidv4()}
+                    className="copyButton"
+                    type={"dashed"}
+                    onClick={copyURL}
+                >
+                    <CopyOutlined />
+                </Button>
+            </Tooltip>
             <div className="space-w" key={uuidv4()} />
-            <Button
-                key={uuidv4()}
-                className="exportImage"
-                type={"dashed"}
-            // onClick={() => console.log(hola))}
-            >
-                <ExportOutlined />
+            <Tooltip placement="top" title={"Export image"}>
 
-            </Button>
-            <textarea
+                <Button
+                    key={uuidv4()}
+                    className="exportImage"
+                    type={"dashed"}
+                // onClick={() => console.log(hola))}
+                >
+                    <ExportOutlined />
 
-                key={uuidv4()}
-                className="invisibleDisplay"
-            // value="Example copy for the textarea."
-            // onChange={() => console.log("modify")}
-            />
+                </Button>
+            </Tooltip>
         </div>
     )
 }
