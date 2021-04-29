@@ -64,11 +64,12 @@ export function fetchFromFile(fileName: string) {
 
 //check if an artifact has all the valid structure
 export const projectIsValid = (project: artifact) => {
+
     return project.coordinates === undefined ||
         project.groupId === undefined ||
         project.artifactId === undefined ||
         project.version === undefined ||
-        project.scope === undefined ||
+        // (project.scope === undefined || project.scope !== undefined) ||
         project.packaging === undefined ||
         project.omitted === undefined ||
         project.size === undefined ||
