@@ -171,7 +171,10 @@ const filterDeleted = (deleted: boolean) => (node: artifact) => node.deleted ===
 
 const removeOmmited = (node: artifact) => node.type !== "omitted";
 
-const treeSize = (size: number, artifact: any) => size + artifact.size;
+const treeSize = (size: number, artifact: any) => {
+    const artSize = artifact.size === undefined ? 0 : artifact.size;
+    return size + artSize
+};
 
 export const filterEmpty = (d: any) => d.num > 0;
 
