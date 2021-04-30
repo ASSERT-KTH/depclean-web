@@ -58,7 +58,7 @@ export const createProject = (data: any): artifact => {
 //load the data from a file
 //give the proper format to the json 
 export function fetchFromFile(fileName: string) {
-    const url = `./depclean-web/files/${fileName}.json`;
+    const url = `./files/${fileName}.json`;
     return json<ResponseData>(url);
 }
 
