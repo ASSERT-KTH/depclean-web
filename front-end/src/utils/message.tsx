@@ -172,7 +172,7 @@ const filterDeleted = (deleted: boolean) => (node: artifact) => node.deleted ===
 const removeOmmited = (node: artifact) => node.type !== "omitted";
 
 const treeSize = (size: number, artifact: any) => {
-    const artSize = artifact.size === undefined ? 0 : artifact.size;
+    const artSize = artifact.size === undefined || isNaN(artifact.size) ? 0 : artifact.size;
     return size + artSize
 };
 
