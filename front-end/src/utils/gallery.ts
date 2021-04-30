@@ -141,7 +141,7 @@ export const galleryData: gallery = {
             version: "999-SNAPSHOT",
             cleanURL: "quarkus-core-runtime",
             gitURL: "https://github.com/quarkusio/quarkus",
-            img: "img.quarkus.png",
+            img: "img.quarkus.jpg",
             normalReport: {
                 direct: 18,
                 inherited: 0,
