@@ -42,6 +42,7 @@ export const HomeViz = () => {
     let history = useHistory();
 
     useEffect(() => {
+
         async function fetchData(fileToLoad: string) {
 
             await fetchFromFile(fileToLoad)

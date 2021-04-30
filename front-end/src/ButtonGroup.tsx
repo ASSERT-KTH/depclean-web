@@ -4,7 +4,7 @@ import React from 'react';
 import { FilterButton } from 'src/FilterButton';
 import { v4 as uuidv4 } from 'uuid';
 import copy from 'copy-to-clipboard';
-import { useParams } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 import { ResultType } from './interfaces/interfaces';
 import { getStateNumber } from './Components/appStateContext';
 import { useAppState } from './AppStateContext';
@@ -16,6 +16,7 @@ interface bottomGroupI {
 }
 
 export const ButtonGroup = ({ componentRef }: React.PropsWithChildren<bottomGroupI>) => {
+    const location = useLocation();
 
     const { id } = useParams<ResultType>();
     const { state } = useAppState();
@@ -23,7 +24,8 @@ export const ButtonGroup = ({ componentRef }: React.PropsWithChildren<bottomGrou
 
     const copyURL = () => {
         const menuState = getStateNumber(messageState, filteredDependencies, filteredBloated, viewLinks, viewOmitted, colorSelected);
-        copy(`http://localhost:3000/depclean-web#/result/LD/${id}/${menuState}`);
+        console.log(location.pathname)
+        copy(`https://castor-software.github.io/depclean-web#/result/LD/${id}/${menuState}`);
         message.success(`The project URL has been copied to the clipboard`);
     }
 
