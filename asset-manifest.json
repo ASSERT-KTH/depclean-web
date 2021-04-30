@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/depclean-web/static/css/main.0c129a61.chunk.css",
-    "main.js": "/depclean-web/static/js/main.51fd1cfb.chunk.js",
-    "main.js.map": "/depclean-web/static/js/main.51fd1cfb.chunk.js.map",
+    "main.js": "/depclean-web/static/js/main.3a507f97.chunk.js",
+    "main.js.map": "/depclean-web/static/js/main.3a507f97.chunk.js.map",
     "runtime-main.js": "/depclean-web/static/js/runtime-main.6429c75a.js",
     "runtime-main.js.map": "/depclean-web/static/js/runtime-main.6429c75a.js.map",
     "static/css/2.617c3bb8.chunk.css": "/depclean-web/static/css/2.617c3bb8.chunk.css",
@@ -21,6 +21,6 @@
     "static/css/2.617c3bb8.chunk.css",
     "static/js/2.a81ed619.chunk.js",
     "static/css/main.0c129a61.chunk.css",
-    "static/js/main.51fd1cfb.chunk.js"
+    "static/js/main.3a507f97.chunk.js"
   ]
 }
