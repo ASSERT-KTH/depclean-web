@@ -13,7 +13,7 @@ export const PackageLoader = ({ handleDropAccepted, handleDropRejected }: React.
     return <Col span={12} >
         <div>
             <Dropzone
-                className="scan__dropzone"
+                // className="scan__dropzone"
                 onDropAccepted={handleDropAccepted}
                 onDropRejected={handleDropRejected}
                 multiple={false}
