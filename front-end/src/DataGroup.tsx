@@ -27,15 +27,18 @@ export const DataGroup = ({
         )
     })
 
-    return <div style={{ marginRight: "20px" }} className={theme}>
-        {dataInfo.length === 0 ? <></> :
-            <>
-                <h3>{tittle}</h3>
-                <div className="flex" key={uuidv4()}>
-                    {data}
-                </div>
-            </>}
-    </div>
+    return (
+        <div style={{ marginRight: "20px" }}
+            className={theme}
+        >
+            {dataInfo.length === 0 ? <></> :
+                <>
+                    <h3>{tittle}</h3>
+                    <div className="flex" key={uuidv4()}>
+                        {data}
+                    </div>
+                </>}
+        </div>)
 
 }
 

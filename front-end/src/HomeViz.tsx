@@ -44,7 +44,6 @@ export const HomeViz = () => {
     useEffect(() => {
 
         async function fetchData(fileToLoad: string) {
-
             await fetchFromFile(fileToLoad)
                 .then(dataProject => {
                     const project: artifact = createProject(dataProject);

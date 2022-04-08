@@ -59,7 +59,7 @@ export const createProject = (data: any): artifact => {
 //give the proper format to the json 
 export function fetchFromFile(fileName: string) {
 
-    const url = `./files/${fileName}.json`;
+    const url = `${process.env.PUBLIC_URL}/files/${fileName}.json`;
     return json<ResponseData>(url);
 }
 

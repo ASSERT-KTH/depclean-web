@@ -22,10 +22,7 @@ export const Message = () => {
             <></>;
 
     const message = messageState === "ORIGINAL" ? <></> :
-        <div className={"flex flex-wrap pull-left"} key={uuidv4()}>
-            {/* <div className="flex text-message">
-                <div>If you<br></br>delete<ArrowRightOutlined /></div>
-            </div> */}
+        <div className={"flex flex-wrap pull-left"}>
             <DataGroup
                 key={uuidv4()}
                 tittle={bloatMessage.deleted.title}
@@ -36,9 +33,6 @@ export const Message = () => {
                 tittle="Size"
                 dataInfo={[bloatMessage.deleted.size.totalSize]}
                 theme="bloated" />
-            {/* <div className="flex text-message">
-                <div>Now this<br></br>project has<ArrowRightOutlined /></div>
-            </div> */}
         </div>
 
 
@@ -54,15 +48,17 @@ export const Message = () => {
     const totalDependencies = generalReport.totalDependencies;
 
     return (
-        <div className="flex flex-wrap margin-buttom-20 " key={uuidv4()}>
+        <div className="flex flex-wrap margin-buttom-20 ">
             <DataGroup
                 key={uuidv4()}
+
                 tittle={totalDependencies.title}
                 dataInfo={[totalDependencies.totalDependencies]}
                 theme="dependencies"
             />
             <DataGroup
                 key={uuidv4()}
+
                 tittle={generalReport.size.title}
                 dataInfo={totalSize}
                 theme="dependencies"
@@ -70,12 +66,14 @@ export const Message = () => {
             <div className="sw"></div>
             <DataGroup
                 key={uuidv4()}
+
                 tittle={generalReport.dependencies.title}
                 dataInfo={dependencies}
                 theme="dependencies"
             />
             <DataGroup
                 key={uuidv4()}
+
                 tittle={generalReport.bloated.title}
                 dataInfo={bloated}
                 theme="bloated"

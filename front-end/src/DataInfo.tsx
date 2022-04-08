@@ -16,7 +16,7 @@ export const DataInfo = ({
 
     return (
         <div key={uuidv4()} className={"dataInfo " + theme}>
-            <span key={uuidv4()}>
+            <span >
                 {quantity}
             </span>
             {name}
